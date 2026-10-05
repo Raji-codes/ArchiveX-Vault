@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, Files, ChevronDown, ChevronUp, FileText } from 'lucide-react';
+import { Upload, Files, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface NavbarProps {
   isDocumentsListOpen: boolean;
@@ -58,19 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Primary Actions */}
-          <div className="flex items-center gap-2.5">
-            <a
-              href="/ArchiveX_Project_Report.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700/80 rounded-md transition-colors shadow-sm"
-              title="View and print the complete academic project report"
-            >
-              <FileText className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden sm:inline">Project Report</span>
-              <span className="sm:hidden">Report</span>
-            </a>
-
+          <div className="flex items-center gap-2">
             {isDocumentsListOpen ? (
               <button
                 onClick={onOpenUpload}

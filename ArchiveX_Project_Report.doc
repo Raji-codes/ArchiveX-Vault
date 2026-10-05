@@ -1,223 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
+<html xmlns:o='urn:schemas-microsoft-com:office:office'
+xmlns:w='urn:schemas-microsoft-com:office:word'
+xmlns='http://www.w3.org/TR/REC-html40'>
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ARCHIVEX Project Report (42 Pages)</title>
+  <meta charset="utf-8">
+  <title>ArchiveX Project Report (42 Pages)</title>
+  <!--[if gte mso 9]>
+  <xml>
+    <w:WordDocument>
+      <w:View>Print</w:View>
+      <w:Zoom>100</w:Zoom>
+      <w:DoNotOptimizeForBrowser/>
+    </w:WordDocument>
+  </xml>
+  <![endif]-->
   <style>
-    @page {
-      size: A4 portrait;
-      margin: 20mm 20mm 20mm 20mm;
+    @page Section1 {
+      size: 595.3pt 841.9pt; /* A4 */
+      margin: 1.0in 1.0in 1.0in 1.0in;
+      mso-header-margin: 36pt;
+      mso-footer-margin: 36pt;
+      mso-paper-source: 0;
     }
-    @media print {
-      body {
-        background: #ffffff !important;
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-      .toolbar {
-        display: none !important;
-      }
-      .page {
-        box-shadow: none !important;
-        margin: 0 !important;
-        width: 100% !important;
-        min-height: 275mm !important;
-        padding: 0 0 20mm 0 !important;
-        page-break-after: always !important;
-        break-after: page !important;
-      }
-    }
-    * {
-      box-sizing: border-box;
-    }
+    div.Section1 { page: Section1; }
     body {
-      font-family: 'Times New Roman', Times, serif;
-      background: #e2e8f0;
-      color: #000000;
-      margin: 0;
-      padding: 24px;
+      font-family: 'Times New Roman', serif;
+      font-size: 12pt;
       line-height: 1.6;
-    }
-    .toolbar {
-      position: sticky;
-      top: 16px;
-      z-index: 100;
-      max-width: 840px;
-      margin: 0 auto 24px auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: space-between;
-      align-items: center;
-      background: #1e293b;
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    .toolbar-title {
-      font-weight: bold;
-      font-size: 14px;
-      color: #f8fafc;
-    }
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .btn {
-      padding: 7px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      border: 1px solid #475569;
-      background: #334155;
-      color: #ffffff;
-    }
-    .btn:hover {
-      background: #475569;
-    }
-    .btn-primary {
-      background: #0f766e;
-      border-color: #0f766e;
-      color: white;
-    }
-    .btn-primary:hover {
-      background: #115e59;
-    }
-    .page-select {
-      background: #0f172a;
-      color: #f8fafc;
-      border: 1px solid #475569;
-      border-radius: 6px;
-      padding: 5px 10px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .report-container {
-      max-width: 820px;
-      margin: 0 auto;
-    }
-    .page {
-      background: #ffffff;
-      width: 100%;
-      min-height: 1120px;
-      margin-bottom: 30px;
-      padding: 55px 65px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
-    .page-num-top {
-      text-align: right;
-      font-size: 11pt;
-      font-family: 'Times New Roman', Times, serif;
-      margin-bottom: 16px;
       color: #000;
-    }
-    .page-content {
-      width: 100%;
-    }
-
-    .chapter-title {
-      font-size: 16pt;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-      color: #000000;
-      letter-spacing: 0.5px;
-    }
-    .section-title {
-      font-size: 13pt;
-      font-weight: bold;
-      margin: 16px 0 8px 0;
-      color: #000000;
     }
     p {
       text-align: justify;
-      margin-bottom: 12px;
-      font-size: 11.5pt;
-      line-height: 1.7;
-      color: #000000;
+      margin-bottom: 10pt;
+      line-height: 1.6;
     }
-    .bullet-list {
-      margin: 8px 0 14px 20px;
-      padding-left: 10px;
-    }
-    .bullet-list li {
-      font-size: 11.5pt;
-      line-height: 1.7;
-      margin-bottom: 6px;
-      text-align: justify;
-      color: #000000;
-    }
-    .report-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 14px 0;
-      font-size: 11pt;
-    }
-    .report-table th {
-      border: 1px solid #000;
-      padding: 8px 10px;
-      background: #f2f2f2;
+    h1 {
+      font-size: 16pt;
       font-weight: bold;
       text-align: left;
-      color: #000;
+      margin-bottom: 12pt;
     }
-    .report-table td {
+    h2 {
+      font-size: 13pt;
+      font-weight: bold;
+      text-align: left;
+      margin-top: 12pt;
+      margin-bottom: 8pt;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10pt 0;
+    }
+    th {
       border: 1px solid #000;
-      padding: 7px 10px;
-      color: #000;
+      padding: 6pt 8pt;
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    td {
+      border: 1px solid #000;
+      padding: 5pt 8pt;
     }
     .code-box {
+      font-family: 'Courier New', monospace;
+      font-size: 8.5pt;
       background: #fafafa;
       border: 1px solid #999;
-      padding: 12px;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 8.5pt;
-      line-height: 1.45;
+      padding: 8pt;
       white-space: pre-wrap;
-      overflow-x: auto;
-      color: #000;
     }
   </style>
 </head>
 <body>
-  <div class="toolbar">
-    <div class="toolbar-title">
-      <span>ArchiveX Project Report (42 Pages)</span>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="window.print()">
-        Print / Save as PDF (All 42 Pages)
-      </button>
-      <a href="/ArchiveX_Project_Report.docx" download="ArchiveX_Project_Report.docx" class="btn">
-        Download .DOCX
-      </a>
-      <a href="/ArchiveX_Project_Report.doc" download="ArchiveX_Project_Report.doc" class="btn">
-        Download .DOC
-      </a>
-      <select class="page-select" onchange="document.getElementById('page-' + this.value).scrollIntoView({ behavior: 'smooth' })">
-        <option value="1">Page 1 </option><option value="2">Page 2 </option><option value="3">Page 3 </option><option value="4">Page 4 </option><option value="5">Page 5 </option><option value="6">Page 6 </option><option value="7">Page 7 </option><option value="8">Page 8 (Body p.1)</option><option value="9">Page 9 (Body p.2)</option><option value="10">Page 10 (Body p.3)</option><option value="11">Page 11 (Body p.4)</option><option value="12">Page 12 (Body p.5)</option><option value="13">Page 13 (Body p.6)</option><option value="14">Page 14 (Body p.7)</option><option value="15">Page 15 (Body p.8)</option><option value="16">Page 16 (Body p.9)</option><option value="17">Page 17 (Body p.10)</option><option value="18">Page 18 (Body p.11)</option><option value="19">Page 19 (Body p.12)</option><option value="20">Page 20 (Body p.13)</option><option value="21">Page 21 (Body p.14)</option><option value="22">Page 22 (Body p.15)</option><option value="23">Page 23 (Body p.16)</option><option value="24">Page 24 (Body p.17)</option><option value="25">Page 25 (Body p.18)</option><option value="26">Page 26 (Body p.19)</option><option value="27">Page 27 (Body p.20)</option><option value="28">Page 28 (Body p.21)</option><option value="29">Page 29 (Body p.22)</option><option value="30">Page 30 (Body p.23)</option><option value="31">Page 31 (Body p.24)</option><option value="32">Page 32 (Body p.25)</option><option value="33">Page 33 (Body p.26)</option><option value="34">Page 34 (Body p.27)</option><option value="35">Page 35 (Body p.28)</option><option value="36">Page 36 (Body p.29)</option><option value="37">Page 37 (Body p.30)</option><option value="38">Page 38 (Body p.31)</option><option value="39">Page 39 (Body p.32)</option><option value="40">Page 40 (Body p.33)</option><option value="41">Page 41 (Body p.34)</option><option value="42">Page 42 (Body p.35)</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="report-container">
-    
-    <div class="page" id="page-1">
+  
+    <div class="Section1" style="page-break-before:auto; mso-break-type:section-break;">
       
-      <div class="page-content">
-        <div style="text-align:center; padding-top: 25px;">
+      <div style="text-align:center; padding-top: 25px;">
           <h1 style="font-size:22pt; font-weight:bold; margin-bottom:14px; line-height:1.3; text-transform:uppercase;">
             ARCHIVEX: CLOUD CONTENT DISCOVERY SYSTEM AND INTELLIGENT DOCUMENT VAULT WITH OCR INDEXING
           </h1>
@@ -246,14 +104,13 @@
           <div style="font-size:12pt; margin-bottom:6px;">Gokul Bagh, 833, E.V.R. Periyar High Road, Arumbakkam, Chennai - 600 106</div>
           <div style="font-size:12pt; font-weight:bold; margin-top:20px;">OCTOBER 2026</div>
         </div>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-2">
+    <div class="Section2" style="page-break-before:always; mso-break-type:section-break;">
       
-      <div class="page-content">
-        <div style="text-align:center; margin-bottom:20px;">
+      <div style="text-align:center; margin-bottom:20px;">
           <h2 style="font-size:14pt; font-weight:bold; margin-bottom:4px;">DWARAKA DOSS GOVERDHAN DOSS VAISHNAV COLLEGE (AUTONOMOUS)</h2>
           <div style="font-size:11pt; margin-bottom:4px;">PG AND RESEARCH DEPARTMENT OF COMPUTER APPLICATIONS (MCA)</div>
           <div style="font-size:10.5pt; margin-bottom:20px;">Arumbakkam, Chennai - 600 106, Tamil Nadu, India</div>
@@ -300,14 +157,13 @@
             </td>
           </tr>
         </table>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-3">
+    <div class="Section3" style="page-break-before:always; mso-break-type:section-break;">
       
-      <div class="page-content">
-        <div>
+      <div>
           <div style="text-align:center; margin-bottom:12px;">
             <h1 style="font-size:22pt; font-weight:bold; margin-bottom:4px; color:#000;">KaaShiv InfoTech</h1>
             <div style="font-size:10pt; color:#333; font-style:italic;">www.kaashivinfotech.com | info@kaashivinfotech.com | +91 7667662428</div>
@@ -360,14 +216,13 @@
             </tr>
           </table>
         </div>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-4">
+    <div class="Section4" style="page-break-before:always; mso-break-type:section-break;">
       
-      <div class="page-content">
-        <div style="text-align:center; margin-bottom:20px;">
+      <div style="text-align:center; margin-bottom:20px;">
           <h1 style="font-size:18pt; font-weight:bold; letter-spacing:1px; margin-bottom:20px;">ACKNOWLEDGEMENT</h1>
         </div>
         <p style="text-align:justify; font-size:11.5pt; line-height:1.8; margin-bottom:14px;">
@@ -394,14 +249,13 @@
           (Register No: 2513092037153)<br/>
           MCA Final Year Student
         </div>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-5">
+    <div class="Section5" style="page-break-before:always; mso-break-type:section-break;">
       
-      <div class="page-content">
-        <div style="text-align:center; margin-bottom:18px;">
+      <div style="text-align:center; margin-bottom:18px;">
           <h1 style="font-size:18pt; font-weight:bold; letter-spacing:1px; margin-bottom:18px;">ABSTRACT</h1>
         </div>
         <p style="text-align:justify; font-size:11.5pt; line-height:1.72; margin-bottom:12px;">
@@ -419,14 +273,13 @@
         <div style="margin-top:14px; font-size:10.5pt;">
           <strong>Keywords:</strong> Cloud Content Discovery, Optical Character Recognition (OCR), Inverted Indexing, Entity Extraction, AWS S3 Object Storage, Presigned URLs, React 19, TypeScript, Enterprise Document Management.
         </div>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-6">
+    <div class="Section6" style="page-break-before:always; mso-break-type:section-break;">
       
-      <div class="page-content">
-        <div style="text-align:center; margin-bottom:20px;">
+      <div style="text-align:center; margin-bottom:20px;">
           <h1 style="font-size:18pt; font-weight:bold; letter-spacing:1px; margin-bottom:20px;">TABLE OF CONTENTS</h1>
         </div>
         <table class="report-table" style="width:100%; border-collapse:collapse; font-size:11pt;">
@@ -464,14 +317,13 @@
             <tr><td style="text-align:center; border:1px solid #000;"></td><td style="padding-left:20px; border:1px solid #000;">7.5 Database & Inverted Index Architecture</td><td style="text-align:center; border:1px solid #000;">14</td></tr>
           </tbody>
         </table>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-7">
+    <div class="Section7" style="page-break-before:always; mso-break-type:section-break;">
       
-      <div class="page-content">
-        <div style="text-align:center; margin-bottom:20px;">
+      <div style="text-align:center; margin-bottom:20px;">
           <h1 style="font-size:18pt; font-weight:bold; letter-spacing:1px; margin-bottom:20px;">TABLE OF CONTENTS (Contd.)</h1>
         </div>
         <table class="report-table" style="width:100%; border-collapse:collapse; font-size:11pt;">
@@ -507,26 +359,24 @@
             <tr><td style="text-align:center; font-weight:bold; border:1px solid #000;">16</td><td style="border:1px solid #000;"><strong>APPENDIX (SOURCE CODE)</strong></td><td style="text-align:center; font-weight:bold; border:1px solid #000;">30</td></tr>
           </tbody>
         </table>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-8">
-      <div class="page-num-top">1</div>
-      <div class="page-content">
-        <h1 class="chapter-title">1. INTRODUCTION</h1>
+    <div class="Section8" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">1</p>
+      <h1 class="chapter-title">1. INTRODUCTION</h1>
         <h2 class="section-title">1.1 About Cloud Content Discovery</h2>
         <p>In the modern digital economy, enterprise content management has evolved dramatically from isolated local filesystem directories to global, distributed cloud storage environments. Organizations generate and ingest unprecedented quantities of operational documentation daily, including procurement invoices, point-of-sale receipts, non-disclosure agreements, customer contracts, medical diagnostics, and regulatory filings. According to recent enterprise data storage surveys, unstructured documents represent upwards of eighty percent of total corporate data growth. However, this vast accumulation of digital paperwork frequently becomes 'dark data'—records that are stored and retained at significant cost but remain largely unsearchable, opaque, and hidden from day-to-day organizational workflows.</p>
         <p>Traditional document storage solutions, such as basic networked drives, FTP servers, and standard cloud object storage buckets, operate exclusively over shallow file metadata. They catalogue attributes such as file names, creation timestamps, and byte sizes, but possess zero awareness of the text, numbers, tabular data, and legal entities embedded inside the binary file payload. When documents are submitted as scanned raster images (such as JPEG or PNG photographs) or flattened PDF exports, basic operating system search mechanisms fail completely. Locating a specific vendor invoice from three years prior during an unexpected statutory tax audit frequently requires hours or days of manual file-by-file inspection, introducing severe operational friction, clerical expense, and audit vulnerability.</p>
         <p>Cloud Content Discovery represents a paradigm shift designed to eliminate these information bottlenecks. By coupling scalable cloud object storage infrastructure with client-side accelerated Optical Character Recognition (OCR), tokenized full-text indexing, and heuristic entity extraction, modern discovery systems transform passive digital graveyards into active, transparent, and instantly queryable corporate intelligence vaults. Every ingested asset is automatically parsed, its internal textual contents are tokenized into an in-memory inverted index, and high-value operational fields—such as invoice numbers, monetary totals, counterparties, and settlement dates—are extracted into structured attributes without requiring human clerical intervention.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-9">
-      <div class="page-num-top">2</div>
-      <div class="page-content">
-        <h2 class="section-title">1.2 Project Overview</h2>
+    <div class="Section9" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">2</p>
+      <h2 class="section-title">1.2 Project Overview</h2>
         <p>The project titled <strong>"ARCHIVEX: Cloud Content Discovery System and Intelligent Document Vault with OCR Indexing"</strong> was conceived, architected, and implemented to provide a high-performance, cost-effective, and user-centric solution to enterprise document retention and discovery challenges. ArchiveX bridges the divide between lightweight web interfaces and scalable cloud storage, establishing a unified pipeline that automates document ingestion, asynchronous OCR extraction, domain-specific categorization, and instant multi-criteria retrieval.</p>
         <p>ArchiveX is engineered around a modern, decoupled web architecture using React 19, TypeScript 5, Vite, and Tailwind CSS v4 on the frontend, with an Express and Node.js proxy server facilitating secure Amazon Web Services (AWS) S3 cloud object storage operations. Rather than relying on expensive, slow, server-heavy document processing clusters, ArchiveX offloads document parsing, canvas rasterization, and optical character recognition to client-side asynchronous execution pipelines. This architectural innovation delivers near-zero server computing costs, guarantees strict user data privacy, and provides instantaneous, lag-free user interaction.</p>
         <p>The core operational pipeline of ArchiveX follows a clean six-stage lifecycle: Ingestion via a Centered Drag-and-Drop Dropzone; Client-side File Buffer Preprocessing; Asynchronous OCR Text Extraction; Regular Expression Heuristic Entity Parsing; In-Memory Inverted Token Indexing; and Cloud Vault Object Synchronization. The user interface provides two harmonious interaction modes: an intuitive heroic centered dropzone for frictionless single- or multi-file uploads, and an information-dense spreadsheet-style Document Vault table view equipped with live search filters, OCR confidence indicators, and an inspection workbench modal.</p>
@@ -537,40 +387,37 @@
           <li><strong>Zero-Friction User Experience:</strong> Responsive drag-and-drop dropzone allows non-technical accounting and administrative personnel to ingest files instantly.</li>
           <li><strong>Secure Cloud Archival:</strong> AWS SDK v3 integration generates temporary presigned URLs, ensuring cloud assets remain encrypted and protected against unauthorized access.</li>
         </ul>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-10">
-      <div class="page-num-top">3</div>
-      <div class="page-content">
-        <h1 class="chapter-title">2. ORGANIZATION PROFILE</h1>
+    <div class="Section10" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">3</p>
+      <h1 class="chapter-title">2. ORGANIZATION PROFILE</h1>
         <h2 class="section-title">2.1 KaaShiv InfoTech Corporate Profile</h2>
         <p>KaaShiv InfoTech is a premier, industry-recognized software engineering, cloud solutions, and industrial research organization located in Chennai, Tamil Nadu, India. Established with the objective of bridging the gap between theoretical academic curricula and the demanding expectations of the modern corporate IT landscape, KaaShiv InfoTech is managed and mentored by seasoned software architects, including Microsoft Most Valuable Professional (MVP) awardees, Google Certified Cloud Architects, and Amazon Web Services certified specialists.</p>
         <p>The organization delivers comprehensive commercial consulting, custom software development, and technical incubation services across multiple advanced technology verticals. These core domains include Enterprise Full-Stack Application Engineering, Distributed Cloud Infrastructure, Computer Vision & Optical Image Analytics, Artificial Intelligence & Natural Language Processing, Embedded IoT Hardware Systems, 3D Prototyping & Drone Research, and Corporate Auditing & Financial Systems Automation. By maintaining state-of-the-art laboratory facilities and industrial testbeds, KaaShiv InfoTech provides enterprise clients with robust, scalable software products while simultaneously training emerging software engineers in modern production development practices.</p>
         <p>During my one-month internship tenure from 11th May 2026 to 30th June 2026, I was immersed in the Data Analytics and Cloud Computing division. The internship curriculum was structured to provide hands-on exposure to production software development lifecycles, full-stack TypeScript programming, reactive frontend state management, asynchronous data stream processing, and distributed cloud object storage. Working in a professional technology environment fostered rigorous programming discipline, heightened analytical problem-solving abilities, and provided deep insight into real-world enterprise information architectures.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-11">
-      <div class="page-num-top">4</div>
-      <div class="page-content">
-        <h2 class="section-title">2.2 Project Background & Industrial Context</h2>
+    <div class="Section11" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">4</p>
+      <h2 class="section-title">2.2 Project Background & Industrial Context</h2>
         <p>During the internship period, technical discussions with senior cloud architects highlighted a recurring pain point encountered by small-to-medium enterprises (SMEs) and corporate finance departments: the high financial and computational overhead associated with commercial cloud document processing APIs. While services such as Amazon Textract and Google Document AI provide powerful machine learning capabilities, their per-page processing fees and API invocation latencies become cost-prohibitive when applied to routine, high-volume operational records like daily purchase receipts, vendor invoices, and delivery notes.</p>
         <p>Furthermore, transmitting sensitive financial records to external cloud processing endpoints raises acute regulatory, confidentiality, and data sovereignty concerns under international data protection standards. This operational reality motivated the independent conception and development of the ArchiveX project. The architectural mandate was to evaluate whether modern client-side browser runtimes, utilizing Web Workers, Canvas rasterization, and lightweight heuristic optical character recognition engines, could perform local document indexing and entity parsing with zero cloud processing fees, while simultaneously delegating long-term durable archival to Amazon S3.</p>
         <h2 class="section-title">2.3 Engineering Standards & Culture</h2>
         <p>KaaShiv InfoTech enforces strict industry engineering conventions across all internal software development tracks. Projects adhere to two-week Agile sprint iterations, daily standup reviews, Git-based branch management workflows, and mandatory peer code reviews. Strict TypeScript typing was enforced throughout the ArchiveX codebase to prevent runtime type exceptions, eliminate null pointer errors, and ensure maintainability. Automated linting via ESLint and strict compilation checks were integrated into the development pipeline.</p>
         <h2 class="section-title">2.4 Research & Development Focus</h2>
         <p>The research track focused on benchmarking client-side regex heuristic parsers against irregular, heterogeneous invoice layouts; optimizing in-memory inverted token index structures for instant substring retrieval; and evaluating the modular architecture of the AWS SDK for JavaScript v3 (@aws-sdk/client-s3) to minimize client bundle footprints through effective tree-shaking.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-12">
-      <div class="page-num-top">5</div>
-      <div class="page-content">
-        <h1 class="chapter-title">3. PROBLEM STATEMENT</h1>
+    <div class="Section12" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">5</p>
+      <h1 class="chapter-title">3. PROBLEM STATEMENT</h1>
         <h2 class="section-title">3.1 Background of Enterprise Data Silos</h2>
         <p>Modern enterprises navigate a continuous influx of operational documentation generated across disparate physical locations, departments, and communication channels. In typical corporate workflows, accounting personnel receive billing PDFs via email, field representatives upload camera-captured expense receipts from mobile devices, and legal counsels store executed vendor agreements across isolated shared folders. Over time, these files form disconnected data silos where vital business intelligence is entombed in static, non-searchable raster formats.</p>
         <h2 class="section-title">3.2 Key Technical Challenges in Unindexed Repositories</h2>
@@ -598,14 +445,13 @@
             <tr><td><strong>Audit Readiness</strong></td><td>High risk of lost documents</td><td>Instant verifiable discovery workbench</td></tr>
           </tbody>
         </table>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-13">
-      <div class="page-num-top">6</div>
-      <div class="page-content">
-        <h1 class="chapter-title">4. OBJECTIVES</h1>
+    <div class="Section13" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">6</p>
+      <h1 class="chapter-title">4. OBJECTIVES</h1>
         <h2 class="section-title">4.1 Primary Strategic Objectives</h2>
         <p>The primary objective of the ArchiveX project is to engineer an enterprise-grade, browser-accelerated Cloud Content Discovery System and Intelligent Document Vault. The system automates the ingestion, textual analysis, heuristic metadata extraction, and indexing of multi-format corporate documentation while providing seamless, secure synchronization with cloud object storage.</p>
         <h2 class="section-title">4.2 Specific Technical Objectives</h2>
@@ -622,14 +468,13 @@
           <li><strong>Elimination of Data Entry Overhead:</strong> Reduce manual data entry requirements for accounting staff by more than eighty percent through automatic entity detection.</li>
           <li><strong>Offline Resilience & Client Persistence:</strong> Maintain full offline indexing capabilities using serialized local storage cache to safeguard operational continuity during network outages.</li>
         </ul>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-14">
-      <div class="page-num-top">7</div>
-      <div class="page-content">
-        <h1 class="chapter-title">5. SCOPE OF THE PROJECT</h1>
+    <div class="Section14" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">7</p>
+      <h1 class="chapter-title">5. SCOPE OF THE PROJECT</h1>
         <h2 class="section-title">5.1 In-Scope Functional Capabilities</h2>
         <p>The operational scope of ArchiveX encompasses end-to-end document lifecycle management within browser and cloud storage environments. Key functional capabilities include:</p>
         <ul class="bullet-list">
@@ -648,14 +493,13 @@
         </ul>
         <h2 class="section-title">5.3 Target Enterprise User Personas</h2>
         <p>ArchiveX is specifically engineered for Corporate Accounting Teams (for invoice and expense reconciliation), Compliance & Audit Officers (for rapid statutory record retrieval), and IT / Cloud Administrators (for managing enterprise cloud storage buckets and access policies).</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-15">
-      <div class="page-num-top">8</div>
-      <div class="page-content">
-        <h1 class="chapter-title">6. SYSTEM ANALYSIS</h1>
+    <div class="Section15" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">8</p>
+      <h1 class="chapter-title">6. SYSTEM ANALYSIS</h1>
         <h2 class="section-title">6.1 Functional Requirements</h2>
         <p>System analysis involves a comprehensive investigation into the functional capabilities, operational constraints, and performance parameters required to build a dependable cloud document discovery vault. The functional requirements define the precise software behaviors, input processing, and output transformations that ArchiveX must execute across its operational lifecycle. The table below specifies the key functional requirements (FR-01 through FR-06).</p>
         <table class="report-table" style="width:100%; border-collapse:collapse; margin-top:8px;">
@@ -683,14 +527,13 @@
           <li><strong>Reliability & Fault Tolerance:</strong> In the event of OCR parsing failures on damaged or corrupt files, the system must degrade gracefully, assigning a low confidence rating without interrupting user workspace state.</li>
           <li><strong>Maintainability & Portability:</strong> The frontend must maintain strict TypeScript 5 typing and responsive styling across mobile, tablet, and desktop viewports using Tailwind CSS.</li>
         </ul>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-16">
-      <div class="page-num-top">9</div>
-      <div class="page-content">
-        <h2 class="section-title">6.3 Feasibility Study</h2>
+    <div class="Section16" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">9</p>
+      <h2 class="section-title">6.3 Feasibility Study</h2>
         <p>A feasibility study was performed to assess the technical viability, economic practicality, operational utility, and development schedule for the ArchiveX system prior to implementation. The study confirmed that all technical dependencies, cloud integrations, and functional goals were achievable within the engineering constraints of the internship.</p>
         <ul class="bullet-list">
           <li><strong>Technical Feasibility:</strong> The modern web ecosystem—specifically React 19, TypeScript 5, Vite, HTML5 Canvas, and Web Workers—provides robust client-side execution capabilities capable of performing complex optical character parsing and inverted token indexing. Utilizing the modular AWS SDK for JavaScript v3 enables direct communication with Amazon S3 cloud buckets with minimal bundle size overhead.</li>
@@ -713,14 +556,13 @@
             <tr><td><strong>Week 4: Cloud Sync & Testing</strong></td><td>AWS S3 SDK v3 presigned URLs, modal inspector, comprehensive report</td><td style="text-align:center; color:#0f766e; font-weight:bold;">Completed</td></tr>
           </tbody>
         </table>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-17">
-      <div class="page-num-top">10</div>
-      <div class="page-content">
-        <h1 class="chapter-title">7. SYSTEM DESIGN</h1>
+    <div class="Section17" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">10</p>
+      <h1 class="chapter-title">7. SYSTEM DESIGN</h1>
         <h2 class="section-title">7.1 System Architecture</h2>
         <p>System design establishes the architectural blueprint, data structures, and component interaction models that translate functional requirements into concrete, maintainable software. ArchiveX is architectured as a decoupled four-tier enterprise system, separating user presentation, client state processing, optical character recognition services, and cloud object storage.</p>
         <ul class="bullet-list">
@@ -731,14 +573,13 @@
         </ul>
         <h2 class="section-title">Architectural Design Principles</h2>
         <p>The architecture strictly adheres to three fundamental software engineering principles: <strong>Loose Coupling</strong> (modules communicate via typed contracts without internal dependencies); <strong>Asynchronous Non-Blocking I/O</strong> (file reading and optical parsing execute without freezing user interface threads); and <strong>Strict Type Safety</strong> (end-to-end TypeScript interfaces prevent data inconsistency across tiers).</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-18">
-      <div class="page-num-top">11</div>
-      <div class="page-content">
-        <h2 class="section-title">7.2 Dataset / Corpus Overview</h2>
+    <div class="Section18" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">11</p>
+      <h2 class="section-title">7.2 Dataset / Corpus Overview</h2>
         <p>The ArchiveX system operates over a diverse corpus of digital documents representing authentic enterprise workflows. The internal data model is strictly typed via TypeScript to ensure structural integrity across file ingestion, storage serialization, and search querying. Each ingested asset is normalized into a comprehensive DocumentItem data object.</p>
         <table class="report-table" style="width:100%; border-collapse:collapse; margin-top:8px;">
           <thead>
@@ -767,14 +608,13 @@
           <li><strong>Legal & Contracts (15% of corpus):</strong> Non-disclosure agreements, master service agreements with counterparty names and execution clauses.</li>
           <li><strong>Operational & Diagnostics (15% of corpus):</strong> Laboratory reports, equipment maintenance logs with high tabular density.</li>
         </ul>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-19">
-      <div class="page-num-top">12</div>
-      <div class="page-content">
-        <h2 class="section-title">7.3 Data Flow Architecture</h2>
+    <div class="Section19" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">12</p>
+      <h2 class="section-title">7.3 Data Flow Architecture</h2>
         <p>The data flow architecture illustrates the structural progression of binary file data, optical character text streams, and extracted business entities as they transition through the system. The architecture is represented through Level 0 (Context Level) and Level 1 Data Flow Diagrams (DFD).</p>
         <h2 class="section-title">Level 0: Context Level Data Flow Diagram</h2>
         <p>At the context level, the User interacts directly with the ArchiveX Client Interface. The user submits raw document files (PDFs, images) and search query strings. In return, the interface delivers real-time search results, extracted invoice entities, highlighted text snippets, and presigned download links. The client interface communicates bidirectionally with the AWS S3 Cloud Storage Bucket for encrypted asset storage.</p>
@@ -786,14 +626,13 @@
           <li><strong>Process 4.0 (Inverted Token Indexing):</strong> Breaks extracted text into lowercase alphanumeric tokens. Builds posting lists mapping tokens to document IDs and character offsets for instant query evaluation.</li>
           <li><strong>Process 5.0 (Cloud Vault Sync & Presigning):</strong> Dispatches uploaded binaries to Amazon S3 via the Express proxy server. Generates cryptographically signed temporary download URLs for authorized access.</li>
         </ul>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-20">
-      <div class="page-num-top">13</div>
-      <div class="page-content">
-        <h2 class="section-title">7.4 Sequence & Interaction Design</h2>
+    <div class="Section20" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">13</p>
+      <h2 class="section-title">7.4 Sequence & Interaction Design</h2>
         <p>Sequence diagrams model the chronological sequence of messages and function invocations exchanged between user interface components, asynchronous processing services, and cloud storage endpoints. Three critical operational sequences govern the ArchiveX lifecycle:</p>
         <h2 class="section-title">Sequence 1: Document Upload & Asynchronous Ingestion Flow</h2>
         <p style="font-size:11pt; line-height:1.7;">
@@ -818,14 +657,13 @@
           2. The modal renders extracted fields on the left pane and highlighted OCR text on the right pane.<br/>
           3. User updates metadata or tags; <code>handleUpdateMetadata()</code> synchronizes state and persists changes.
         </p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-21">
-      <div class="page-num-top">14</div>
-      <div class="page-content">
-        <h2 class="section-title">7.5 Database & Inverted Index Architecture</h2>
+    <div class="Section21" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">14</p>
+      <h2 class="section-title">7.5 Database & Inverted Index Architecture</h2>
         <p>ArchiveX pairs client-side in-memory inverted token indexing with distributed cloud object storage. This hybrid architecture eliminates heavy server database clustering while delivering instant query evaluation and petabyte-scale cloud retention.</p>
         <h2 class="section-title">In-Memory Inverted Index Structure</h2>
         <p>During document ingestion, extracted OCR text and metadata are normalized (lowercased, punctuation-stripped, and tokenized). An in-memory inverted index maps each unique token to a posting list containing document IDs, term frequencies, and character position offsets:</p>
@@ -842,14 +680,13 @@
         </div>
         <h2 class="section-title">Presigned URL Access & Security Model</h2>
         <p>To prevent unauthorized downloads without routing multi-gigabyte binary files through intermediate server proxies, ArchiveX utilizes AWS S3 Presigned URLs. The server uses <code>@aws-sdk/s3-request-presigner</code> to cryptographically sign a <code>GetObjectCommand</code> URL with HMAC-SHA256 signatures valid for fifteen minutes. The browser downloads directly from S3 securely.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-22">
-      <div class="page-num-top">15</div>
-      <div class="page-content">
-        <h1 class="chapter-title">8. MODULES DESCRIPTION</h1>
+    <div class="Section22" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">15</p>
+      <h1 class="chapter-title">8. MODULES DESCRIPTION</h1>
         <h2 class="section-title">8.1 Data Collection & Ingestion Module</h2>
         <p>The Data Collection and Ingestion Module serves as the primary gateway for bringing heterogeneous enterprise documentation into the ArchiveX discovery pipeline. Implemented in <code>CenteredUploadDropzone.tsx</code> and <code>UploadModal.tsx</code>, the module provides a distraction-free, drag-and-drop interface engineered to handle diverse file formats including scanned PDF contracts, high-resolution PNG invoices, camera JPEG receipts, and plain text logs.</p>
         <h2 class="section-title">HTML5 Drag-and-Drop Event Lifecycle</h2>
@@ -858,14 +695,13 @@
         <p>Upon file drop, the module executes multi-stage validation heuristics prior to initiating processing. It validates file MIME types against an approved whitelist, verifies that file size does not exceed the 25MB threshold, and initializes an asynchronous <code>FileReader</code> stream. The ingestion module broadcasts real-time phase updates to keep users informed.</p>
         <h2 class="section-title">Dual-Mode Seamless View Transition</h2>
         <p>A key design feature is the seamless toggle between the heroic Centered Ingestion Dropzone and the Document Vault Table. When no documents are being uploaded or when users wish to explore existing assets, clicking 'View Documents' smoothly transitions the interface into the spreadsheet table view.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-23">
-      <div class="page-num-top">16</div>
-      <div class="page-content">
-        <h2 class="section-title">8.2 Asynchronous Document Preprocessing Module</h2>
+    <div class="Section23" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">16</p>
+      <h2 class="section-title">8.2 Asynchronous Document Preprocessing Module</h2>
         <p>Before raw document images and multi-page PDFs can be accurately parsed by optical character recognition algorithms, they must undergo digital preprocessing to remove noise, normalize pixel intensity, and convert binary streams into machine-readable canvas rasters. The Asynchronous Preprocessing Module, encapsulated in <code>ocrEngine.ts</code>, operates entirely on the client browser thread to eliminate server latency.</p>
         <h2 class="section-title">Canvas Rasterization & Grayscale Thresholding</h2>
         <p>For image-based documents (PNG, JPEG), the module dynamically instantiates off-screen HTML5 Canvas elements. The raw image is drawn to the canvas context, and image data pixels are retrieved via <code>getImageData()</code>. A luminance thresholding filter is applied to convert color pixels into high-contrast grayscale: <code>Y = 0.299R + 0.587G + 0.114B</code>. Grayscale normalization sharpens faded receipt text and increases OCR accuracy by over 18%.</p>
@@ -873,14 +709,13 @@
         <p>Processing large high-resolution scans inside browser memory presents significant risks of memory leaks if references are not cleanly disposed. The module enforces strict memory hygiene: every created Blob URL is explicitly deregistered via <code>URL.revokeObjectURL()</code> once rasterization concludes, and off-screen canvas dimensions are zeroed out.</p>
         <h2 class="section-title">Multi-Page PDF Stream Decoding</h2>
         <p>For PDF files, the preprocessing pipeline decodes the internal page stream sequentially. Each individual page is rasterized at 150 DPI to strike an optimal balance between optical character legibility and processing speed.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-24">
-      <div class="page-num-top">17</div>
-      <div class="page-content">
-        <h2 class="section-title">8.3 Content Analysis & Heuristic Tagging Module</h2>
+    <div class="Section24" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">17</p>
+      <h2 class="section-title">8.3 Content Analysis & Heuristic Tagging Module</h2>
         <p>The Content Analysis and Heuristic Tagging Module transforms unstructured, raw OCR text streams into highly structured business entities. Rather than treating document text as an undifferentiated sequence of words, the module deploys specialized regular expression (regex) heuristic engines to identify domain entities, monetary values, and tax breakdowns.</p>
         <h2 class="section-title">Regular Expression Entity Detection Engines</h2>
         <ul class="bullet-list">
@@ -890,14 +725,13 @@
         </ul>
         <h2 class="section-title">Automated Taxonomy Hashtag Assignment</h2>
         <p>Following entity detection, the module categorizes the file into corporate taxonomies by evaluating token frequency distributions. It automatically assigns searchable hashtags: <code>#invoice</code>, <code>#tax</code>, <code>#audit</code>, <code>#contract</code>, and <code>#receipt</code>. These tags become instant clickable filter chips in the UI.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-25">
-      <div class="page-num-top">18</div>
-      <div class="page-content">
-        <h2 class="section-title">8.4 OCR Extraction & Entity Classification Module</h2>
+    <div class="Section25" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">18</p>
+      <h2 class="section-title">8.4 OCR Extraction & Entity Classification Module</h2>
         <p>The Optical Character Recognition (OCR) and Entity Classification Module forms the computational engine of ArchiveX. Implemented in <code>src/services/ocrEngine.ts</code>, this module coordinates optical glyph recognition, token segmentation, word confidence calculation, and line-item table parsing.</p>
         <h2 class="section-title">Optical Character Segmentation Pipeline</h2>
         <p>The optical engine receives preprocessed grayscale image matrices. It segments pixels into connected components, identifies text baselines, and matches character bounding boxes against neural and matrix glyph dictionaries. The output produces structured text lines, word tokens, and bounding box coordinates.</p>
@@ -909,14 +743,13 @@
         <p>A score above 90% is displayed with a green badge; 75% to 90% displays amber; below 75% indicates a degraded scan.</p>
         <h2 class="section-title">Line-Item Tabular Data Extraction</h2>
         <p>For financial invoices, the module identifies tabular rows corresponding to purchased goods or services. It splits tabular blocks into item description, quantity, unit price, and extended total amount, populating the <code>lineItems</code> array for downstream audit reconciliation.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-26">
-      <div class="page-num-top">19</div>
-      <div class="page-content">
-        <h2 class="section-title">8.5 Document Vault & Retrieval Interface Module</h2>
+    <div class="Section26" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">19</p>
+      <h2 class="section-title">8.5 Document Vault & Retrieval Interface Module</h2>
         <p>The Document Vault and Retrieval Interface Module represents the operational workspace where business users interact with indexed assets. Built in <code>DocumentTableView.tsx</code> and <code>SearchAndFilters.tsx</code>, it unifies lightning-fast in-memory keyword search, dynamic multi-attribute filtering, batch administrative controls, and cloud storage synchronization.</p>
         <h2 class="section-title">Sub-Millisecond Query Evaluation & Highlight Spans</h2>
         <p>The search engine evaluates user queries across multiple document dimensions simultaneously: file name, extracted invoice ID, vendor counterparty, domain tags, and raw full-text OCR body text. Matching query substrings are wrapped in glowing yellow <code>&lt;mark&gt;</code> tags inside contextual snippet previews, allowing users to verify immediately why a document was returned.</p>
@@ -924,14 +757,13 @@
         <p>For enterprise productivity, the table view includes batch management features. Users can click individual row checkboxes or the master 'Select All' header checkbox to perform batch operations, such as deleting multiple obsolete records simultaneously or resetting the document vault to standard default fixtures.</p>
         <h2 class="section-title">Cloud Storage Synchronization Gateway</h2>
         <p>The module interfaces with AWS S3 via <code>S3ConfigModal.tsx</code> and <code>server.ts</code>. Users can configure AWS access keys, S3 bucket names, and regions, testing bucket connectivity in real time. Documents can be downloaded using temporary presigned URLs directly from Amazon S3.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-27">
-      <div class="page-num-top">20</div>
-      <div class="page-content">
-        <h1 class="chapter-title">9. USER INTERFACE DESIGN</h1>
+    <div class="Section27" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">20</p>
+      <h1 class="chapter-title">9. USER INTERFACE DESIGN</h1>
         <h2 class="section-title">9.1 Centered Upload Dropzone Portal</h2>
         <p>User experience (UX) and visual interface design are critical to the successful adoption of enterprise software. ArchiveX is designed with a modern, dark-themed aesthetic (<code>#090d16</code> canvas) that reduces ocular fatigue during extended document review sessions while maintaining crisp typographic contrast conforming to WCAG 2.1 AA accessibility standards.</p>
         <h2 class="section-title">Heroic Centered Dropzone Ergonomics</h2>
@@ -940,14 +772,13 @@
         <p>When files are dragged over the dropzone, the component provides immediate visual feedback: the border glows vivid blue, the dropzone scales slightly (1.01x), and an animated prompt appears. During file processing, an animated progress bar reflects real-time stages: 'Reading file buffer (15%)', 'Rasterizing image canvas (45%)', 'Extracting OCR text (75%)', and 'Parsing entities (95%)'.</p>
         <h2 class="section-title">Direct Navigation Controls</h2>
         <p>A prominent action button ('View Documents') in the dropzone allows users to bypass file upload and enter the document vault workspace directly at any time.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-28">
-      <div class="page-num-top">21</div>
-      <div class="page-content">
-        <h2 class="section-title">9.2 Document Vault Table & Discovery Workspace</h2>
+    <div class="Section28" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">21</p>
+      <h2 class="section-title">9.2 Document Vault Table & Discovery Workspace</h2>
         <p>The Document Vault Table View provides a dense, spreadsheet-style interface optimized for financial controllers, auditors, and operations managers who require high data throughput without visual clutter. The table layout displays comprehensive document metadata across clearly demarcated columns.</p>
         <h2 class="section-title">Tabular Column Hierarchy</h2>
         <ul class="bullet-list">
@@ -961,14 +792,13 @@
         </ul>
         <h2 class="section-title">Document Inspector Modal Workbench</h2>
         <p>Clicking any document row launches the <code>DocumentViewerModal</code>. The modal utilizes an intuitive dual-pane layout: the <strong>Left Pane</strong> contains editable input fields for Invoice Number, Date, Vendor Name, Total Amount, and Tag management; the <strong>Right Pane</strong> displays the full extracted raw OCR text with highlighted keywords matching the active search query. Users can update metadata inline and persist changes to the vault.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-29">
-      <div class="page-num-top">22</div>
-      <div class="page-content">
-        <h1 class="chapter-title">10. TESTING</h1>
+    <div class="Section29" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">22</p>
+      <h1 class="chapter-title">10. TESTING</h1>
         <h2 class="section-title">10.1 Testing Objectives & Methodology</h2>
         <p>Software testing validates the operational correctness, data integrity, error resilience, and performance criteria of the ArchiveX system across diverse runtime conditions. Testing was conducted iteratively across Unit, Component Integration, System Functional, and Usability verification phases.</p>
         <h2 class="section-title">10.2 Comprehensive Test Cases & Execution Results</h2>
@@ -995,14 +825,13 @@
             <tr><td style="font-weight:bold;">TC-10</td><td>S3 Cloud Presign</td><td>Request presigned download link for vaulted document</td><td>Cryptographically valid HTTPS AWS S3 link generated</td><td style="text-align:center; color:#0f766e; font-weight:bold;">PASS</td></tr>
           </tbody>
         </table>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-30">
-      <div class="page-num-top">23</div>
-      <div class="page-content">
-        <h1 class="chapter-title">11. TOOLS & TECHNOLOGIES USED</h1>
+    <div class="Section30" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">23</p>
+      <h1 class="chapter-title">11. TOOLS & TECHNOLOGIES USED</h1>
         <p>ArchiveX is constructed using modern web standards, cloud-native frameworks, and strict static typing. The technology stack was curated to maximize client runtime performance, ensure architectural modularity, and maintain secure integration with cloud infrastructure.</p>
         <table class="report-table" style="width:100%; border-collapse:collapse; margin-top:8px; font-size:10pt;">
           <thead>
@@ -1026,14 +855,13 @@
         </table>
         <h2 class="section-title">Architectural Justification</h2>
         <p>The combination of React 19, TypeScript 5, and the modular AWS SDK v3 guarantees that the entire client bundle remains compact and responsive. Delegating OCR extraction and indexing to the browser eliminates cloud compute expenses, while Amazon S3 ensures enterprise-grade asset retention with 99.999999999% (11 9's) durability.</p>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-31">
-      <div class="page-num-top">24</div>
-      <div class="page-content">
-        <h1 class="chapter-title">12. SCREENSHOTS</h1>
+    <div class="Section31" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">24</p>
+      <h1 class="chapter-title">12. SCREENSHOTS</h1>
         <div style="text-align:center; margin:12px 0;">
           <p style="font-weight:bold; font-size:11pt; margin-bottom:4px; color:#000;">Figure 12.1: ArchiveX Centered Upload Dropzone Portal</p>
           <img src="/assets/images/upload_portal_1790860486608.jpg" alt="Figure 12.1 Centered Upload Dropzone" style="width:100%; max-height:260px; object-fit:contain; border:1px solid #999;" />
@@ -1049,14 +877,13 @@
             Walkthrough: The spreadsheet-style Document Vault table shows indexed documents, checkboxes for batch deletion, color-coded domain badges, OCR confidence scores, monetary values, and action controls.
           </p>
         </div>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-32">
-      <div class="page-num-top">25</div>
-      <div class="page-content">
-        <div style="text-align:center; margin:12px 0;">
+    <div class="Section32" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">25</p>
+      <div style="text-align:center; margin:12px 0;">
           <p style="font-weight:bold; font-size:11pt; margin-bottom:4px; color:#000;">Figure 12.3: Document Preview & Extracted OCR Text Inspector</p>
           <img src="/assets/images/document_viewer_1790861039201.jpg" alt="Figure 12.3 Document Viewer" style="width:100%; max-height:260px; object-fit:contain; border:1px solid #999;" />
           <p style="font-size:9pt; font-style:italic; margin-top:4px; text-align:center; color:#333;">
@@ -1071,14 +898,13 @@
             Walkthrough: The S3ConfigModal interface allowing cloud administrators to configure AWS access credentials, test S3 bucket connectivity, monitor storage usage, and manage presigned temporary download links.
           </p>
         </div>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-33">
-      <div class="page-num-top">26</div>
-      <div class="page-content">
-        <h1 class="chapter-title">13. LEARNING OUTCOMES</h1>
+    <div class="Section33" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">26</p>
+      <h1 class="chapter-title">13. LEARNING OUTCOMES</h1>
         <h2 class="section-title">13.1 Technical Competencies Mastered</h2>
         <p>The execution of the ArchiveX project and the intensive internship tenure at KaaShiv InfoTech contributed significantly to my technical, analytical, and architectural development as a computer applications professional. The experience bridged theoretical academic foundations with modern production software engineering practices.</p>
         <ul class="bullet-list">
@@ -1088,14 +914,13 @@
           <li><strong>AWS Cloud Storage Architecture (SDK v3):</strong> Learned how to interact with Amazon Web Services S3 using the modular AWS SDK for JavaScript v3. Implemented secure presigned URL generation, IAM policy configuration, and multi-part file stream uploads.</li>
           <li><strong>Regular Expression Heuristic Parsing:</strong> Designed high-precision regex engines for financial entity detection, extracting invoice identification numbers, monetary totals, and dates from heterogeneous document text.</li>
         </ul>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-34">
-      <div class="page-num-top">27</div>
-      <div class="page-content">
-        <h2 class="section-title">13.2 Industry Exposure & Problem-Solving Competencies</h2>
+    <div class="Section34" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">27</p>
+      <h2 class="section-title">13.2 Industry Exposure & Problem-Solving Competencies</h2>
         <p>Beyond technical programming competencies, working within a professional technology incubation center provided invaluable exposure to corporate software engineering methodologies, cloud governance, and operational problem solving:</p>
         <ul class="bullet-list">
           <li><strong>Enterprise Information Governance:</strong> Understood the critical importance of statutory document retention mandates, audit readiness, and the acute business risks associated with unstructured 'dark data' silos.</li>
@@ -1104,14 +929,13 @@
           <li><strong>Asynchronous Concurrency Debugging:</strong> Developed practical debugging skills in tracing asynchronous race conditions, managing memory lifecycles during canvas rasterization, and handling transient network failures gracefully.</li>
           <li><strong>Product-Centric Ergonomics:</strong> Learned that enterprise software must be intuitive and distraction-free. The dual-mode interface of ArchiveX ensures that both non-technical accounting clerks and technical auditors can navigate the vault effortlessly.</li>
         </ul>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-35">
-      <div class="page-num-top">28</div>
-      <div class="page-content">
-        <h1 class="chapter-title">14. CONCLUSION AND FUTURE ENHANCEMENTS</h1>
+    <div class="Section35" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">28</p>
+      <h1 class="chapter-title">14. CONCLUSION AND FUTURE ENHANCEMENTS</h1>
         <h2 class="section-title">14.1 Conclusion</h2>
         <p>The ArchiveX Cloud Content Discovery System successfully resolves the long-standing enterprise challenge of inaccessible, unsearchable document archives. By unifying browser-accelerated optical character recognition, heuristic regular expression entity detection, in-memory inverted token indexing, and durable Amazon S3 cloud object storage, the system transforms opaque digital record graveyards into transparent, instantly queryable business intelligence vaults.</p>
         <p>The project demonstrates that high-performance document discovery does not require expensive on-premises database clusters or costly commercial cloud OCR APIs. By performing optical text extraction and entity parsing on the client browser, ArchiveX achieves zero ongoing compute expenses, protects enterprise data privacy, and delivers sub-50 millisecond query evaluation across thousands of document lines.</p>
@@ -1122,14 +946,13 @@
           <li><strong>Multi-Cloud Storage Redundancy:</strong> Extend storage synchronization across Google Cloud Storage and Microsoft Azure Blob Storage for geo-redundant enterprise disaster recovery.</li>
           <li><strong>Mobile Progressive Web App (PWA):</strong> Enhance the web client with service workers and camera capture APIs for direct physical invoice scanning on mobile devices.</li>
         </ul>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-36">
-      <div class="page-num-top">29</div>
-      <div class="page-content">
-        <h1 class="chapter-title">15. REFERENCES</h1>
+    <div class="Section36" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">29</p>
+      <h1 class="chapter-title">15. REFERENCES</h1>
         <h2 class="section-title">Academic Literature, Textbooks & Technical Specifications</h2>
         <ul class="bullet-list" style="list-style-type:none; padding-left:0; font-size:10.5pt; line-height:1.7;">
           <li style="margin-bottom:8px;">1. Manning, C. D., Raghavan, P., & Schütze, H. (2008). <em>Introduction to Information Retrieval</em>. Cambridge University Press.</li>
@@ -1145,14 +968,13 @@
           <li style="margin-bottom:8px;">11. Mozilla Developer Network (MDN). (2026). <em>Web APIs: CanvasRenderingContext2D, FileReader API, and Web Workers Guide</em>.</li>
           <li style="margin-bottom:8px;">12. International Organization for Standardization. (2020). <em>ISO 19005-1: Document Management — Electronic Document File Format for Long-Term Preservation (PDF/A)</em>.</li>
         </ul>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-37">
-      <div class="page-num-top">30</div>
-      <div class="page-content">
-        <h1 class="chapter-title">16. APPENDIX</h1>
+    <div class="Section37" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">30</p>
+      <h1 class="chapter-title">16. APPENDIX</h1>
         <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: CenteredUploadDropzone.tsx (Part 1 - Component Setup & Drag Events):</p>
         <pre class="code-box"><code>import React, { useState, useRef, DragEvent } from &#039;react&#039;;
 import { 
@@ -1205,14 +1027,13 @@ export const CenteredUploadDropzone: React.FC&lt;CenteredUploadDropzoneProps&gt;
       });
 
 </code></pre>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-38">
-      <div class="page-num-top">31</div>
-      <div class="page-content">
-        <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: CenteredUploadDropzone.tsx (Part 2 - JSX Rendering & Format Pills):</p>
+    <div class="Section38" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">31</p>
+      <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: CenteredUploadDropzone.tsx (Part 2 - JSX Rendering & Format Pills):</p>
         <pre class="code-box"><code>      onDocumentProcessed(processedDoc);
       setLastUploadedDoc(processedDoc);
       setIsProcessing(false);
@@ -1269,14 +1090,13 @@ export const CenteredUploadDropzone: React.FC&lt;CenteredUploadDropzoneProps&gt;
         {/* Subtle Background Glow */}
         &lt;div className=&quot;absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none&quot; /&gt;
 </code></pre>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-39">
-      <div class="page-num-top">32</div>
-      <div class="page-content">
-        <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: DocumentTableView.tsx (Part 1 - Header & Search Integration):</p>
+    <div class="Section39" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">32</p>
+      <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: DocumentTableView.tsx (Part 1 - Header & Search Integration):</p>
         <pre class="code-box"><code>import React from &#039;react&#039;;
 import { 
   FileText, 
@@ -1328,14 +1148,13 @@ export const DocumentTableView: React.FC&lt;DocumentTableViewProps&gt; = ({
       const d = new Date(isoString);
       return d.toLocaleDateString(&#039;en-US&#039;, { month: &#039;short&#039;, day: &#039;numeric&#039;, year: &#039;numeric&#039; });
 </code></pre>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-40">
-      <div class="page-num-top">33</div>
-      <div class="page-content">
-        <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: DocumentTableView.tsx (Part 2 - Row Rendering & Batch Actions):</p>
+    <div class="Section40" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">33</p>
+      <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: DocumentTableView.tsx (Part 2 - Row Rendering & Batch Actions):</p>
         <pre class="code-box"><code>    } catch {
       return isoString;
     }
@@ -1392,14 +1211,13 @@ export const DocumentTableView: React.FC&lt;DocumentTableViewProps&gt; = ({
                     &lt;td className=&quot;px-3 py-3 text-center&quot; onClick={(e) =&gt; { e.stopPropagation(); onToggleSelect(doc.id); }}&gt;
                       &lt;button className=&quot;text-slate-400 hover:text-slate-200&quot;&gt;
 </code></pre>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-41">
-      <div class="page-num-top">34</div>
-      <div class="page-content">
-        <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: ocrEngine.ts (OCR Pipeline & Regex Entity Heuristic Parser):</p>
+    <div class="Section41" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">34</p>
+      <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: ocrEngine.ts (OCR Pipeline & Regex Entity Heuristic Parser):</p>
         <pre class="code-box"><code>import { DocumentItem, ExtractedMetadata, TextractBlock, LineItem } from &#039;../types/document&#039;;
 
 interface ProcessingCallback {
@@ -1456,14 +1274,13 @@ export async function processDocumentUpload(
     summary: generateDocumentSummary(extracted, file.name),
     extracted,
 </code></pre>
-      </div>
     </div>
     
+<br clear="all" style="page-break-before:always;mso-break-type:section-break">
 
-    <div class="page" id="page-42">
-      <div class="page-num-top">35</div>
-      <div class="page-content">
-        <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: server.ts & s3Service.ts (Express Server & AWS S3 Integration):</p>
+    <div class="Section42" style="page-break-before:always; mso-break-type:section-break;">
+      <p style="text-align:right; font-size:11pt; color:#000; margin-bottom:12pt;">35</p>
+      <p style="font-weight:bold; margin-bottom:8px; font-size:11pt;">SOURCE CODE: server.ts & s3Service.ts (Express Server & AWS S3 Integration):</p>
         <pre class="code-box"><code>import express from &#039;express&#039;;
 import { createServer as createViteServer } from &#039;vite&#039;;
 import dotenv from &#039;dotenv&#039;;
@@ -1520,9 +1337,7 @@ function createS3Client() {
   return new S3Client({
     region: config.region,
 </code></pre>
-      </div>
     </div>
     
-  </div>
 </body>
 </html>
