@@ -10,6 +10,11 @@ import {
   ListObjectsV2Command, 
   HeadBucketCommand 
 } from '@aws-sdk/client-s3';
+import { 
+  TextractClient, 
+  DetectDocumentTextCommand, 
+  AnalyzeDocumentCommand 
+} from '@aws-sdk/client-textract';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 dotenv.config();
@@ -52,6 +57,25 @@ function createS3Client() {
   }
 
   return new S3Client({
+    region: config.region,
+    credentials: {
+      accessKeyId: config.accessKeyId!,
+      secretAccessKey: config.secretAccessKey!,
+      sessionToken: config.sessionToken
+    }
+  });
+}
+
+/**
+ * Helper to construct an AWS Textract Client from environment variables
+ */
+function createTextractClient() {
+  const config = getS3Config();
+  if (!config.hasCredentials) {
+    return null;
+  }
+
+  return new TextractClient({
     region: config.region,
     credentials: {
       accessKeyId: config.accessKeyId!,
@@ -286,6 +310,149 @@ app.get('/api/s3/list', async (req, res) => {
     return res.json({ success: true, count: objects.length, objects });
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// -----------------------------------------------------------------------------
+// AWS Textract API Routes (/api/textract/*)
+// -----------------------------------------------------------------------------
+
+/**
+ * GET /api/textract/status
+ * Returns current AWS Textract connection status
+ */
+app.get('/api/textract/status', async (_req, res) => {
+  const config = getS3Config();
+
+  if (!config.hasCredentials) {
+    return res.json({
+      isConfigured: false,
+      hasCredentials: false,
+      region: config.region,
+      mode: 'simulation',
+      message: 'AWS Textract requires AWS credentials (AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY).'
+    });
+  }
+
+  return res.json({
+    isConfigured: true,
+    hasCredentials: true,
+    region: config.region,
+    mode: 'live',
+    message: `AWS Textract client ready in region ${config.region}.`
+  });
+});
+
+/**
+ * POST /api/textract/analyze
+ * Executes real AWS Textract extraction on document bytes or an S3 object
+ */
+app.post('/api/textract/analyze', async (req, res) => {
+  const config = getS3Config();
+  const { contentBase64, s3Bucket, s3Key } = req.body;
+
+  if (!config.hasCredentials) {
+    return res.status(400).json({
+      success: false,
+      error: 'AWS credentials not configured. Textract requires AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY.'
+    });
+  }
+
+  const textract = createTextractClient();
+  if (!textract) {
+    return res.status(500).json({ success: false, error: 'Could not instantiate Textract client.' });
+  }
+
+  try {
+    const startTime = Date.now();
+    let documentParam: any = {};
+
+    if (s3Bucket && s3Key) {
+      documentParam = {
+        S3Object: {
+          Bucket: s3Bucket,
+          Name: s3Key
+        }
+      };
+    } else if (contentBase64) {
+      documentParam = {
+        Bytes: Buffer.from(contentBase64, 'base64')
+      };
+    } else {
+      return res.status(400).json({
+        success: false,
+        error: 'Either contentBase64 or (s3Bucket and s3Key) is required.'
+      });
+    }
+
+    // Attempt AnalyzeDocument with TABLES and FORMS for deep structural OCR
+    let response: any;
+    try {
+      response = await textract.send(new AnalyzeDocumentCommand({
+        Document: documentParam,
+        FeatureTypes: ['TABLES', 'FORMS']
+      }));
+    } catch (analyzeErr: any) {
+      // Fallback to DetectDocumentText if AnalyzeDocument is not supported for this file
+      console.warn('Textract AnalyzeDocument fallback to DetectDocumentText:', analyzeErr?.message);
+      response = await textract.send(new DetectDocumentTextCommand({
+        Document: documentParam
+      }));
+    }
+
+    const durationMs = Date.now() - startTime;
+    const blocks = response.Blocks || [];
+
+    // Extract all LINE texts
+    const lines = blocks
+      .filter((b: any) => b.BlockType === 'LINE' && b.Text)
+      .map((b: any) => b.Text);
+    const rawText = lines.join('\n');
+
+    // Calculate real average confidence
+    const wordBlocks = blocks.filter((b: any) => (b.BlockType === 'WORD' || b.BlockType === 'LINE') && typeof b.Confidence === 'number');
+    const avgConfidence = wordBlocks.length > 0
+      ? Number((wordBlocks.reduce((acc: number, b: any) => acc + b.Confidence, 0) / wordBlocks.length).toFixed(1))
+      : 98.0;
+
+    // Convert AWS Textract blocks into our TextractBlock format
+    const formattedBlocks = blocks.slice(0, 60).map((b: any) => ({
+      id: b.Id || `blk-${Math.random()}`,
+      blockType: b.BlockType,
+      text: b.Text,
+      confidence: b.Confidence ? Number(b.Confidence.toFixed(1)) : undefined,
+      geometry: {
+        boundingBox: {
+          width: b.Geometry?.BoundingBox?.Width || 0.5,
+          height: b.Geometry?.BoundingBox?.Height || 0.04,
+          left: b.Geometry?.BoundingBox?.Left || 0.1,
+          top: b.Geometry?.BoundingBox?.Top || 0.1
+        }
+      },
+      entityTypes: b.EntityTypes,
+      rowIndex: b.RowIndex,
+      columnIndex: b.ColumnIndex,
+      rowSpan: b.RowSpan,
+      columnSpan: b.ColumnSpan
+    }));
+
+    return res.json({
+      success: true,
+      mode: 'live_aws_textract',
+      durationMs,
+      pageCount: response.DocumentMetadata?.Pages || 1,
+      avgConfidence,
+      rawText,
+      lineCount: lines.length,
+      blocks: formattedBlocks
+    });
+  } catch (err: any) {
+    console.error('AWS Textract extraction error:', err);
+    return res.status(500).json({
+      success: false,
+      error: err.message || 'AWS Textract extraction failed',
+      code: err.name || 'TextractError'
+    });
   }
 });
 

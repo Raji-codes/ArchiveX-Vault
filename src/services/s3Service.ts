@@ -106,7 +106,78 @@ export async function deleteFromRealS3(key: string): Promise<boolean> {
   }
 }
 
-function fileToBase64(file: File): Promise<string> {
+export interface TextractStatusResponse {
+  isConfigured: boolean;
+  hasCredentials: boolean;
+  region: string;
+  mode: 'live' | 'simulation';
+  message: string;
+}
+
+export interface TextractAnalyzeResponse {
+  success: boolean;
+  mode: 'live_aws_textract';
+  durationMs: number;
+  pageCount: number;
+  avgConfidence: number;
+  rawText: string;
+  lineCount: number;
+  blocks: any[];
+  error?: string;
+}
+
+/**
+ * Check if the server has real AWS Textract credentials configured
+ */
+export async function checkTextractStatus(): Promise<TextractStatusResponse> {
+  try {
+    const res = await fetch('/api/textract/status');
+    if (!res.ok) throw new Error(`Status ${res.status}`);
+    return await res.json();
+  } catch (err: any) {
+    return {
+      isConfigured: false,
+      hasCredentials: false,
+      region: 'ap-southeast-2',
+      mode: 'simulation',
+      message: err.message || 'Offline simulation'
+    };
+  }
+}
+
+/**
+ * Analyze a document file using real AWS Textract
+ */
+export async function analyzeDocumentWithTextract(
+  file: File,
+  s3Bucket?: string,
+  s3Key?: string
+): Promise<TextractAnalyzeResponse | null> {
+  try {
+    const base64Data = await fileToBase64(file);
+    const res = await fetch('/api/textract/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contentBase64: base64Data,
+        s3Bucket,
+        s3Key,
+        filename: file.name
+      })
+    });
+
+    const data = await res.json();
+    if (res.ok && data.success) {
+      return data;
+    }
+    return null;
+  } catch (err) {
+    console.warn('Real AWS Textract call failed, using fallback:', err);
+    return null;
+  }
+}
+
+export function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {

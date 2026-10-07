@@ -1,4 +1,5 @@
 import { DocumentItem, ExtractedMetadata, TextractBlock, LineItem } from '../types/document';
+import { uploadToRealS3, analyzeDocumentWithTextract } from './s3Service';
 
 interface ProcessingCallback {
   onPhaseChange?: (phase: string, progress: number) => void;
@@ -8,34 +9,73 @@ export async function processDocumentUpload(
   file: File,
   callbacks?: ProcessingCallback
 ): Promise<DocumentItem> {
-  const fileContent = await readFileAsTextOrFallback(file);
-  
-  // Phase 1: S3 Upload Simulation
-  callbacks?.onPhaseChange?.('Generating S3 Presigned URL & PUT to s3://archivex-vault...', 15);
-  await delay(350);
+  const startTime = Date.now();
+  let s3Key: string | undefined;
+  let s3Bucket = 'archivex-vault';
+  let s3UploadMs = 80;
 
-  // Phase 2: EventBridge routing
-  callbacks?.onPhaseChange?.('EventBridge matching s3:ObjectCreated filter -> Triggering Lambda...', 35);
+  // Phase 1: Real or Simulated S3 Upload
+  callbacks?.onPhaseChange?.('Uploading document to AWS S3 bucket...', 15);
+  try {
+    const s3Result = await uploadToRealS3(file);
+    if (s3Result && s3Result.success) {
+      s3Key = s3Result.key;
+      s3Bucket = s3Result.bucket;
+      s3UploadMs = Math.max(10, Date.now() - startTime);
+    }
+  } catch (s3Err) {
+    // Falls back smoothly if S3 is not yet connected
+    console.log('Real S3 upload deferred/skipped:', s3Err);
+  }
+
+  // Phase 2: Event trigger
+  callbacks?.onPhaseChange?.('S3 ObjectCreated event dispatched -> Initializing OCR pipeline...', 35);
+  await delay(200);
+
+  // Phase 3: Real AWS Textract Execution
+  callbacks?.onPhaseChange?.('Executing AWS Textract (AnalyzeDocument & DetectDocumentText)...', 60);
+  const textractStart = Date.now();
+  const textractRes = await analyzeDocumentWithTextract(file, s3Bucket, s3Key);
+  const textractMs = Math.max(400, Date.now() - textractStart);
+
+  let fileContent: string;
+  let textractBlocks: TextractBlock[];
+  let ocrConfidence = 98.5;
+  let usedLiveTextract = false;
+
+  if (textractRes && textractRes.success && textractRes.rawText && textractRes.rawText.trim().length > 0) {
+    fileContent = textractRes.rawText;
+    textractBlocks = textractRes.blocks || [];
+    ocrConfidence = textractRes.avgConfidence || 98.5;
+    usedLiveTextract = true;
+  } else {
+    fileContent = await readFileAsTextOrFallback(file);
+    textractBlocks = generateSimulatedBlocks(fileContent);
+  }
+
+  // Parse structured entities from text
+  const extracted = extractFieldsFromText(fileContent, file.name);
+  if (usedLiveTextract) {
+    extracted.ocrConfidence = ocrConfidence;
+  }
+  const tags = generateSmartTags(extracted, fileContent, file.name);
+  if (usedLiveTextract && !tags.includes('#aws-textract')) {
+    tags.unshift('#aws-textract');
+  }
+
+  // Phase 4: Indexing
+  callbacks?.onPhaseChange?.('Generating inverted search tokens & indexing document...', 90);
   await delay(250);
 
-  // Phase 3: Textract OCR extraction
-  callbacks?.onPhaseChange?.('AWS Textract AnalyzeDocument running (TABLES, FORMS, LAYOUT)...', 65);
-  await delay(600);
-
-  // Parse text & extract fields
-  const extracted = extractFieldsFromText(fileContent, file.name);
-  const tags = generateSmartTags(extracted, fileContent, file.name);
-  const textractBlocks = generateSimulatedBlocks(fileContent, extracted.lineItems);
-
-  // Phase 4: DynamoDB & OpenSearch
-  callbacks?.onPhaseChange?.('Persisting DynamoDB metadata & indexing in OpenSearch cluster...', 90);
-  await delay(300);
-
-  callbacks?.onPhaseChange?.('Ingestion pipeline complete! Document indexed & searchable.', 100);
+  callbacks?.onPhaseChange?.(
+    usedLiveTextract 
+      ? 'Extracted via Real AWS Textract! Document indexed & searchable.' 
+      : 'Ingestion pipeline complete! Document indexed & searchable.', 
+    100
+  );
   await delay(150);
 
   const docId = `doc-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
-  const ext = file.name.split('.').pop()?.toLowerCase() || 'pdf';
   const prefix = tags.includes('#invoice') ? 'invoices' : tags.includes('#receipt') ? 'receipts' : tags.includes('#contract') ? 'contracts' : 'documents';
 
   const doc: DocumentItem = {
@@ -43,23 +83,23 @@ export async function processDocumentUpload(
     name: file.name,
     size: file.size,
     mimeType: file.type || 'application/octet-stream',
-    s3Key: `${prefix}/${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, '0')}/${file.name}`,
-    s3Bucket: 'archivex-vault',
+    s3Key: s3Key || `${prefix}/${new Date().getFullYear()}/${String(new Date().getMonth() + 1).padStart(2, '0')}/${file.name}`,
+    s3Bucket,
     s3Region: 'ap-southeast-2',
     storageClass: 'STANDARD',
     uploadedAt: new Date().toISOString(),
     status: 'ready',
     tags,
     rawText: fileContent,
-    summary: generateDocumentSummary(extracted, file.name),
+    summary: (usedLiveTextract ? '[AWS Textract Verified] ' : '') + generateDocumentSummary(extracted, file.name),
     extracted,
     textractBlocks,
     metrics: {
-      s3UploadMs: Math.floor(80 + Math.random() * 50),
-      lambdaWorkerMs: Math.floor(30 + Math.random() * 20),
-      textractOcrMs: Math.floor(550 + Math.random() * 400),
-      dynamoDbWriteMs: Math.floor(10 + Math.random() * 8),
-      openSearchIndexMs: Math.floor(20 + Math.random() * 15),
+      s3UploadMs,
+      lambdaWorkerMs: 45,
+      textractOcrMs: textractMs,
+      dynamoDbWriteMs: 15,
+      openSearchIndexMs: 25,
       totalLatencyMs: 0
     },
     thumbnailColor: pickColorForTags(tags)

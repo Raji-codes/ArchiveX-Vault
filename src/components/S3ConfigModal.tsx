@@ -14,7 +14,7 @@ import {
   Sliders,
   Database
 } from 'lucide-react';
-import { checkS3Status, S3StatusResponse } from '../services/s3Service';
+import { checkS3Status, S3StatusResponse, checkTextractStatus, TextractStatusResponse } from '../services/s3Service';
 
 interface S3ConfigModalProps {
   isOpen: boolean;
@@ -28,6 +28,7 @@ export const S3ConfigModal: React.FC<S3ConfigModalProps> = ({
   onStatusChange
 }) => {
   const [status, setStatus] = useState<S3StatusResponse | null>(null);
+  const [textractStatus, setTextractStatus] = useState<TextractStatusResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'env' | 'iam' | 'cors'>('env');
@@ -39,9 +40,13 @@ export const S3ConfigModal: React.FC<S3ConfigModalProps> = ({
   const fetchStatus = async () => {
     setLoading(true);
     try {
-      const data = await checkS3Status();
-      setStatus(data);
-      onStatusChange?.(data);
+      const [s3Data, textractData] = await Promise.all([
+        checkS3Status(),
+        checkTextractStatus()
+      ]);
+      setStatus(s3Data);
+      setTextractStatus(textractData);
+      onStatusChange?.(s3Data);
     } catch {
       // ignore
     } finally {
@@ -90,6 +95,16 @@ AWS_SECRET_ACCESS_KEY="YOUR_ACTUAL_SECRET_ACCESS_KEY"`;
         "s3:DeleteObject"
       ],
       "Resource": "arn:aws:s3:::${bucketName}/*"
+    },
+    {
+      "Sid": "ArchivexTextractAccess",
+      "Effect": "Allow",
+      "Action": [
+        "textract:DetectDocumentText",
+        "textract:AnalyzeDocument",
+        "textract:AnalyzeExpense"
+      ],
+      "Resource": "*"
     }
   ]
 }`;
@@ -225,9 +240,9 @@ AWS_SECRET_ACCESS_KEY="YOUR_ACTUAL_SECRET_ACCESS_KEY"`;
             </div>
 
             <div className="p-2 rounded bg-slate-950 border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">PROXY UPLOADS</span>
-              <span className="text-emerald-400 font-semibold block">
-                Active (/api/s3)
+              <span className="text-slate-400 block text-[10px]">AWS TEXTRACT</span>
+              <span className={textractStatus?.isConfigured ? 'text-emerald-400 font-semibold truncate block' : 'text-amber-400 truncate block'}>
+                {textractStatus?.isConfigured ? 'Ready (ML OCR)' : 'Pending Keys'}
               </span>
             </div>
           </div>
