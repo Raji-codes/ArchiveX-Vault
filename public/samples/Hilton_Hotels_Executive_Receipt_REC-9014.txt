@@ -1,0 +1,27 @@
+HILTON HOTELS & RESORTS
+HILTON UNION SQUARE, 333 O'FARRELL ST, SAN FRANCISCO, CA 94102
+
+GUEST FOLIO & EXPENSE RECEIPT
+Receipt Number: REC-9014
+Folio Number: FOL-882190
+Guest Name: John Doe (ArchiveX Cloud Corp)
+Confirmation: #98334182
+Arrival Date: October 01, 2026
+Departure Date: October 04, 2026
+Room: 1824 (King High Floor Executive)
+
+ITEMIZED CHARGES:
+1 3 Nights Executive King Suite ($289.00/night) - $867.00
+2 Urban Destination Amenity Fee (3 nights) - $75.00
+3 Room Service Dining & Continental Breakfast - $94.50
+4 High-Speed Business Center Printing & Internet - $25.00
+
+Subtotal: $1,061.50
+San Francisco Lodging Tax (14.0%): $148.61
+Tourism Assessment (2.25%): $23.88
+TOTAL AMOUNT CHARGED: $1,233.99 USD
+
+Payment Method: Corporate Visa Card (Ending in ••••9021)
+Approval Code: AUTH-882910
+Status: Settled in Full
+Thank you for staying with Hilton Worldwide.

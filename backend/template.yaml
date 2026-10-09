@@ -1,0 +1,130 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  DocuSense Serverless Architecture - S3 Uploads, Textract OCR Extraction,
+  Smart Tag Engine, DynamoDB Metadata Storage, and OpenSearch Search Engine.
+
+Globals:
+  Function:
+    Timeout: 60
+    MemorySize: 1024
+    Runtime: python3.12
+    Architectures:
+      - arm64
+    Environment:
+      Variables:
+        DOCUMENTS_TABLE_NAME: !Ref DocuSenseDocumentsTable
+        OPENSEARCH_ENDPOINT: !GetAtt DocuSenseOpenSearchDomain.DomainEndpoint
+
+Resources:
+  # 1. Primary S3 Document Storage Vault
+  DocuSenseVaultBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'docusense-production-vault-\${AWS::AccountId}-\${AWS::Region}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, PUT, POST, HEAD]
+            AllowedOrigins: ['*']
+            MaxAge: 3600
+      NotificationConfiguration:
+        EventBridgeConfiguration:
+          EventBridgeEnabled: true
+
+  # 2. Main Lambda Ingestion Function
+  DocuSenseIngestWorker:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: lambda_handler.lambda_handler
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub 'docusense-production-vault-\${AWS::AccountId}-\${AWS::Region}'
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DocuSenseDocumentsTable
+        - Statement:
+            - Sid: AllowTextractOCR
+              Effect: Allow
+              Action:
+                - textract:AnalyzeDocument
+                - textract:DetectDocumentText
+              Resource: '*'
+            - Sid: AllowOpenSearchAccess
+              Effect: Allow
+              Action:
+                - es:ESHttpPost
+                - es:ESHttpPut
+                - es:ESHttpGet
+              Resource: !Sub 'arn:aws:es:\${AWS::Region}:\${AWS::AccountId}:domain/docusense-search/*'
+      Events:
+        S3NewDocumentUpload:
+          Type: EventBridgeRule
+          Properties:
+            Pattern:
+              source:
+                - aws.s3
+              detail-type:
+                - Object Created
+              detail:
+                bucket:
+                  name:
+                    - !Ref DocuSenseVaultBucket
+
+  # 3. DynamoDB Metadata & Tag Storage
+  DocuSenseDocumentsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: DocuSenseDocuments
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: document_id
+          AttributeType: S
+        - AttributeName: created_at
+          AttributeType: S
+      KeySchema:
+        - AttributeName: document_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: CreatedAtIndex
+          KeySchema:
+            - AttributeName: created_at
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  # 4. OpenSearch Domain for Full-Text Search
+  DocuSenseOpenSearchDomain:
+    Type: AWS::OpenSearchService::Domain
+    Properties:
+      DomainName: docusense-search
+      EngineVersion: OpenSearch_2.11
+      ClusterConfig:
+        InstanceType: t3.small.search
+        InstanceCount: 1
+      EBSOptions:
+        EBSEnabled: true
+        VolumeType: gp3
+        VolumeSize: 20
+      NodeToNodeEncryptionOptions:
+        Enabled: true
+      EncryptionAtRestOptions:
+        Enabled: true
+
+Outputs:
+  VaultBucketName:
+    Description: S3 Vault Bucket for uploaded documents
+    Value: !Ref DocuSenseVaultBucket
+  IngestWorkerArn:
+    Description: Lambda worker ARN
+    Value: !GetAtt DocuSenseIngestWorker.Arn
+  DynamoDBTableName:
+    Description: DynamoDB Table Name
+    Value: !Ref DocuSenseDocumentsTable
+  OpenSearchEndpoint:
+    Description: OpenSearch Domain Endpoint
+    Value: !GetAtt DocuSenseOpenSearchDomain.DomainEndpoint

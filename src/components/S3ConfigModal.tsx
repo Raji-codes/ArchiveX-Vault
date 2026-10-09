@@ -35,7 +35,7 @@ export const S3ConfigModal: React.FC<S3ConfigModalProps> = ({
 
   const bucketName = status?.bucket || 'archivex-vault';
   const region = status?.region || 'ap-southeast-2';
-  const bucketConsoleUrl = 'https://488510448728-n37hwkxl.ap-southeast-2.console.aws.amazon.com/s3/buckets/archivex-vault?region=ap-southeast-2&tab=objects';
+  const bucketConsoleUrl = `https://s3.console.aws.amazon.com/s3/buckets/${bucketName}?region=${region}&tab=objects`;
 
   const fetchStatus = async () => {
     setLoading(true);

@@ -14,8 +14,8 @@ export async function processDocumentUpload(
   let s3Bucket = 'archivex-vault';
   let s3UploadMs = 80;
 
-  // Phase 1: Real or Simulated S3 Upload
-  callbacks?.onPhaseChange?.('Uploading document to AWS S3 bucket...', 15);
+  // Phase 1: Upload
+  callbacks?.onPhaseChange?.('Uploading document to storage...', 25);
   try {
     const s3Result = await uploadToRealS3(file);
     if (s3Result && s3Result.success) {
@@ -24,19 +24,14 @@ export async function processDocumentUpload(
       s3UploadMs = Math.max(10, Date.now() - startTime);
     }
   } catch (s3Err) {
-    // Falls back smoothly if S3 is not yet connected
-    console.log('Real S3 upload deferred/skipped:', s3Err);
+    console.log('S3 upload deferred:', s3Err);
   }
 
-  // Phase 2: Event trigger
-  callbacks?.onPhaseChange?.('S3 ObjectCreated event dispatched -> Initializing OCR pipeline...', 35);
-  await delay(200);
-
-  // Phase 3: Real AWS Textract Execution
-  callbacks?.onPhaseChange?.('Executing AWS Textract (AnalyzeDocument & DetectDocumentText)...', 60);
+  // Phase 2: OCR Extraction
+  callbacks?.onPhaseChange?.('Extracting document text...', 65);
   const textractStart = Date.now();
   const textractRes = await analyzeDocumentWithTextract(file, s3Bucket, s3Key);
-  const textractMs = Math.max(400, Date.now() - textractStart);
+  const textractMs = Math.max(300, Date.now() - textractStart);
 
   let fileContent: string;
   let textractBlocks: TextractBlock[];
@@ -59,21 +54,13 @@ export async function processDocumentUpload(
     extracted.ocrConfidence = ocrConfidence;
   }
   const tags = generateSmartTags(extracted, fileContent, file.name);
-  if (usedLiveTextract && !tags.includes('#aws-textract')) {
-    tags.unshift('#aws-textract');
-  }
 
-  // Phase 4: Indexing
-  callbacks?.onPhaseChange?.('Generating inverted search tokens & indexing document...', 90);
-  await delay(250);
+  // Phase 3: Indexing
+  callbacks?.onPhaseChange?.('Indexing document...', 90);
+  await delay(180);
 
-  callbacks?.onPhaseChange?.(
-    usedLiveTextract 
-      ? 'Extracted via Real AWS Textract! Document indexed & searchable.' 
-      : 'Ingestion pipeline complete! Document indexed & searchable.', 
-    100
-  );
-  await delay(150);
+  callbacks?.onPhaseChange?.('Ready', 100);
+  await delay(100);
 
   const docId = `doc-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
   const prefix = tags.includes('#invoice') ? 'invoices' : tags.includes('#receipt') ? 'receipts' : tags.includes('#contract') ? 'contracts' : 'documents';
@@ -91,26 +78,16 @@ export async function processDocumentUpload(
     status: 'ready',
     tags,
     rawText: fileContent,
-    summary: (usedLiveTextract ? '[AWS Textract Verified] ' : '') + generateDocumentSummary(extracted, file.name),
+    summary: generateDocumentSummary(extracted, file.name),
     extracted,
     textractBlocks,
     metrics: {
       s3UploadMs,
-      lambdaWorkerMs: 45,
       textractOcrMs: textractMs,
-      dynamoDbWriteMs: 15,
-      openSearchIndexMs: 25,
-      totalLatencyMs: 0
+      totalLatencyMs: s3UploadMs + textractMs
     },
-    thumbnailColor: pickColorForTags(tags)
+    thumbnailColor: 'from-slate-800 to-slate-900'
   };
-
-  doc.metrics.totalLatencyMs = 
-    doc.metrics.s3UploadMs + 
-    doc.metrics.lambdaWorkerMs + 
-    doc.metrics.textractOcrMs + 
-    doc.metrics.dynamoDbWriteMs + 
-    doc.metrics.openSearchIndexMs;
 
   return doc;
 }

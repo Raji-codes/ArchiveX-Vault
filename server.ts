@@ -475,7 +475,9 @@ async function startServer() {
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`DocuSense full-stack server running at http://0.0.0.0:${PORT}`);
+    console.log(`ArchiveX full-stack server running at:`);
+    console.log(`  > Local:   http://localhost:${PORT}`);
+    console.log(`  > Network: http://127.0.0.1:${PORT}`);
   });
 }
 

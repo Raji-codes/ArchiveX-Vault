@@ -1,0 +1,48 @@
+GOOGLE CLOUD PLATFORM
+Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043
+Tax Registration: 94-2756281
+
+TAX INVOICE
+Invoice Number: INV-2026-4491
+Invoice Date: September 30, 2026
+Payment Due: October 30, 2026 (Net 30)
+Billing Account ID: 014A82-C92910-88A912
+
+BILLED TO:
+Apex Cloud Infrastructure Ltd.
+Attn: Accounts Payable
+100 Montgomery St, Suite 1800
+San Francisco, CA 94104
+
+ITEMIZED SERVICES:
+1. Google Kubernetes Engine (GKE Autopilot)
+   Description: Regional Cluster Cluster-Prod-US-Central
+   Hours / Resource: 720 Hours vCPU & RAM Allocation
+   Amount: $1,420.50
+
+2. BigQuery Enterprise Analytics
+   Description: 48.2 TB Active Storage & Query Processing Slots
+   Amount: $845.20
+
+3. Cloud Run Serverless Microservices
+   Description: 12.8M Invocations & Memory Allocation
+   Amount: $324.80
+
+4. Cloud Armor Managed DDoS & Web Security
+   Description: Enterprise Security Policy Protection
+   Amount: $180.00
+
+--------------------------------------------------------------
+Subtotal:                       $2,770.50
+Taxes & Regulatory Fees:           $0.00
+--------------------------------------------------------------
+TOTAL AMOUNT DUE:               $2,770.50 USD
+--------------------------------------------------------------
+
+Remit Payment To:
+Bank of America, N.A.
+Routing Transit: 121000358
+Account Number: 9820-1192-4401
+Reference: INV-2026-4491 Apex Cloud
+Payment Method: Automatic Bank ACH / Wire Transfer
+==============================================================

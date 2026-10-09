@@ -129,11 +129,8 @@ Thank you for building on AWS.`,
     ],
     metrics: {
       s3UploadMs: 118,
-      lambdaWorkerMs: 42,
       textractOcrMs: 780,
-      dynamoDbWriteMs: 14,
-      openSearchIndexMs: 28,
-      totalLatencyMs: 982
+      totalLatencyMs: 898
     },
     thumbnailColor: 'from-amber-500/20 to-orange-600/20'
   },
@@ -245,11 +242,8 @@ Visit uber.com/help for questions regarding this receipt.`,
     ],
     metrics: {
       s3UploadMs: 95,
-      lambdaWorkerMs: 38,
       textractOcrMs: 640,
-      dynamoDbWriteMs: 12,
-      openSearchIndexMs: 24,
-      totalLatencyMs: 809
+      totalLatencyMs: 735
     },
     thumbnailColor: 'from-emerald-500/20 to-teal-600/20'
   },
@@ -316,11 +310,8 @@ Apex Innovations Inc. - Signed by David K. Chen (VP of Engineering)`,
     ],
     metrics: {
       s3UploadMs: 140,
-      lambdaWorkerMs: 50,
       textractOcrMs: 1240,
-      dynamoDbWriteMs: 16,
-      openSearchIndexMs: 36,
-      totalLatencyMs: 1482
+      totalLatencyMs: 1380
     },
     thumbnailColor: 'from-blue-500/20 to-indigo-600/20'
   },
@@ -385,11 +376,8 @@ Save trees: Digital receipts available at starbucks.com`,
     ],
     metrics: {
       s3UploadMs: 78,
-      lambdaWorkerMs: 32,
       textractOcrMs: 510,
-      dynamoDbWriteMs: 11,
-      openSearchIndexMs: 21,
-      totalLatencyMs: 652
+      totalLatencyMs: 588
     },
     thumbnailColor: 'from-amber-600/20 to-yellow-600/20'
   },
@@ -453,11 +441,8 @@ CONFIDENTIAL MEDICAL DOCUMENT - PROTECTED UNDER HIPAA REGULATIONS`,
     ],
     metrics: {
       s3UploadMs: 122,
-      lambdaWorkerMs: 44,
       textractOcrMs: 910,
-      dynamoDbWriteMs: 15,
-      openSearchIndexMs: 29,
-      totalLatencyMs: 1120
+      totalLatencyMs: 1032
     },
     thumbnailColor: 'from-teal-500/20 to-cyan-600/20'
   },
@@ -518,11 +503,8 @@ Date: January 14, 2026`,
     ],
     metrics: {
       s3UploadMs: 110,
-      lambdaWorkerMs: 40,
       textractOcrMs: 820,
-      dynamoDbWriteMs: 14,
-      openSearchIndexMs: 27,
-      totalLatencyMs: 1011
+      totalLatencyMs: 930
     },
     thumbnailColor: 'from-purple-500/20 to-violet-600/20'
   },
@@ -588,280 +570,9 @@ Thank you for monitoring with Datadog!`,
     ],
     metrics: {
       s3UploadMs: 102,
-      lambdaWorkerMs: 36,
       textractOcrMs: 690,
-      dynamoDbWriteMs: 13,
-      openSearchIndexMs: 25,
-      totalLatencyMs: 866
+      totalLatencyMs: 792
     },
     thumbnailColor: 'from-purple-600/20 to-pink-600/20'
-  }
-];
-
-export const PIPELINE_NODES = [
-  {
-    id: 's3-upload',
-    name: 'Amazon S3 Vault',
-    awsService: 'Amazon S3',
-    role: 'Secure object storage for incoming document scans, PDFs, and images with server-side KMS encryption.',
-    status: 'idle',
-    latencyAvgMs: 115,
-    iconName: 'Archive',
-    color: 'from-amber-500 to-red-500',
-    iamRoleName: 'ArchiveXS3BucketPolicy',
-    iamPolicy: `{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowPresignedPutUploads",
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": ["s3:PutObject", "s3:GetObject"],
-      "Resource": "arn:aws:s3:::archivex-vault/*",
-      "Condition": {
-        "StringEquals": { "s3:x-amz-server-side-encryption": "aws:kms" }
-      }
-    }
-  ]
-}`,
-    samplePayload: {
-      bucket: 'archivex-vault',
-      key: 'invoices/2026/09/AWS_Invoice_INV-2026-9812.pdf',
-      sizeBytes: 245760,
-      contentType: 'application/pdf',
-      kmsKeyId: 'arn:aws:kms:ap-southeast-2:488510448728:key/archivex-vault-key',
-      etag: '"8f1b2c4a9e3d7021c3b7a5e8f01248ab"'
-    },
-    metrics: {
-      invocations: '14,820 PUTs / day',
-      p95Latency: '115 ms',
-      errorRate: '0.001%',
-      throughput: '1.4 Gbps'
-    }
-  },
-  {
-    id: 'eventbridge',
-    name: 'EventBridge Bus',
-    awsService: 'Amazon EventBridge',
-    role: 'Filters and asynchronously routes S3 ObjectCreated events to decoupled Lambda workers.',
-    status: 'idle',
-    latencyAvgMs: 18,
-    iconName: 'Zap',
-    color: 'from-rose-500 to-pink-500',
-    iamRoleName: 'EventBridgeExecutionRole',
-    iamPolicy: `{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "events:PutEvents",
-      "Resource": "arn:aws:events:us-east-1:182500203848:event-bus/default"
-    }
-  ]
-}`,
-    samplePayload: {
-      version: '0',
-      id: 'c823bf10-8b1a-45c1-b0e2-10f81734bc91',
-      source: 'aws.s3',
-      detailType: 'Object Created',
-      time: '2026-09-22T14:32:01Z',
-      region: 'us-east-1',
-      resources: ['arn:aws:s3:::archivex-vault'],
-      detail: {
-        bucket: { name: 'archivex-vault' },
-        object: { key: 'invoices/2026/09/AWS_Invoice_INV-2026-9812.pdf', size: 245760 }
-      }
-    },
-    metrics: {
-      invocations: '14,820 events / day',
-      p95Latency: '18 ms',
-      errorRate: '0.00%',
-      throughput: '350 msg/sec'
-    }
-  },
-  {
-    id: 'lambda-worker',
-    name: 'Lambda Ingest Worker',
-    awsService: 'AWS Lambda (Python 3.12)',
-    role: 'Orchestrates Textract document analysis, extracts tables and forms, triggers smart tagging algorithm.',
-    status: 'idle',
-    latencyAvgMs: 42,
-    iconName: 'Cpu',
-    color: 'from-orange-500 to-amber-500',
-    iamRoleName: 'ArchiveXLambdaExecutionRole',
-    iamPolicy: `{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "textract:AnalyzeDocument",
-        "textract:StartDocumentAnalysis",
-        "dynamodb:PutItem",
-        "dynamodb:UpdateItem",
-        "es:ESHttpPost"
-      ],
-      "Resource": "*"
-    }
-  ]
-}`,
-    samplePayload: {
-      functionName: 'ArchiveXIngestWorker',
-      memoryAllocatedMB: 1024,
-      timeoutSeconds: 60,
-      runtime: 'python3.12',
-      architecture: 'arm64 (Graviton3)',
-      eventTrigger: 's3:ObjectCreated:Put'
-    },
-    metrics: {
-      invocations: '14,820 / day',
-      p95Latency: '42 ms (overhead)',
-      errorRate: '0.02%',
-      throughput: '45 concurrent'
-    }
-  },
-  {
-    id: 'textract-ocr',
-    name: 'AWS Textract OCR',
-    awsService: 'Amazon Textract',
-    role: 'Machine learning service extracting printed text, handwritten notes, tables, and key-value forms.',
-    status: 'idle',
-    latencyAvgMs: 780,
-    iconName: 'FileSearch',
-    color: 'from-blue-500 to-cyan-500',
-    iamRoleName: 'TextractServiceRole',
-    iamPolicy: `{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["textract:AnalyzeDocument", "textract:GetDocumentAnalysis"],
-      "Resource": "*"
-    }
-  ]
-}`,
-    samplePayload: {
-      Document: { S3Object: { Bucket: 'archivex-vault', Name: 'AWS_Invoice_INV-2026-9812.pdf' } },
-      FeatureTypes: ['TABLES', 'FORMS', 'LAYOUT', 'SIGNATURES'],
-      BlocksCount: 248,
-      ExtractedTextConfidenceAvg: 99.6
-    },
-    metrics: {
-      invocations: '14,820 pages / day',
-      p95Latency: '780 ms',
-      errorRate: '0.01%',
-      throughput: '100 TPS quota'
-    }
-  },
-  {
-    id: 'smart-tagger',
-    name: 'Smart Tag Engine',
-    awsService: 'Amazon Comprehend / Tag Engine',
-    role: 'Synthesizes auto-generated smart tags (#invoice, #total, #receipt, #contract) and monetary entity detection.',
-    status: 'idle',
-    latencyAvgMs: 35,
-    iconName: 'Tag',
-    color: 'from-purple-500 to-violet-500',
-    iamRoleName: 'ComprehendEntityRole',
-    iamPolicy: `{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["comprehend:DetectEntities", "comprehend:ClassifyDocument"],
-      "Resource": "*"
-    }
-  ]
-}`,
-    samplePayload: {
-      generatedTags: ['#invoice', '#total', '#financial', '#tax', '#aws'],
-      detectedType: 'Invoice',
-      extractedTotal: 4829.40,
-      currency: 'USD',
-      vendor: 'Amazon Web Services, Inc.',
-      confidence: 0.99
-    },
-    metrics: {
-      invocations: '14,820 runs / day',
-      p95Latency: '35 ms',
-      errorRate: '0.00%',
-      throughput: '200 msg/sec'
-    }
-  },
-  {
-    id: 'dynamodb-store',
-    name: 'DynamoDB Metadata',
-    awsService: 'Amazon DynamoDB',
-    role: 'Ultra-fast NoSQL storage for document metadata, status, tags, extracted fields, and user permissions.',
-    status: 'idle',
-    latencyAvgMs: 14,
-    iconName: 'Database',
-    color: 'from-emerald-500 to-green-500',
-    iamRoleName: 'DynamoDBAccessRole',
-    iamPolicy: `{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:Query", "dynamodb:UpdateItem"],
-      "Resource": "arn:aws:dynamodb:ap-southeast-2:488510448728:table/ArchiveXDocuments"
-    }
-  ]
-}`,
-    samplePayload: {
-      TableName: 'ArchiveXDocuments',
-      Item: {
-        document_id: { S: 'doc-aws-inv-9812' },
-        s3_key: { S: 'invoices/2026/09/AWS_Invoice_INV-2026-9812.pdf' },
-        tags: { SS: ['#invoice', '#total', '#financial', '#tax', '#aws'] },
-        total_amount: { N: '4829.40' },
-        created_at: { S: '2026-09-22T14:32:00Z' }
-      }
-    },
-    metrics: {
-      invocations: '45,200 ops / day',
-      p95Latency: '14 ms',
-      errorRate: '0.00%',
-      throughput: 'Single-digit ms SLA'
-    }
-  },
-  {
-    id: 'opensearch-index',
-    name: 'OpenSearch Service',
-    awsService: 'Amazon OpenSearch',
-    role: 'Distributed search engine indexing raw OCR text, enabling sub-second full-text queries and highlighted snippets.',
-    status: 'idle',
-    latencyAvgMs: 28,
-    iconName: 'Search',
-    color: 'from-sky-500 to-indigo-500',
-    iamRoleName: 'OpenSearchIndexingRole',
-    iamPolicy: `{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["es:ESHttpPost", "es:ESHttpPut", "es:ESHttpGet"],
-      "Resource": "arn:aws:es:ap-southeast-2:488510448728:domain/archivex-search/*"
-    }
-  ]
-}`,
-    samplePayload: {
-      index: 'archivex-ocr-index',
-      id: 'doc-aws-inv-9812',
-      body: {
-        fileName: 'AWS_Invoice_INV-2026-9812.pdf',
-        tags: ['#invoice', '#total', '#financial', '#tax', '#aws'],
-        totalAmount: 4829.40,
-        rawOcrText: 'AMAZON WEB SERVICES, INC. INVOICE SUMMARY...',
-        highlightConfig: { fields: { rawOcrText: { pre_tags: ['<mark>'], post_tags: ['</mark>'] } } }
-      }
-    },
-    metrics: {
-      invocations: '14,820 index ops / day',
-      p95Latency: '28 ms',
-      errorRate: '0.00%',
-      throughput: '1,200 search QPS'
-    }
   }
 ];

@@ -1,0 +1,24 @@
+MICROSOFT CORPORATION
+ONE MICROSOFT WAY, REDMOND, WA 98052
+
+TAX INVOICE / COMMERCIAL STATEMENT
+Invoice Number: INV-2026-7731
+Invoice Date: October 03, 2026
+Payment Due Date: November 02, 2026
+Account ID: MS-AZURE-8849-01
+Client: ArchiveX Technology Operations Ltd.
+Billing Address: 750 Battery St, 5th Floor, San Francisco, CA 94111
+
+CLOUD SUBSCRIPTION CHARGES (AZURE EAST US):
+1 Azure Kubernetes Service (AKS) Standard Cluster (720 hrs) - $1,440.00
+2 Azure Cosmos DB Multi-Region Write Throughput (25,000 RU/s) - $1,825.00
+3 Azure Blob Storage Hot Tier (12.5 TB-Month) - $262.50
+4 Azure Virtual Network Peering & Egress Traffic - $145.80
+
+Subtotal: $3,673.30
+State & Local Sales Tax (8.25%): $303.05
+TOTAL AMOUNT DUE: $3,976.35 USD
+
+Payment Method: Corporate Direct Debit (Wire ACH ••••4419)
+Status: Pending Settlement
+Thank you for using Microsoft Azure Cloud Services.

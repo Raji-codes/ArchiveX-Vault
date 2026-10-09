@@ -49,10 +49,7 @@ export interface TextractBlock {
 
 export interface DocumentMetrics {
   s3UploadMs: number;
-  lambdaWorkerMs: number;
   textractOcrMs: number;
-  dynamoDbWriteMs: number;
-  openSearchIndexMs: number;
   totalLatencyMs: number;
 }
 

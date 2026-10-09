@@ -599,31 +599,19 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                   </div>
 
                   <div className="space-y-2 bg-slate-950 p-4 rounded border border-slate-800">
-                    <span className="text-xs font-semibold text-slate-200 block font-sans">Pipeline Execution Latency</span>
+                    <span className="text-xs font-semibold text-slate-200 block font-sans">Processing Metrics</span>
                     <div className="space-y-1.5 tabular-nums text-slate-400">
                       <div className="flex justify-between">
-                        <span>S3 Presigned Upload:</span>
+                        <span>S3 Storage Sync:</span>
                         <span className="text-slate-200">{document.metrics.s3UploadMs} ms</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Lambda Ingest Worker:</span>
-                        <span className="text-slate-200">{document.metrics.lambdaWorkerMs} ms</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>AWS Textract Processing:</span>
+                        <span>OCR Text Extraction:</span>
                         <span className="text-slate-200">{document.metrics.textractOcrMs} ms</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span>DynamoDB PutItem:</span>
-                        <span className="text-slate-200">{document.metrics.dynamoDbWriteMs} ms</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>OpenSearch BM25 Indexing:</span>
-                        <span className="text-slate-200">{document.metrics.openSearchIndexMs} ms</span>
-                      </div>
                       <div className="flex justify-between pt-2 border-t border-slate-800 font-semibold text-slate-100">
-                        <span>Total End-to-End:</span>
-                        <span className="text-blue-400">{document.metrics.totalLatencyMs} ms</span>
+                        <span>Total Ingestion Time:</span>
+                        <span className="text-slate-200">{document.metrics.totalLatencyMs} ms</span>
                       </div>
                     </div>
                   </div>

@@ -1,0 +1,25 @@
+FEDERAL EXPRESS CORPORATION
+FEDEX WORLD HEADQUARTERS, MEMPHIS, TN 38120
+
+FREIGHT BILL & AIR WAYBILL STATEMENT
+Invoice Number: INV-2026-5519
+Statement Date: September 28, 2026
+Due Date: October 28, 2026
+Master Tracking Number: 7789-2140-9981
+Customer Account: FEDEX-ACCT-33108
+Bill To: ArchiveX Technology Operations Ltd.
+
+SHIPMENT SUMMARY & CHARGES:
+1 International Priority Freight (4x Palletized Hardware Servers) - $2,850.00
+2 Customs Brokerage & Import Clearance Processing - $320.00
+3 Fuel Surcharge Index (14.5%) - $413.25
+4 Liftgate Service & Inside Delivery Fee - $175.00
+
+Subtotal: $3,758.25
+Transportation Regulatory Fee: $45.00
+TOTAL AMOUNT DUE: $3,803.25 USD
+
+Payment Method: Corporate ACH Wire Transfer
+Reference: PO-FEDEX-Hardware-Rack
+Terms: Net 30 Days
+Thank you for shipping with FedEx.

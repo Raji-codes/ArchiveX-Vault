@@ -1,6 +1,6 @@
 {
-  "name": "DocuSense - Cloud File Storage & OCR Intelligence",
-  "description": "Smart cloud file storage with OCR text extraction, automated tag generation, live full-text search with highlighted snippets, interactive AWS pipeline visualizer, and exportable Python Boto3 backend.",
+  "name": "ArchiveX - Cloud Content Discovery & Document Vault",
+  "description": "Enterprise cloud content discovery and intelligent document vault with full-text OCR indexing and Amazon S3 storage integration.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

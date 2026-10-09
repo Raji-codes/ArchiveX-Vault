@@ -1,0 +1,29 @@
+APEX SOFTWARE ARCHITECTURE & SYSTEMS CONSULTING LLC
+STATEMENT OF WORK & PROFESSIONAL SERVICES AGREEMENT
+Agreement Reference: SOW-2026-8812
+Execution Date: September 15, 2026
+Effective Period: September 15, 2026 through December 31, 2026
+Governing Jurisdiction: State of California, United States
+
+PARTIES:
+Consultant: Apex Software Architecture LLC ("Service Provider")
+Client: ArchiveX Cloud Corporation ("Customer")
+
+SCOPE OF DELIVERABLES:
+1 Architecture Design & S3 Cloud Vault Hardening (80 Hours @ $225/hr) - $18,000.00
+2 Automated OCR Ingestion & Textract Performance Tuning (60 Hours @ $225/hr) - $13,500.00
+3 High-Throughput Search Index & Token Optimization (40 Hours @ $225/hr) - $9,000.00
+4 Production Readiness Review & Security Penetration Audit - $4,500.00
+
+PROJECT BUDGET SUMMARY:
+Subtotal Deliverables Fee: $45,000.00
+Initial Retainer Deposit (50% Due Upon Signing): $22,500.00
+Final Milestone Balance: $22,500.00
+TOTAL CONTRACT VALUE: $45,000.00 USD
+
+CONFIDENTIALITY & IP OWNERSHIP:
+All proprietary algorithms, source code, and data pipelines developed under this Statement of Work shall remain the sole and exclusive intellectual property of Customer.
+
+Signatures Executed Electronically via DocuSign:
+Consultant: Elena Rostova, Managing Partner, Apex Software Architecture LLC
+Client: Alex Vance, Chief Technology Officer, ArchiveX Cloud Corporation

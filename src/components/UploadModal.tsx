@@ -23,16 +23,10 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentPhase, setCurrentPhase] = useState('');
   const [progress, setProgress] = useState(0);
-  const [logs, setLogs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
-
-  const addLog = (msg: string) => {
-    const time = new Date().toISOString().substring(11, 19);
-    setLogs(prev => [...prev, `[${time}] ${msg}`]);
-  };
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -40,30 +34,27 @@ export const UploadModal: React.FC<UploadModalProps> = ({
 
     setIsProcessing(true);
     setError(null);
-    setLogs([]);
-    addLog(`Initiating upload: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
+    setProgress(10);
+    setCurrentPhase('Preparing document...');
 
     try {
       const processedDoc = await processDocumentUpload(file, {
         onPhaseChange: (phase, pct) => {
           setCurrentPhase(phase);
           setProgress(pct);
-          addLog(phase);
         }
       });
 
-      addLog(`Extraction complete. Assigned tags: ${processedDoc.tags.join(', ')}`);
       onDocumentProcessed(processedDoc);
 
       setTimeout(() => {
         setIsProcessing(false);
         onClose();
-      }, 500);
+      }, 400);
 
     } catch (err: any) {
       setError(err?.message || 'Failed to process document');
       setIsProcessing(false);
-      addLog(`ERROR: ${err?.message || 'Unknown ingestion error'}`);
     }
   };
 
@@ -162,23 +153,6 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                   className="h-full bg-blue-600 transition-all duration-200"
                   style={{ width: `${progress}%` }}
                 />
-              </div>
-            </div>
-          )}
-
-          {/* Execution Log */}
-          {logs.length > 0 && (
-            <div className="space-y-1">
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
-                Execution Log
-              </span>
-              <div className="bg-black/90 p-2.5 rounded font-mono text-[10px] text-slate-300 max-h-28 overflow-y-auto space-y-0.5 border border-slate-800 select-text">
-                {logs.map((line, idx) => (
-                  <div key={idx} className="leading-snug">
-                    <span className="text-slate-400">{line.slice(0, 10)}</span>
-                    <span className="text-slate-200">{line.slice(10)}</span>
-                  </div>
-                ))}
               </div>
             </div>
           )}

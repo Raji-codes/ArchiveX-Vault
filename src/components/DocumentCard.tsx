@@ -117,13 +117,13 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
           </div>
         )}
 
-        {/* Smart Tags as clean unboxed text links */}
+        {/* Tags as clean subtle chips */}
         <div className="flex items-center gap-1.5 flex-wrap pt-1">
           {document.tags.map((tag) => (
             <button
               key={tag}
               onClick={(e) => { e.stopPropagation(); onTagClick(tag); }}
-              className="text-[11px] font-mono text-slate-400 hover:text-blue-400 transition-colors"
+              className="inline-flex items-center text-[10px] font-mono text-slate-400 hover:text-slate-200 bg-slate-800/60 hover:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700/60 transition-colors cursor-pointer"
             >
               {highlightText(tag, searchQuery)}
             </button>

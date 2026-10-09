@@ -1,0 +1,43 @@
+=======================================================
+APPLE RETAIL STORE #412 - FIFTH AVENUE
+767 5th Ave, New York, NY 10153
+Tel: (212) 336-1440
+=======================================================
+RECEIPT & PROOF OF PURCHASE
+Date: October 04, 2026 14:28 EST
+Transaction ID: APPL-NY-2026-90412
+Cashier: Sarah M. (Terminal 04)
+
+CUSTOMER:
+Enterprise Media Labs Inc.
+Tax ID: 84-2938102
+
+ITEMIZED CHARGES:
+1x MacBook Pro 16-inch M4 Max (64GB RAM, 2TB SSD, Space Black)
+   Part Number: MX2E3LL/A
+   Serial Number: C02XN09PL4M8
+   Unit Price: $3,499.00
+   Extended Price: $3,499.00
+
+1x Apple Care+ for 16-inch MacBook Pro (3 Years)
+   Unit Price: $399.00
+   Extended Price: $399.00
+
+1x Magic Mouse - Black Multi-Touch Surface
+   Unit Price: $99.00
+   Extended Price: $99.00
+
+-------------------------------------------------------
+SUBTOTAL:                   $3,997.00
+New York State Tax (8.875%):  $354.73
+-------------------------------------------------------
+TOTAL AMOUNT DUE:           $4,351.73 USD
+-------------------------------------------------------
+
+Payment Method: Corporate Amex (•••• •••• •••• 4192)
+Approval Code: 092831
+Status: PAID IN FULL
+
+Return Policy: 14 days from purchase date with original receipt.
+Support: apple.com/support | 1-800-MY-APPLE
+=======================================================

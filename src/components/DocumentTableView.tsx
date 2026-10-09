@@ -158,13 +158,13 @@ export const DocumentTableView: React.FC<DocumentTableViewProps> = ({
                           <button
                             key={tag}
                             onClick={(e) => { e.stopPropagation(); onTagClick(tag); }}
-                            className="text-[11px] font-mono text-slate-300 hover:text-blue-400 transition-colors"
+                            className="inline-flex items-center text-[10px] font-mono text-slate-400 hover:text-slate-200 bg-slate-800/60 hover:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700/60 transition-colors cursor-pointer"
                           >
                             {highlightText(tag, searchQuery)}
                           </button>
                         ))}
                         {doc.tags.length > 3 && (
-                          <span className="text-[10px] text-slate-400">
+                          <span className="text-[10px] text-slate-500 font-mono">
                             +{doc.tags.length - 3}
                           </span>
                         )}
