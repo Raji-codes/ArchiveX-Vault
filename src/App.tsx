@@ -46,8 +46,8 @@ export default function App() {
 
   // Documents list toggle state:
   // When true -> lists out documents
-  // When false -> closes documents list and displays big centered upload dropzone
-  const [isDocumentsListOpen, setIsDocumentsListOpen] = useState(true);
+  // When false -> displays centered upload ingestion portal (default landing)
+  const [isDocumentsListOpen, setIsDocumentsListOpen] = useState(false);
 
   // Search & Filters State
   const [searchQuery, setSearchQuery] = useState('');
