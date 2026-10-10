@@ -64,7 +64,7 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
 
   // Export CSV formatted for NetSuite / SAP / QuickBooks
   const handleExportCSV = () => {
-    const headers = ['Line #', 'Description', 'Category', 'Quantity', 'Unit Price', 'Line Total', 'Confidence (%)', 'Linked Textract Cell IDs'];
+    const headers = ['Line #', 'Description', 'Category', 'Quantity', 'Unit Price', 'Line Total', 'Confidence (%)', 'Linked Cell IDs'];
     const rows = lineItems.map((item, idx) => [
       idx + 1,
       `"${(item.description || '').replace(/"/g, '""')}"`,
@@ -184,7 +184,7 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
                   color: 'var(--text-secondary)'
                 }}
               >
-                Textract TABLES
+                Structured Tables
               </span>
             </div>
             <p className="text-[11px] mt-1" style={{ color: 'var(--text-secondary)' }}>
@@ -378,7 +378,7 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
               <label className="block mb-1 text-[11px]" style={{ color: 'var(--text-secondary)' }}>Description / Service</label>
               <input
                 type="text"
-                placeholder="e.g. AWS Data Transfer Out"
+                placeholder="e.g. Cloud Compute Services"
                 value={newDesc}
                 onChange={e => setNewDesc(e.target.value)}
                 required
@@ -461,7 +461,7 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
               <TableIcon className="w-8 h-8 mx-auto" style={{ color: 'var(--text-muted)' }} />
               <h4 className="text-xs font-medium" style={{ color: 'var(--text-primary)' }}>No Tabular Rows Found</h4>
               <p className="text-[11px] max-w-sm mx-auto" style={{ color: 'var(--text-muted)' }}>
-                AWS Textract did not detect structured TABLE blocks in this specific document. Click &quot;Add Item&quot; to add rows manually.
+                No structured table blocks were detected in this specific document. Click &quot;Add Item&quot; to add rows manually.
               </p>
             </div>
           ) : (
@@ -624,7 +624,7 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
                 </span>
               </div>
               <div className="flex items-center gap-3" style={{ color: 'var(--text-secondary)' }}>
-                <span>Textract Ref: <code style={{ color: 'var(--text-primary)' }}>{lineItems[selectedRowIndex].cellIds?.[0] || 'CELL-Auto'}</code></span>
+                <span>Cell Ref: <code style={{ color: 'var(--text-primary)' }}>{lineItems[selectedRowIndex].cellIds?.[0] || 'CELL-Auto'}</code></span>
                 <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>${lineItems[selectedRowIndex].total.toFixed(2)}</span>
               </div>
             </div>
@@ -645,10 +645,10 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
           >
             <div className="flex items-center gap-1.5 font-medium" style={{ color: 'var(--text-primary)' }}>
               <Info className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-              <span>Textract Relational Table Model</span>
+              <span>Relational Table Model</span>
             </div>
             <p className="text-[11px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              Tables in AWS Textract are represented as root <code style={{ color: 'var(--text-primary)' }}>TABLE</code> blocks pointing to 
+              Tables are represented as root <code style={{ color: 'var(--text-primary)' }}>TABLE</code> blocks pointing to 
               individual <code style={{ color: 'var(--text-primary)' }}>CELL</code> blocks through child IDs.
             </p>
           </div>
@@ -864,7 +864,7 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
       {viewMode === 'json' && (
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
-            <span>Textract Relational Schema (TABLE &amp; CELL Blocks)</span>
+            <span>Relational Schema (TABLE &amp; CELL Blocks)</span>
             <button
               onClick={handleCopyHierarchyJson}
               className="flex items-center gap-1 hover:underline cursor-pointer"

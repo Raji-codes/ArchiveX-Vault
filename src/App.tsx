@@ -9,7 +9,6 @@ import {
   RotateCcw, 
   Trash2,
   Upload,
-  Cloud,
   FileText
 } from 'lucide-react';
 import { Navbar } from './components/Navbar';
@@ -18,12 +17,9 @@ import { DocumentTableView } from './components/DocumentTableView';
 import { DocumentCard } from './components/DocumentCard';
 import { DocumentViewerModal } from './components/DocumentViewerModal';
 import { UploadModal } from './components/UploadModal';
-import { S3ConfigModal } from './components/S3ConfigModal';
 import { INITIAL_DOCUMENTS } from './data/mockDocuments';
 import { DocumentItem } from './types/document';
 import { searchDocuments } from './utils/searchHighlight';
-import { ThemeProvider } from './context/ThemeContext';
-import { LiveThemeBar } from './components/ThemeSwitcher';
 
 function VaultApp() {
   // Storage state with localStorage persistence
@@ -63,7 +59,6 @@ function VaultApp() {
 
   // Modals
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [isS3ModalOpen, setIsS3ModalOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<DocumentItem | null>(null);
 
   // Toggle tag filter
@@ -216,12 +211,8 @@ function VaultApp() {
         isDocumentsListOpen={isDocumentsListOpen}
         onToggleDocumentsList={() => setIsDocumentsListOpen(true)}
         onOpenUpload={() => setIsUploadModalOpen(true)}
-        onOpenS3Config={() => setIsS3ModalOpen(true)}
         totalDocuments={documents.length}
       />
-
-      {/* Interactive Live Theme Switcher Bar (Click any palette to see it immediately) */}
-      <LiveThemeBar />
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -254,20 +245,6 @@ function VaultApp() {
                   <span>Delete ({selectedDocIds.length})</span>
                 </button>
               )}
-
-              <button
-                onClick={() => setIsS3ModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer"
-                style={{
-                  backgroundColor: 'var(--bg-surface)',
-                  borderColor: 'var(--border-subtle)',
-                  color: 'var(--text-secondary)'
-                }}
-                title="Configure AWS S3 and Textract credentials"
-              >
-                <Cloud className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
-                <span>AWS Config</span>
-              </button>
 
               <button
                 onClick={handleResetToDefaults}
@@ -419,12 +396,6 @@ function VaultApp() {
         onDocumentProcessed={handleDocumentProcessed}
       />
 
-      {/* AWS S3 / Textract Status Modal */}
-      <S3ConfigModal
-        isOpen={isS3ModalOpen}
-        onClose={() => setIsS3ModalOpen(false)}
-      />
-
       {/* Clean, Humanized Footer */}
       <footer 
         className="border-t py-4 text-xs transition-colors"
@@ -441,8 +412,6 @@ function VaultApp() {
             <span>Document Extraction & Cloud Storage</span>
           </div>
           <div className="flex items-center gap-3 text-[11px] font-mono" style={{ color: 'var(--text-muted)' }}>
-            <span>AWS S3 + Textract</span>
-            <span aria-hidden="true" style={{ color: 'var(--border-subtle)' }}>·</span>
             <button 
               onClick={() => setIsUploadModalOpen(true)} 
               className="hover:underline transition-colors cursor-pointer"
@@ -459,9 +428,5 @@ function VaultApp() {
 }
 
 export default function App() {
-  return (
-    <ThemeProvider>
-      <VaultApp />
-    </ThemeProvider>
-  );
+  return <VaultApp />;
 }

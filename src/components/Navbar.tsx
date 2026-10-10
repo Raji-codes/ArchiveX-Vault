@@ -1,18 +1,15 @@
 import React from 'react';
-import { Upload, Files, Cloud } from 'lucide-react';
-import { ThemeSwitcher } from './ThemeSwitcher';
+import { Upload, Files } from 'lucide-react';
 
 interface NavbarProps {
   isDocumentsListOpen: boolean;
   onToggleDocumentsList: () => void;
   onOpenUpload: () => void;
-  onOpenS3Config?: () => void;
   totalDocuments: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   onOpenUpload,
-  onOpenS3Config,
   totalDocuments
 }) => {
   return (
@@ -65,25 +62,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Primary Actions */}
           <div className="flex items-center gap-2">
-            {/* Live Theme Switcher */}
-            <ThemeSwitcher />
-
-            {onOpenS3Config && (
-              <button
-                onClick={onOpenS3Config}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors cursor-pointer"
-                style={{
-                  backgroundColor: 'var(--bg-surface)',
-                  borderColor: 'var(--border-subtle)',
-                  color: 'var(--text-secondary)'
-                }}
-                title="AWS S3 & Textract settings"
-              >
-                <Cloud className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
-                <span className="hidden sm:inline">AWS S3</span>
-              </button>
-            )}
-
             <button
               onClick={onOpenUpload}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all shadow-sm cursor-pointer"

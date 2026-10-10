@@ -310,7 +310,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                       {isTable ? (
                         <div className="font-bold text-xs flex items-center gap-1.5" style={{ color: 'var(--text-primary)' }}>
                           <Table className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-                          <span>[Textract TABLE: {blk.id}] ({blk.relationships?.[0]?.ids?.length || 0} Cells)</span>
+                          <span>[Table Block: {blk.id}] ({blk.relationships?.[0]?.ids?.length || 0} Cells)</span>
                         </div>
                       ) : (
                         <span style={{ color: isHighlighted ? 'var(--accent-text)' : 'var(--text-primary)' }}>
@@ -407,7 +407,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                   color: activeTab === 'json' ? 'var(--accent-text)' : 'var(--text-muted)'
                 }}
               >
-                Textract JSON
+                OCR JSON
               </button>
 
               <button
@@ -418,7 +418,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                   color: activeTab === 'metadata' ? 'var(--accent-text)' : 'var(--text-muted)'
                 }}
               >
-                S3 Metadata
+                Storage Metadata
               </button>
             </div>
 
@@ -441,7 +441,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                     <div className="flex items-center justify-between pb-2 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
                       <div>
                         <h4 className="text-xs font-bold" style={{ color: 'var(--text-primary)' }}>Verified Form Values</h4>
-                        <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Values extracted by AWS Textract.</p>
+                        <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Values extracted by OCR document intelligence.</p>
                       </div>
                       <button
                         type="submit"
@@ -565,7 +565,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                             Itemized Tabular Breakdown ({lineItemsCount} Rows Detected)
                           </span>
                           <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                            Parsed via Textract TABLES engine with accounting reconciliation.
+                            Parsed via table extraction engine with accounting reconciliation.
                           </span>
                         </div>
                       </div>
@@ -720,12 +720,12 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 </div>
               )}
 
-              {/* TAB 5: TEXTRACT JSON */}
+              {/* TAB 5: OCR JSON */}
               {activeTab === 'json' && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold" style={{ color: 'var(--text-primary)' }}>
-                      AWS Textract Blocks JSON
+                      Structured OCR Blocks JSON
                     </span>
                     <button
                       onClick={handleCopyJson}
@@ -753,7 +753,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 </div>
               )}
 
-              {/* TAB 6: AWS METADATA & TELEMETRY */}
+              {/* TAB 6: STORAGE METADATA & TELEMETRY */}
               {activeTab === 'metadata' && (
                 <div className="space-y-4 text-xs font-mono">
                   <div 
@@ -763,13 +763,13 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                       borderColor: 'var(--border-subtle)'
                     }}
                   >
-                    <span className="text-xs font-bold block font-sans" style={{ color: 'var(--text-primary)' }}>Amazon S3 Parameters</span>
+                    <span className="text-xs font-bold block font-sans" style={{ color: 'var(--text-primary)' }}>Vault Storage Parameters</span>
                     <div className="grid grid-cols-2 gap-2" style={{ color: 'var(--text-secondary)' }}>
                       <div>Bucket: <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{document.s3Bucket}</span></div>
                       <div>Key: <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{document.s3Key}</span></div>
                       <div>Content-Type: <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{document.mimeType}</span></div>
                       <div>Storage Class: <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>STANDARD</span></div>
-                      <div>Encryption: <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>aws:kms</span></div>
+                      <div>Encryption: <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>Managed KMS</span></div>
                       <div>Status: <span className="font-semibold text-emerald-600">active</span></div>
                     </div>
                   </div>
@@ -784,11 +784,11 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                     <span className="text-xs font-bold block font-sans" style={{ color: 'var(--text-primary)' }}>Processing Times</span>
                     <div className="space-y-1.5 tabular-nums" style={{ color: 'var(--text-secondary)' }}>
                       <div className="flex justify-between">
-                        <span>S3 Upload:</span>
+                        <span>Upload Time:</span>
                         <span style={{ color: 'var(--text-primary)' }}>{document.metrics.s3UploadMs} ms</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Textract Extraction:</span>
+                        <span>Extraction Time:</span>
                         <span style={{ color: 'var(--text-primary)' }}>{document.metrics.textractOcrMs} ms</span>
                       </div>
                       <div className="flex justify-between pt-2 border-t font-bold" style={{ borderColor: 'var(--border-subtle)', color: 'var(--text-primary)' }}>
