@@ -76,23 +76,46 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-      <div className="bg-slate-900 border border-slate-700 rounded-lg w-full max-w-xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs">
+      <div 
+        className="border rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] transition-colors"
+        style={{
+          backgroundColor: 'var(--bg-surface)',
+          borderColor: 'var(--border-subtle)',
+          color: 'var(--text-primary)'
+        }}
+      >
         
         {/* Header */}
-        <div className="px-5 py-3 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+        <div 
+          className="px-5 py-3.5 border-b flex items-center justify-between transition-colors"
+          style={{
+            backgroundColor: 'var(--bg-surface-elevated)',
+            borderColor: 'var(--border-subtle)'
+          }}
+        >
           <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
+            <div 
+              className="w-7 h-7 rounded-lg border flex items-center justify-center"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--accent)'
+              }}
+            >
               <Upload className="w-3.5 h-3.5" />
             </div>
             <div>
-              <h3 className="text-xs font-semibold text-white">Upload Document to S3 Storage</h3>
+              <h3 className="text-xs font-bold" style={{ color: 'var(--text-primary)' }}>
+                Upload Document to S3 Storage
+              </h3>
             </div>
           </div>
           <button
             disabled={isProcessing}
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition-colors disabled:opacity-30"
+            className="p-1 rounded hover:opacity-75 transition-opacity disabled:opacity-30 cursor-pointer"
+            style={{ color: 'var(--text-muted)' }}
           >
             <X className="w-4 h-4" />
           </button>
@@ -107,13 +130,11 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onClick={() => !isProcessing && fileInputRef.current?.click()}
-            className={`border border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer ${
-              isDragging
-                ? 'border-blue-500 bg-blue-950/20'
-                : isProcessing
-                ? 'border-slate-700 bg-slate-950/40 cursor-not-allowed'
-                : 'border-slate-700 hover:border-slate-600 bg-slate-950/40'
-            }`}
+            className="border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer"
+            style={{
+              backgroundColor: isDragging ? 'var(--bg-surface-elevated)' : 'var(--bg-surface-muted)',
+              borderColor: isDragging ? 'var(--accent)' : 'var(--border-subtle)'
+            }}
           >
             <input
               type="file"
@@ -123,18 +144,27 @@ export const UploadModal: React.FC<UploadModalProps> = ({
               accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.md,.json"
             />
 
-            <div className="flex flex-col items-center justify-center space-y-2">
+            <div className="flex flex-col items-center justify-center space-y-2.5">
               {isProcessing ? (
-                <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
+                <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent)' }} />
               ) : (
-                <Upload className="w-6 h-6 text-slate-400" />
+                <div 
+                  className="w-10 h-10 rounded-lg border flex items-center justify-center shadow-xs"
+                  style={{
+                    backgroundColor: 'var(--bg-surface)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--accent)'
+                  }}
+                >
+                  <Upload className="w-5 h-5" />
+                </div>
               )}
 
               <div>
-                <p className="text-xs font-medium text-slate-200">
+                <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>
                   {isProcessing ? currentPhase || 'Processing Document...' : 'Drag and drop file here, or click to browse'}
                 </p>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>
                   PDF, Scanned Receipts, Invoices, PNG, JPG, TXT (up to 50 MB)
                 </p>
               </div>
@@ -143,23 +173,29 @@ export const UploadModal: React.FC<UploadModalProps> = ({
 
           {/* Progress State */}
           {isProcessing && (
-            <div className="space-y-2 bg-slate-950 p-3 rounded border border-slate-800 text-xs">
-              <div className="flex justify-between text-slate-300">
+            <div 
+              className="space-y-2 p-3 rounded-lg border text-xs"
+              style={{
+                backgroundColor: 'var(--bg-surface-elevated)',
+                borderColor: 'var(--border-subtle)'
+              }}
+            >
+              <div className="flex justify-between" style={{ color: 'var(--text-secondary)' }}>
                 <span>{currentPhase}</span>
-                <span className="font-mono tabular-nums">{progress}%</span>
+                <span className="font-mono tabular-nums font-bold" style={{ color: 'var(--text-primary)' }}>{progress}%</span>
               </div>
-              <div className="w-full h-1.5 bg-slate-800 rounded overflow-hidden">
+              <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--bg-surface)' }}>
                 <div 
-                  className="h-full bg-blue-600 transition-all duration-200"
-                  style={{ width: `${progress}%` }}
+                  className="h-full transition-all duration-200"
+                  style={{ width: `${progress}%`, backgroundColor: 'var(--accent)' }}
                 />
               </div>
             </div>
           )}
 
           {error && (
-            <div className="p-2.5 bg-rose-950/40 border border-rose-800 rounded flex items-center gap-2 text-xs text-rose-300">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-lg flex items-center gap-2 text-xs text-rose-800">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
               <span>{error}</span>
             </div>
           )}

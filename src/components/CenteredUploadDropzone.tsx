@@ -77,28 +77,50 @@ export const CenteredUploadDropzone: React.FC<CenteredUploadDropzoneProps> = ({
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-160px)] px-4 py-8 max-w-4xl mx-auto w-full">
       
       {/* Top Quick Action Bar */}
-      <div className="w-full flex items-center justify-between mb-6 pb-3 border-b border-slate-800">
+      <div 
+        className="w-full flex items-center justify-between mb-6 pb-3 border-b transition-colors"
+        style={{ borderColor: 'var(--border-subtle)' }}
+      >
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>
             Document Ingestion Portal
           </span>
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
+          <span 
+            className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border"
+            style={{
+              backgroundColor: 'var(--bg-surface-elevated)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-secondary)'
+            }}
+          >
             Vault Ready
           </span>
         </div>
 
         <button
           onClick={onOpenDocumentsList}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-medium border border-slate-700 transition-colors cursor-pointer shadow-sm group"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer shadow-xs group"
+          style={{
+            backgroundColor: 'var(--bg-surface)',
+            borderColor: 'var(--border-subtle)',
+            color: 'var(--text-secondary)'
+          }}
         >
-          <Files className="w-4 h-4 text-slate-400 group-hover:text-slate-200 transition-colors" />
+          <Files className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
           <span>View Documents List ({totalDocuments})</span>
-          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" style={{ color: 'var(--text-muted)' }} />
         </button>
       </div>
 
       {/* Main Centered Card */}
-      <div className="w-full bg-slate-900/60 border border-slate-800 rounded-xl p-8 sm:p-10 shadow-lg backdrop-blur-sm relative overflow-hidden">
+      <div 
+        className="w-full border rounded-2xl p-8 sm:p-10 shadow-sm relative overflow-hidden transition-colors"
+        style={{
+          backgroundColor: 'var(--bg-surface)',
+          borderColor: 'var(--border-subtle)',
+          color: 'var(--text-primary)'
+        }}
+      >
         
         <input
           type="file"
@@ -114,64 +136,63 @@ export const CenteredUploadDropzone: React.FC<CenteredUploadDropzoneProps> = ({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onClick={() => !isProcessing && fileInputRef.current?.click()}
-          className={`relative border-2 border-dashed rounded-lg p-10 sm:p-12 text-center transition-colors cursor-pointer flex flex-col items-center justify-center ${
-            isDragging
-              ? 'border-blue-500 bg-blue-950/20'
-              : isProcessing
-              ? 'border-slate-800 bg-slate-950/40 cursor-not-allowed'
-              : 'border-slate-800 hover:border-slate-700 bg-slate-950/40 hover:bg-slate-950/60 group'
-          }`}
+          className="relative border-2 border-dashed rounded-xl p-10 sm:p-12 text-center transition-colors cursor-pointer flex flex-col items-center justify-center group"
+          style={{
+            backgroundColor: isDragging ? 'var(--bg-surface-elevated)' : 'var(--bg-surface-muted)',
+            borderColor: isDragging ? 'var(--accent)' : 'var(--border-subtle)'
+          }}
         >
           
           {/* Centered Upload Icon */}
           <div className="mb-5">
-            <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl flex items-center justify-center transition-colors ${
-              isDragging
-                ? 'bg-blue-600 text-white'
-                : isProcessing
-                ? 'bg-slate-800 text-slate-300 border border-slate-700'
-                : 'bg-slate-800/80 text-slate-300 border border-slate-700/80 group-hover:border-slate-600 group-hover:text-white'
-            }`}>
+            <div 
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center transition-colors border"
+              style={{
+                backgroundColor: 'var(--bg-surface-elevated)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--accent)'
+              }}
+            >
               {isProcessing ? (
-                <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 animate-spin text-blue-400" />
+                <Loader2 className="w-7 h-7 sm:w-8 sm:h-8 animate-spin" style={{ color: 'var(--accent)' }} />
               ) : (
-                <Upload className="w-8 h-8 sm:w-10 sm:h-10 text-slate-400 group-hover:text-slate-200 transition-colors" />
+                <Upload className="w-7 h-7 sm:w-8 sm:h-8 transition-transform group-hover:scale-105" />
               )}
             </div>
           </div>
 
           {/* Heading and Guidance */}
           <div className="max-w-lg space-y-2">
-            <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight">
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
               {isProcessing
                 ? currentPhase || 'Processing Document...'
                 : isDragging
-                ? 'Drop your document here now'
+                ? 'Drop your document here'
                 : 'Upload Document'}
             </h2>
 
-            <p className="text-xs sm:text-sm text-slate-400">
+            <p className="text-xs sm:text-sm" style={{ color: 'var(--text-secondary)' }}>
               {isProcessing
                 ? 'Extracting text and syncing with storage...'
                 : 'Drag and drop your file here, or click to browse'}
             </p>
 
-            <p className="text-xs text-slate-500 pt-1">
-              Supports <span className="text-slate-400 font-medium">PDF, Scanned Receipts, Invoices, PNG, JPG, TXT</span> (up to 50 MB)
+            <p className="text-xs pt-1" style={{ color: 'var(--text-muted)' }}>
+              Supports <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>PDF, Scanned Receipts, Invoices, PNG, JPG, TXT</span> (up to 50 MB)
             </p>
           </div>
 
           {/* Progress Bar */}
           {isProcessing && (
             <div className="w-full max-w-md mt-6 space-y-2">
-              <div className="flex items-center justify-between text-xs text-slate-400">
+              <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
                 <span className="font-mono">{currentPhase}</span>
-                <span className="font-mono tabular-nums text-slate-300">{progress}%</span>
+                <span className="font-mono tabular-nums font-bold" style={{ color: 'var(--text-primary)' }}>{progress}%</span>
               </div>
-              <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+              <div className="w-full rounded-full h-1.5 overflow-hidden" style={{ backgroundColor: 'var(--bg-surface-elevated)' }}>
                 <div 
-                  className="bg-blue-600 h-full transition-all duration-200"
-                  style={{ width: `${progress}%` }}
+                  className="h-full transition-all duration-200"
+                  style={{ width: `${progress}%`, backgroundColor: 'var(--accent)' }}
                 />
               </div>
             </div>
@@ -182,7 +203,11 @@ export const CenteredUploadDropzone: React.FC<CenteredUploadDropzoneProps> = ({
             <div className="mt-5">
               <button
                 type="button"
-                className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white text-xs font-medium transition-colors shadow-sm flex items-center gap-2 cursor-pointer"
+                className="px-4 py-2 rounded-lg text-xs font-semibold tracking-tight transition-all shadow-sm flex items-center gap-2 cursor-pointer"
+                style={{
+                  backgroundColor: 'var(--btn-primary-bg)',
+                  color: 'var(--btn-primary-text)'
+                }}
               >
                 <Upload className="w-3.5 h-3.5" />
                 <span>Browse Files</span>
@@ -194,24 +219,33 @@ export const CenteredUploadDropzone: React.FC<CenteredUploadDropzoneProps> = ({
 
         {/* Error Notice */}
         {error && (
-          <div className="mt-4 p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-rose-200 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+          <div className="mt-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Successful Upload Banner */}
         {lastUploadedDoc && !isProcessing && (
-          <div className="mt-6 p-4 rounded-lg bg-slate-900 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div 
+            className="mt-6 p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+            style={{
+              backgroundColor: 'var(--bg-surface-muted)',
+              borderColor: 'var(--border-subtle)'
+            }}
+          >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/60 border border-emerald-800 flex items-center justify-center text-emerald-400 shrink-0">
+              <div 
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                style={{ backgroundColor: 'var(--accent-subtle)', color: 'var(--accent)' }}
+              >
                 <CheckCircle2 className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-xs font-medium text-white">
+                <p className="text-xs font-medium" style={{ color: 'var(--text-primary)' }}>
                   Document successfully processed & indexed
                 </p>
-                <p className="text-[11px] text-slate-400 font-mono mt-0.5">
+                <p className="text-[11px] font-mono mt-0.5" style={{ color: 'var(--text-secondary)' }}>
                   {lastUploadedDoc.name} · {(lastUploadedDoc.size / 1024).toFixed(1)} KB
                 </p>
               </div>
@@ -220,9 +254,14 @@ export const CenteredUploadDropzone: React.FC<CenteredUploadDropzoneProps> = ({
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={onOpenDocumentsList}
-                className="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-medium border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-primary)'
+                }}
               >
-                <Files className="w-3.5 h-3.5 text-slate-400" />
+                <Files className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
                 <span>View Documents</span>
               </button>
             </div>

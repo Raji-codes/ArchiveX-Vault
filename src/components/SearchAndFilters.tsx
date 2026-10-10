@@ -85,7 +85,7 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
         
         {/* Search Input */}
         <div className="relative flex-1 min-w-[240px]">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" style={{ color: 'var(--text-muted)' }}>
             <Search className="w-4 h-4" />
           </div>
           <input
@@ -93,12 +93,18 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search full OCR text, invoice #, amounts, vendors..."
-            className="w-full pl-9 pr-8 py-2 bg-slate-900 border border-slate-700/80 rounded-md text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full pl-9 pr-8 py-2 rounded-lg text-xs transition-colors focus:outline-none border"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-primary)'
+            }}
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-white"
+              className="absolute inset-y-0 right-0 pr-2.5 flex items-center hover:opacity-75"
+              style={{ color: 'var(--text-muted)' }}
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -113,11 +119,12 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
             <select
               value={selectedDocType}
               onChange={(e) => setSelectedDocType(e.target.value)}
-              className={`bg-slate-900 border text-xs rounded-md pl-3 pr-8 py-2 focus:outline-none appearance-none cursor-pointer transition-colors ${
-                selectedDocType !== 'ALL'
-                  ? 'border-blue-500/80 text-blue-300 font-medium'
-                  : 'border-slate-700/80 text-slate-300'
-              }`}
+              className="text-xs rounded-lg pl-3 pr-8 py-2 focus:outline-none appearance-none cursor-pointer transition-colors border"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: selectedDocType !== 'ALL' ? 'var(--accent)' : 'var(--border-subtle)',
+                color: selectedDocType !== 'ALL' ? 'var(--accent-text)' : 'var(--text-secondary)'
+              }}
             >
               {docTypes.map((type) => (
                 <option key={type.value} value={type.value}>
@@ -125,7 +132,7 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
                 </option>
               ))}
             </select>
-            <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-500">
+            <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none" style={{ color: 'var(--text-muted)' }}>
               <ChevronDown className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -135,13 +142,14 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
             <button
               type="button"
               onClick={() => setIsTagDropdownOpen(!isTagDropdownOpen)}
-              className={`flex items-center gap-1.5 px-3 py-2 text-xs rounded-md border transition-colors bg-slate-900 ${
-                selectedTags.length > 0
-                  ? 'border-blue-500/80 text-blue-300 font-medium'
-                  : 'border-slate-700/80 text-slate-300 hover:text-white'
-              }`}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border transition-colors cursor-pointer"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: selectedTags.length > 0 ? 'var(--accent)' : 'var(--border-subtle)',
+                color: selectedTags.length > 0 ? 'var(--accent-text)' : 'var(--text-secondary)'
+              }}
             >
-              <Tag className="w-3.5 h-3.5 text-slate-400" />
+              <Tag className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
               <span>
                 {selectedTags.length === 0
                   ? 'Filter by Tag'
@@ -149,22 +157,34 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
                   ? `${selectedTags[0]}`
                   : `Tags (${selectedTags.length})`}
               </span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-500 ml-0.5" />
+              <ChevronDown className="w-3.5 h-3.5 ml-0.5" style={{ color: 'var(--text-muted)' }} />
             </button>
 
             {/* Tag Dropdown Popover Menu */}
             {isTagDropdownOpen && (
-              <div className="absolute right-0 sm:left-0 sm:right-auto mt-1 w-64 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-40 p-2 space-y-2">
+              <div 
+                className="absolute right-0 sm:left-0 sm:right-auto mt-1 w-64 rounded-xl shadow-2xl z-40 p-2 space-y-2 border animate-in fade-in duration-100"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-primary)'
+                }}
+              >
                 
                 {/* Search within tags */}
                 <div className="relative">
-                  <Search className="w-3 h-3 absolute left-2.5 top-2.5 text-slate-500" />
+                  <Search className="w-3 h-3 absolute left-2.5 top-2.5" style={{ color: 'var(--text-muted)' }} />
                   <input
                     type="text"
                     value={tagSearch}
                     onChange={(e) => setTagSearch(e.target.value)}
                     placeholder="Search tags..."
-                    className="w-full bg-slate-950 border border-slate-800 rounded pl-7 pr-2 py-1 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono"
+                    className="w-full rounded-lg pl-7 pr-2 py-1 text-xs font-mono border focus:outline-none"
+                    style={{
+                      backgroundColor: 'var(--bg-surface-elevated)',
+                      borderColor: 'var(--border-subtle)',
+                      color: 'var(--text-primary)'
+                    }}
                     autoFocus
                   />
                 </div>
@@ -178,28 +198,33 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
                         <button
                           key={tag}
                           onClick={() => toggleTag(tag)}
-                          className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs text-left transition-colors font-mono ${
-                            isSelected
-                              ? 'bg-blue-600/20 text-blue-300'
-                              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                          }`}
+                          className="w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-xs text-left transition-colors font-mono cursor-pointer"
+                          style={{
+                            backgroundColor: isSelected ? 'var(--bg-surface-elevated)' : 'transparent',
+                            color: isSelected ? 'var(--accent-text)' : 'var(--text-secondary)'
+                          }}
                         >
                           <span className="flex items-center gap-2 truncate">
-                            <span className={`w-3.5 h-3.5 rounded border flex items-center justify-center ${
-                              isSelected ? 'bg-blue-600 border-blue-500' : 'border-slate-700 bg-slate-950'
-                            }`}>
-                              {isSelected && <Check className="w-2.5 h-2.5 text-white" />}
+                            <span 
+                              className="w-3.5 h-3.5 rounded border flex items-center justify-center text-[10px]"
+                              style={{
+                                backgroundColor: isSelected ? 'var(--accent)' : 'var(--bg-surface)',
+                                borderColor: isSelected ? 'var(--accent)' : 'var(--border-subtle)',
+                                color: isSelected ? 'var(--btn-primary-text)' : 'inherit'
+                              }}
+                            >
+                              {isSelected && <Check className="w-2.5 h-2.5" />}
                             </span>
                             <span className="truncate">{tag}</span>
                           </span>
-                          <span className="text-[10px] text-slate-400 tabular-nums ml-2 shrink-0">
+                          <span className="text-[10px] tabular-nums ml-2 shrink-0 font-mono" style={{ color: 'var(--text-muted)' }}>
                             ({count})
                           </span>
                         </button>
                       );
                     })
                   ) : (
-                    <div className="text-center py-3 text-xs text-slate-500">
+                    <div className="text-center py-3 text-xs" style={{ color: 'var(--text-muted)' }}>
                       No matching tags
                     </div>
                   )}
@@ -207,13 +232,14 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
 
                 {/* Dropdown Footer */}
                 {selectedTags.length > 0 && (
-                  <div className="pt-1.5 border-t border-slate-800 flex items-center justify-between text-[11px]">
-                    <span className="text-slate-400 font-mono">{selectedTags.length} selected</span>
+                  <div className="pt-1.5 border-t flex items-center justify-between text-[11px]" style={{ borderColor: 'var(--border-subtle)' }}>
+                    <span className="font-mono" style={{ color: 'var(--text-muted)' }}>{selectedTags.length} selected</span>
                     <button
                       onClick={() => {
                         selectedTags.forEach(t => toggleTag(t));
                       }}
-                      className="text-slate-400 hover:text-slate-200 transition-colors"
+                      className="hover:underline transition-colors cursor-pointer"
+                      style={{ color: 'var(--accent-text)' }}
                     >
                       Clear tags
                     </button>
@@ -229,7 +255,12 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-slate-900 border border-slate-700/80 text-xs text-slate-300 rounded-md pl-3 pr-8 py-2 focus:outline-none focus:border-blue-500 appearance-none cursor-pointer"
+              className="text-xs rounded-lg pl-3 pr-8 py-2 focus:outline-none appearance-none cursor-pointer border transition-colors"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--text-secondary)'
+              }}
             >
               <option value="newest">Sort: Newest</option>
               <option value="oldest">Sort: Oldest</option>
@@ -238,27 +269,37 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
               <option value="name">Sort: Name (A-Z)</option>
               <option value="size">Sort: Size</option>
             </select>
-            <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-500">
+            <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none" style={{ color: 'var(--text-muted)' }}>
               <ArrowUpDown className="w-3.5 h-3.5" />
             </div>
           </div>
 
           {/* 4. Table / Grid Toggle */}
-          <div className="flex items-center bg-slate-900 border border-slate-800 rounded-md p-0.5 shrink-0">
+          <div 
+            className="flex items-center rounded-lg p-0.5 shrink-0 border"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)'
+            }}
+          >
             <button
               onClick={() => setViewMode('table')}
-              className={`p-1.5 rounded transition-colors ${
-                viewMode === 'table' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className="p-1.5 rounded transition-colors cursor-pointer"
+              style={{
+                backgroundColor: viewMode === 'table' ? 'var(--bg-surface-elevated)' : 'transparent',
+                color: viewMode === 'table' ? 'var(--accent-text)' : 'var(--text-muted)'
+              }}
               title="Table View"
             >
               <LayoutList className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-1.5 rounded transition-colors ${
-                viewMode === 'grid' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className="p-1.5 rounded transition-colors cursor-pointer"
+              style={{
+                backgroundColor: viewMode === 'grid' ? 'var(--bg-surface-elevated)' : 'transparent',
+                color: viewMode === 'grid' ? 'var(--accent-text)' : 'var(--text-muted)'
+              }}
               title="Card Grid View"
             >
               <LayoutGrid className="w-3.5 h-3.5" />
@@ -269,7 +310,7 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
           {hasActiveFilters && (
             <button
               onClick={onClearFilters}
-              className="text-xs text-slate-400 hover:text-slate-200 px-2 py-1.5 transition-colors whitespace-nowrap"
+              className="text-xs text-zinc-400 hover:text-zinc-200 px-2 py-1.5 transition-colors whitespace-nowrap"
               title="Reset all filters"
             >
               Reset
@@ -281,10 +322,10 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
       </div>
 
       {/* Subtle status row showing active filters and total count */}
-      <div className="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
+      <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-0.5">
         <div className="flex items-center gap-2 flex-wrap">
           {selectedDocType !== 'ALL' && (
-            <span className="inline-flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded text-slate-300">
+            <span className="inline-flex items-center gap-1 bg-zinc-800/80 px-2 py-0.5 rounded text-zinc-300">
               <span>Type: {selectedDocType}</span>
               <button onClick={() => setSelectedDocType('ALL')} className="hover:text-white">
                 <X className="w-3 h-3" />
@@ -293,7 +334,7 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
           )}
 
           {selectedTags.map(tag => (
-            <span key={tag} className="inline-flex items-center gap-1 bg-slate-800/80 font-mono px-2 py-0.5 rounded text-slate-300">
+            <span key={tag} className="inline-flex items-center gap-1 bg-zinc-800/80 font-mono px-2 py-0.5 rounded text-zinc-300">
               <span>{tag}</span>
               <button onClick={() => toggleTag(tag)} className="hover:text-white">
                 <X className="w-3 h-3" />
@@ -302,7 +343,7 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
           ))}
         </div>
 
-        <div className="font-mono text-slate-400 tabular-nums ml-auto">
+        <div className="font-mono text-zinc-400 tabular-nums ml-auto">
           {totalResults} {totalResults === 1 ? 'object' : 'objects'} found
         </div>
       </div>

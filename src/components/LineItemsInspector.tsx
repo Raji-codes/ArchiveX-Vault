@@ -13,7 +13,6 @@ import {
   Info, 
   ChevronRight, 
   ChevronDown,
-  Sparkles,
   FileSpreadsheet
 } from 'lucide-react';
 import { DocumentItem, LineItem, TextractBlock } from '../types/document';
@@ -32,7 +31,6 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
   const [viewMode, setViewMode] = useState<'table' | 'hierarchy' | 'json'>('table');
   const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
   const [copiedJson, setCopiedJson] = useState(false);
-  const [showInterviewGuide, setShowInterviewGuide] = useState(false);
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [expandedRows, setExpandedRows] = useState<Record<number, boolean>>({ 0: true, 1: true });
 
@@ -151,90 +149,137 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
   return (
     <div className="space-y-5">
       {/* Top Banner: Financial Reconciliation & Architecture Context */}
-      <div className="bg-slate-950/80 rounded-lg border border-slate-800 p-4 space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
+      <div 
+        className="rounded-xl border p-4 space-y-3 transition-colors"
+        style={{
+          backgroundColor: 'var(--bg-surface-elevated)',
+          borderColor: 'var(--border-subtle)',
+          color: 'var(--text-primary)'
+        }}
+      >
+        <div 
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b transition-colors"
+          style={{ borderColor: 'var(--border-subtle)' }}
+        >
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+              <span 
+                className="p-1 rounded-md border"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--accent)'
+                }}
+              >
                 <TableIcon className="w-4 h-4" />
               </span>
-              <h3 className="text-xs font-semibold text-white uppercase tracking-wider">
+              <h3 className="text-xs font-semibold tracking-tight" style={{ color: 'var(--text-primary)' }}>
                 Tabular Extraction & Itemized Reconciliation
               </h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-800">
-                Textract TABLES Engine
+              <span 
+                className="px-2 py-0.5 rounded text-[10px] font-mono border"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Textract TABLES
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">
-              Hierarchical <code className="text-blue-300 font-mono">TABLE → ROW → CELL</code> parsing for ERP itemized accounting.
+            <p className="text-[11px] mt-1" style={{ color: 'var(--text-secondary)' }}>
+              Hierarchical table structure parsed into line items with mathematical balance check.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handleExportCSV}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-colors"
-              title="Download line items as ERP CSV"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--text-secondary)'
+              }}
+              title="Download line items as CSV"
             >
-              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+              <FileSpreadsheet className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
               <span>Export CSV</span>
             </button>
             <button
               onClick={handleCopyHierarchyJson}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--text-secondary)'
+              }}
             >
-              {copiedJson ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copiedJson ? <Check className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedJson ? 'Copied' : 'Copy JSON'}</span>
-            </button>
-            <button
-              onClick={() => setShowInterviewGuide(!showInterviewGuide)}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-medium border border-amber-500/30 transition-colors"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Interview Defense</span>
             </button>
           </div>
         </div>
 
         {/* Financial Reconciliation Status Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-          <div className="bg-slate-900/90 p-2.5 rounded border border-slate-800/80">
-            <span className="text-[10px] text-slate-400 block uppercase tracking-wide">Itemized Rows</span>
-            <span className="text-sm font-semibold font-mono text-slate-100">
+          <div 
+            className="p-2.5 rounded-lg border transition-colors"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)'
+            }}
+          >
+            <span className="text-[10px] block uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Itemized Rows</span>
+            <span className="text-sm font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
               {lineItems.length} {lineItems.length === 1 ? 'Row' : 'Rows'}
             </span>
           </div>
 
-          <div className="bg-slate-900/90 p-2.5 rounded border border-slate-800/80">
-            <span className="text-[10px] text-slate-400 block uppercase tracking-wide">Line Items Sum</span>
-            <span className="text-sm font-semibold font-mono text-emerald-400">
+          <div 
+            className="p-2.5 rounded-lg border transition-colors"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)'
+            }}
+          >
+            <span className="text-[10px] block uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Line Items Sum</span>
+            <span className="text-sm font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
               ${calculatedSum.toFixed(2)}
             </span>
           </div>
 
-          <div className="bg-slate-900/90 p-2.5 rounded border border-slate-800/80">
-            <span className="text-[10px] text-slate-400 block uppercase tracking-wide">Stated Doc Total</span>
-            <span className="text-sm font-semibold font-mono text-slate-100">
+          <div 
+            className="p-2.5 rounded-lg border transition-colors"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)'
+            }}
+          >
+            <span className="text-[10px] block uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Stated Doc Total</span>
+            <span className="text-sm font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
               {statedTotal !== null ? `$${statedTotal.toFixed(2)}` : 'N/A'}
             </span>
           </div>
 
-          <div className={`p-2.5 rounded border ${
-            isReconciled 
-              ? 'bg-emerald-950/30 border-emerald-800/60 text-emerald-300' 
-              : 'bg-amber-950/30 border-amber-800/60 text-amber-300'
-          }`}>
-            <span className="text-[10px] block uppercase tracking-wide opacity-80">Reconciliation Status</span>
+          <div 
+            className="p-2.5 rounded-lg border transition-colors"
+            style={{
+              backgroundColor: isReconciled ? 'var(--accent-subtle)' : 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)'
+            }}
+          >
+            <span className="text-[10px] block uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Reconciliation</span>
             <div className="flex items-center gap-1.5 mt-0.5">
               {isReconciled ? (
                 <>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                  <span className="text-xs font-semibold font-mono">Balanced (100%)</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--accent)' }} />
+                  <span className="text-xs font-semibold font-mono" style={{ color: 'var(--accent-text)' }}>Balanced (100%)</span>
                 </>
               ) : (
                 <>
-                  <AlertTriangle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
-                  <span className="text-xs font-semibold font-mono">
+                  <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--accent-text)' }} />
+                  <span className="text-xs font-semibold font-mono" style={{ color: 'var(--text-secondary)' }}>
                     {statedTotal !== null ? `Δ $${Math.abs(variance).toFixed(2)}` : 'Unstated'}
                   </span>
                 </>
@@ -244,91 +289,70 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
         </div>
       </div>
 
-      {/* Collapsible Interview Defense Talking Points */}
-      {showInterviewGuide && (
-        <div className="bg-gradient-to-r from-amber-950/40 via-slate-950 to-slate-950 p-4 rounded-lg border border-amber-500/30 space-y-2 text-xs">
-          <div className="flex items-center justify-between text-amber-300 font-semibold">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>Why This Impresses Interviewers: Textract TABLES vs Single Key-Values</span>
-            </div>
-            <button 
-              onClick={() => setShowInterviewGuide(false)}
-              className="text-slate-400 hover:text-white"
-            >
-              ✕
-            </button>
-          </div>
-          <p className="text-slate-300 leading-relaxed text-[11px]">
-            Extracting flat fields like <code>InvoiceDate</code> or <code>TotalAmount</code> is simple key-value OCR. 
-            Real enterprise accounting software (NetSuite, Coupa, SAP) requires itemized tabular data to populate 
-            general ledger entries, verify purchase order lines, and catch billing discrepancies.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-[11px]">
-            <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-              <span className="font-semibold text-blue-300 block mb-1">1. The Textract Hierarchy</span>
-              <p className="text-slate-400 leading-normal">
-                Textract doesn&apos;t output plain CSV rows. It returns a relational graph of 
-                <code className="text-slate-200"> TABLE</code> blocks containing <code className="text-slate-200">CELL</code> blocks linked by <code className="text-slate-200">Relationships: CHILD</code>. Each cell maintains its 2D coordinates (<code className="text-blue-400">RowIndex</code>, <code className="text-blue-400">ColumnIndex</code>, <code className="text-blue-400">RowSpan</code>).
-              </p>
-            </div>
-            <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-              <span className="font-semibold text-emerald-300 block mb-1">2. Mathematical Reconciliation</span>
-              <p className="text-slate-400 leading-normal">
-                Our post-processing algorithm sums <code className="text-slate-200">Σ(Quantity × UnitPrice)</code> and matches it against the document&apos;s stated header total. If there&apos;s a tax, tip, or toll mismatch, the system flags it automatically for human-in-the-loop review.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Mode Navigation Tabs */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+      <div 
+        className="flex items-center justify-between border-b pb-2 transition-colors"
+        style={{ borderColor: 'var(--border-subtle)' }}
+      >
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setViewMode('table')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-              viewMode === 'table'
-                ? 'bg-blue-600 text-white'
-                : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
-            }`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border"
+            style={{
+              backgroundColor: viewMode === 'table' ? 'var(--btn-primary-bg)' : 'var(--bg-surface)',
+              color: viewMode === 'table' ? 'var(--btn-primary-text)' : 'var(--text-secondary)',
+              borderColor: viewMode === 'table' ? 'var(--btn-primary-bg)' : 'var(--border-subtle)'
+            }}
           >
             <TableIcon className="w-3.5 h-3.5" />
             <span>Parsed Ledger</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded text-[10px] bg-blue-900/60 text-blue-200">
+            <span 
+              className="ml-1 px-1.5 py-0.2 rounded text-[10px]"
+              style={{
+                backgroundColor: viewMode === 'table' ? 'rgba(255,255,255,0.2)' : 'var(--bg-surface-elevated)',
+                color: viewMode === 'table' ? 'inherit' : 'var(--text-secondary)'
+              }}
+            >
               {lineItems.length}
             </span>
           </button>
 
           <button
             onClick={() => setViewMode('hierarchy')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-              viewMode === 'hierarchy'
-                ? 'bg-blue-600 text-white'
-                : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
-            }`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border"
+            style={{
+              backgroundColor: viewMode === 'hierarchy' ? 'var(--btn-primary-bg)' : 'var(--bg-surface)',
+              color: viewMode === 'hierarchy' ? 'var(--btn-primary-text)' : 'var(--text-secondary)',
+              borderColor: viewMode === 'hierarchy' ? 'var(--btn-primary-bg)' : 'var(--border-subtle)'
+            }}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>TABLE → ROW → CELL Tree</span>
+            <span>Table Structure</span>
           </button>
 
           <button
             onClick={() => setViewMode('json')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-              viewMode === 'json'
-                ? 'bg-blue-600 text-white'
-                : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
-            }`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border"
+            style={{
+              backgroundColor: viewMode === 'json' ? 'var(--btn-primary-bg)' : 'var(--bg-surface)',
+              color: viewMode === 'json' ? 'var(--btn-primary-text)' : 'var(--text-secondary)',
+              borderColor: viewMode === 'json' ? 'var(--btn-primary-bg)' : 'var(--border-subtle)'
+            }}
           >
             <Code className="w-3.5 h-3.5" />
-            <span>Textract Blocks JSON</span>
+            <span>JSON</span>
           </button>
         </div>
 
         {viewMode === 'table' && (
           <button
             onClick={() => setIsAddingItem(!isAddingItem)}
-            className="flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors border border-slate-700"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs font-medium transition-colors cursor-pointer"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-secondary)'
+            }}
           >
             <Plus className="w-3.5 h-3.5" />
             <span>{isAddingItem ? 'Cancel' : 'Add Item'}</span>
@@ -338,35 +362,52 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
 
       {/* Add New Line Item Form Drawer */}
       {isAddingItem && (
-        <form onSubmit={handleAddNewItem} className="p-3 bg-slate-950 rounded border border-blue-500/40 space-y-3">
-          <div className="flex items-center justify-between pb-1 border-b border-slate-800 text-xs text-blue-300 font-semibold">
-            <span>Add Itemized Line (Simulate Manual Correction)</span>
+        <form 
+          onSubmit={handleAddNewItem} 
+          className="p-3 rounded-xl border space-y-3 transition-colors"
+          style={{
+            backgroundColor: 'var(--bg-surface-elevated)',
+            borderColor: 'var(--border-subtle)'
+          }}
+        >
+          <div className="flex items-center justify-between pb-1 border-b text-xs font-semibold" style={{ borderColor: 'var(--border-subtle)', color: 'var(--text-primary)' }}>
+            <span>Add Itemized Line</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
             <div className="sm:col-span-2">
-              <label className="text-slate-400 block mb-1 text-[11px]">Description / Service</label>
+              <label className="block mb-1 text-[11px]" style={{ color: 'var(--text-secondary)' }}>Description / Service</label>
               <input
                 type="text"
                 placeholder="e.g. AWS Data Transfer Out"
                 value={newDesc}
                 onChange={e => setNewDesc(e.target.value)}
                 required
-                className="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-blue-500"
+                className="w-full px-2.5 py-1.5 rounded-lg border text-xs focus:outline-none"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-primary)'
+                }}
               />
             </div>
             <div>
-              <label className="text-slate-400 block mb-1 text-[11px]">Qty / Units</label>
+              <label className="block mb-1 text-[11px]" style={{ color: 'var(--text-secondary)' }}>Qty / Units</label>
               <input
                 type="number"
                 step="any"
                 value={newQty}
                 onChange={e => setNewQty(e.target.value)}
                 required
-                className="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-blue-500"
+                className="w-full px-2.5 py-1.5 rounded-lg border text-xs focus:outline-none"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-primary)'
+                }}
               />
             </div>
             <div>
-              <label className="text-slate-400 block mb-1 text-[11px]">Unit Price ($)</label>
+              <label className="block mb-1 text-[11px]" style={{ color: 'var(--text-secondary)' }}>Unit Price ($)</label>
               <input
                 type="number"
                 step="any"
@@ -374,7 +415,12 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
                 value={newUnitPrice}
                 onChange={e => setNewUnitPrice(e.target.value)}
                 required
-                className="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-blue-500"
+                className="w-full px-2.5 py-1.5 rounded-lg border text-xs focus:outline-none"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-primary)'
+                }}
               />
             </div>
           </div>
@@ -382,13 +428,18 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
             <button
               type="button"
               onClick={() => setIsAddingItem(false)}
-              className="px-2.5 py-1 text-xs text-slate-400 hover:text-white"
+              className="px-2.5 py-1 text-xs transition-colors"
+              style={{ color: 'var(--text-muted)' }}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-3 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium"
+              className="px-3 py-1 rounded-lg text-xs font-semibold shadow-xs"
+              style={{
+                backgroundColor: 'var(--btn-primary-bg)',
+                color: 'var(--btn-primary-text)'
+              }}
             >
               Save Line Item
             </button>
@@ -400,17 +451,36 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
       {viewMode === 'table' && (
         <div className="space-y-3">
           {lineItems.length === 0 ? (
-            <div className="p-8 text-center bg-slate-950/60 rounded border border-slate-800 space-y-2">
-              <TableIcon className="w-8 h-8 text-slate-600 mx-auto" />
-              <h4 className="text-xs font-medium text-slate-300">No Tabular Rows Found</h4>
-              <p className="text-[11px] text-slate-500 max-w-sm mx-auto">
-                AWS Textract did not detect structured TABLE blocks in this specific document type. Click &quot;Add Item&quot; to test accounting reconciliation.
+            <div 
+              className="p-8 text-center rounded-xl border space-y-2 transition-colors"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: 'var(--border-subtle)'
+              }}
+            >
+              <TableIcon className="w-8 h-8 mx-auto" style={{ color: 'var(--text-muted)' }} />
+              <h4 className="text-xs font-medium" style={{ color: 'var(--text-primary)' }}>No Tabular Rows Found</h4>
+              <p className="text-[11px] max-w-sm mx-auto" style={{ color: 'var(--text-muted)' }}>
+                AWS Textract did not detect structured TABLE blocks in this specific document. Click &quot;Add Item&quot; to add rows manually.
               </p>
             </div>
           ) : (
-            <div className="border border-slate-800 rounded-lg overflow-hidden bg-slate-950">
+            <div 
+              className="border rounded-xl overflow-hidden transition-colors"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: 'var(--border-subtle)'
+              }}
+            >
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-900 text-slate-400 font-semibold border-b border-slate-800">
+                <thead 
+                  className="font-medium border-b text-[11px] uppercase tracking-wider transition-colors"
+                  style={{
+                    backgroundColor: 'var(--bg-surface-elevated)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--text-secondary)'
+                  }}
+                >
                   <tr>
                     <th className="py-2.5 px-3 w-12 text-center">#</th>
                     <th className="py-2.5 px-3">Description / Service</th>
@@ -421,7 +491,10 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
                     <th className="py-2.5 px-3 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/80 text-slate-300 font-mono text-[11px]">
+                <tbody 
+                  className="divide-y font-mono text-[11px]"
+                  style={{ borderColor: 'var(--border-subtle)' }}
+                >
                   {lineItems.map((item, idx) => {
                     const isSelected = selectedRowIndex === idx;
                     const confidenceVal = item.confidence || document.extracted.ocrConfidence || 99;
@@ -443,40 +516,45 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
                         onMouseLeave={() => {
                           if (onHighlightBlock) onHighlightBlock(null);
                         }}
-                        className={`transition-colors cursor-pointer group ${
-                          isSelected 
-                            ? 'bg-blue-950/40 text-white' 
-                            : 'hover:bg-slate-900/60'
-                        }`}
+                        className="transition-colors cursor-pointer group"
+                        style={{
+                          backgroundColor: isSelected 
+                            ? 'var(--accent-subtle)' 
+                            : 'transparent',
+                          borderColor: 'var(--border-subtle)'
+                        }}
                       >
-                        <td className="py-2.5 px-3 text-center text-slate-500 font-mono">
+                        <td className="py-2.5 px-3 text-center font-mono" style={{ color: 'var(--text-muted)' }}>
                           {idx + 1}
                         </td>
                         <td className="py-2.5 px-3 font-sans">
-                          <div className="font-medium text-slate-200 group-hover:text-blue-300 transition-colors">
+                          <div className="font-medium transition-colors" style={{ color: 'var(--text-primary)' }}>
                             {item.description}
                           </div>
                           {item.cellIds && item.cellIds.length > 0 && (
-                            <span className="text-[10px] text-slate-500 font-mono block">
+                            <span className="text-[10px] font-mono block" style={{ color: 'var(--text-muted)' }}>
                               Cell: {item.cellIds[0]}
                             </span>
                           )}
                         </td>
-                        <td className="py-2.5 px-3 text-right tabular-nums text-slate-300">
+                        <td className="py-2.5 px-3 text-right tabular-nums" style={{ color: 'var(--text-secondary)' }}>
                           {item.quantity?.toLocaleString() || 1}
                         </td>
-                        <td className="py-2.5 px-3 text-right tabular-nums text-slate-300">
+                        <td className="py-2.5 px-3 text-right tabular-nums" style={{ color: 'var(--text-secondary)' }}>
                           ${item.unitPrice !== undefined ? item.unitPrice.toFixed(2) : '—'}
                         </td>
-                        <td className="py-2.5 px-3 text-right tabular-nums font-semibold text-slate-100">
+                        <td className="py-2.5 px-3 text-right tabular-nums font-semibold" style={{ color: 'var(--text-primary)' }}>
                           ${item.total.toFixed(2)}
                         </td>
                         <td className="py-2.5 px-3 text-center">
-                          <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] tabular-nums font-mono ${
-                            confidenceVal > 98 
-                              ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/40' 
-                              : 'bg-amber-950/60 text-amber-400 border border-amber-800/40'
-                          }`}>
+                          <span 
+                            className="inline-block px-1.5 py-0.5 rounded text-[10px] tabular-nums font-mono border"
+                            style={{
+                              backgroundColor: 'var(--bg-surface-elevated)',
+                              borderColor: 'var(--border-subtle)',
+                              color: 'var(--text-secondary)'
+                            }}
+                          >
                             {confidenceVal.toFixed(1)}%
                           </span>
                         </td>
@@ -486,7 +564,8 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
                               e.stopPropagation();
                               handleDeleteItem(idx);
                             }}
-                            className="p-1 text-slate-500 hover:text-rose-400 transition-colors"
+                            className="p-1 hover:text-rose-500 transition-colors"
+                            style={{ color: 'var(--text-muted)' }}
                             title="Remove row"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -497,15 +576,21 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
                   })}
                 </tbody>
                 {/* Table Footer Totals */}
-                <tfoot className="bg-slate-900/90 font-mono text-xs border-t-2 border-slate-800">
+                <tfoot 
+                  className="font-mono text-xs border-t transition-colors"
+                  style={{
+                    backgroundColor: 'var(--bg-surface-elevated)',
+                    borderColor: 'var(--border-subtle)'
+                  }}
+                >
                   <tr>
-                    <td colSpan={4} className="py-2.5 px-3 text-right font-sans font-medium text-slate-400">
+                    <td colSpan={4} className="py-2.5 px-3 text-right font-sans font-medium" style={{ color: 'var(--text-secondary)' }}>
                       Calculated Itemized Total:
                     </td>
-                    <td className="py-2.5 px-3 text-right font-semibold text-emerald-400 tabular-nums">
+                    <td className="py-2.5 px-3 text-right font-semibold tabular-nums" style={{ color: 'var(--text-primary)' }}>
                       ${calculatedSum.toFixed(2)}
                     </td>
-                    <td colSpan={2} className="py-2.5 px-3 text-right text-[11px] text-slate-500 font-sans">
+                    <td colSpan={2} className="py-2.5 px-3 text-right text-[11px] font-sans" style={{ color: 'var(--text-muted)' }}>
                       {isReconciled ? '✓ Matched Stated Total' : `Stated: $${statedTotal?.toFixed(2) || '0.00'}`}
                     </td>
                   </tr>
@@ -516,18 +601,31 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
 
           {/* Interactive Row Detail Callout */}
           {selectedRowIndex !== null && lineItems[selectedRowIndex] && (
-            <div className="bg-slate-900 p-3 rounded border border-blue-500/30 flex items-center justify-between text-xs font-mono">
+            <div 
+              className="p-3 rounded-xl border flex items-center justify-between text-xs font-mono transition-colors"
+              style={{
+                backgroundColor: 'var(--bg-surface-elevated)',
+                borderColor: 'var(--border-subtle)'
+              }}
+            >
               <div className="flex items-center gap-3">
-                <span className="px-2 py-0.5 rounded bg-blue-900/60 text-blue-200 text-[10px]">
+                <span 
+                  className="px-2 py-0.5 rounded text-[10px] border"
+                  style={{
+                    backgroundColor: 'var(--bg-surface)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--text-secondary)'
+                  }}
+                >
                   Row #{selectedRowIndex + 1} Selected
                 </span>
-                <span className="text-slate-300 font-sans font-medium">
+                <span className="font-sans font-medium" style={{ color: 'var(--text-primary)' }}>
                   {lineItems[selectedRowIndex].description}
                 </span>
               </div>
-              <div className="flex items-center gap-3 text-slate-400">
-                <span>Textract Ref: <code className="text-blue-300">{lineItems[selectedRowIndex].cellIds?.[0] || 'CELL-Auto'}</code></span>
-                <span className="font-semibold text-white">${lineItems[selectedRowIndex].total.toFixed(2)}</span>
+              <div className="flex items-center gap-3" style={{ color: 'var(--text-secondary)' }}>
+                <span>Textract Ref: <code style={{ color: 'var(--text-primary)' }}>{lineItems[selectedRowIndex].cellIds?.[0] || 'CELL-Auto'}</code></span>
+                <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>${lineItems[selectedRowIndex].total.toFixed(2)}</span>
               </div>
             </div>
           )}
@@ -537,71 +635,126 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
       {/* VIEW MODE 2: HIERARCHICAL TEXTRACT TREE */}
       {viewMode === 'hierarchy' && (
         <div className="space-y-4">
-          <div className="p-3 rounded bg-slate-950 border border-slate-800 text-xs text-slate-400 space-y-1">
-            <div className="flex items-center gap-1.5 text-slate-200 font-medium">
-              <Info className="w-3.5 h-3.5 text-blue-400" />
-              <span>Textract Relational Graph Model</span>
+          <div 
+            className="p-3 rounded-xl border text-xs space-y-1 transition-colors"
+            style={{
+              backgroundColor: 'var(--bg-surface-elevated)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-secondary)'
+            }}
+          >
+            <div className="flex items-center gap-1.5 font-medium" style={{ color: 'var(--text-primary)' }}>
+              <Info className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+              <span>Textract Relational Table Model</span>
             </div>
-            <p className="text-[11px] leading-relaxed">
-              In AWS Textract, tables are represented as root <code className="text-blue-300">TABLE</code> blocks pointing to 
-              individual <code className="text-blue-300">CELL</code> blocks through child IDs. Each cell specifies its 
-              2D position (<code className="text-amber-300">RowIndex</code>, <code className="text-amber-300">ColumnIndex</code>) and child text words.
+            <p className="text-[11px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              Tables in AWS Textract are represented as root <code style={{ color: 'var(--text-primary)' }}>TABLE</code> blocks pointing to 
+              individual <code style={{ color: 'var(--text-primary)' }}>CELL</code> blocks through child IDs.
             </p>
           </div>
 
           {/* Tree View Structure */}
-          <div className="bg-slate-950 rounded-lg border border-slate-800 p-4 font-mono text-xs space-y-3">
+          <div 
+            className="rounded-xl border p-4 font-mono text-xs space-y-3 transition-colors"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)'
+            }}
+          >
             {/* Root TABLE Block */}
-            <div className="p-3 rounded bg-slate-900 border border-blue-500/30 space-y-2">
+            <div 
+              className="p-3 rounded-lg border space-y-2 transition-colors"
+              style={{
+                backgroundColor: 'var(--bg-surface-elevated)',
+                borderColor: 'var(--border-subtle)'
+              }}
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="px-1.5 py-0.5 rounded bg-blue-600 text-white text-[10px] font-bold">
+                  <span 
+                    className="px-1.5 py-0.5 rounded text-[10px] font-bold border"
+                    style={{
+                      backgroundColor: 'var(--bg-surface)',
+                      borderColor: 'var(--border-subtle)',
+                      color: 'var(--text-primary)'
+                    }}
+                  >
                     BLOCK: TABLE
                   </span>
-                  <span className="text-slate-200 font-semibold">
+                  <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                     {tableBlocks[0]?.id || 'tbl-aws-root-1'}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-slate-400">
-                  <span>Confidence: <strong className="text-emerald-400">99.6%</strong></span>
-                  <span>Children: <strong className="text-slate-200">{lineItems.length * 4 + 4} Cells</strong></span>
+                <div className="flex items-center gap-3 text-[11px]" style={{ color: 'var(--text-secondary)' }}>
+                  <span>Confidence: <strong style={{ color: 'var(--text-primary)' }}>99.6%</strong></span>
+                  <span>Children: <strong style={{ color: 'var(--text-primary)' }}>{lineItems.length * 4 + 4} Cells</strong></span>
                 </div>
               </div>
 
               {/* Geometry Box */}
-              <div className="text-[10px] text-slate-500 flex items-center gap-4 bg-slate-950 p-2 rounded">
+              <div 
+                className="text-[10px] flex items-center gap-4 p-2 rounded border"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-muted)'
+                }}
+              >
                 <span>BoundingBox: Left: 0.08, Top: 0.35, Width: 0.84, Height: 0.38</span>
-                <span>FeatureType: TABLES (Synchronous AnalyzeDocument)</span>
+                <span>FeatureType: TABLES</span>
               </div>
             </div>
 
             {/* Hierarchical Rows */}
-            <div className="pl-4 border-l-2 border-slate-800 space-y-2.5">
+            <div 
+              className="pl-4 border-l-2 space-y-2.5"
+              style={{ borderColor: 'var(--border-subtle)' }}
+            >
               {/* Header Row (RowIndex: 1) */}
-              <div className="rounded border border-slate-800 bg-slate-900/60 overflow-hidden">
+              <div 
+                className="rounded-lg border overflow-hidden transition-colors"
+                style={{
+                  backgroundColor: 'var(--bg-surface-elevated)',
+                  borderColor: 'var(--border-subtle)'
+                }}
+              >
                 <div 
                   onClick={() => toggleRowExpand(0)}
-                  className="p-2.5 flex items-center justify-between cursor-pointer hover:bg-slate-800/40 transition-colors"
+                  className="p-2.5 flex items-center justify-between cursor-pointer transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    {expandedRows[0] ? <ChevronDown className="w-3.5 h-3.5 text-slate-400" /> : <ChevronRight className="w-3.5 h-3.5 text-slate-400" />}
-                    <span className="px-1.5 py-0.2 rounded bg-purple-950 text-purple-300 border border-purple-800 text-[10px] font-bold">
+                    {expandedRows[0] ? <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} /> : <ChevronRight className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />}
+                    <span 
+                      className="px-1.5 py-0.2 rounded text-[10px] font-bold border"
+                      style={{
+                        backgroundColor: 'var(--bg-surface)',
+                        borderColor: 'var(--border-subtle)',
+                        color: 'var(--text-secondary)'
+                      }}
+                    >
                       ROW 1 (COLUMN HEADERS)
                     </span>
-                    <span className="text-slate-300 text-[11px]">
+                    <span className="text-[11px]" style={{ color: 'var(--text-secondary)' }}>
                       [Description, Quantity, Unit Price, Line Total]
                     </span>
                   </div>
-                  <span className="text-[10px] text-slate-500">4 CELL Blocks</span>
+                  <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>4 CELL Blocks</span>
                 </div>
 
                 {expandedRows[0] && (
                   <div className="p-2.5 pt-0 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
                     {['Description', 'Quantity', 'Unit Rate ($)', 'Line Total ($)'].map((col, cIdx) => (
-                      <div key={cIdx} className="bg-slate-950 p-2 rounded border border-slate-800/80">
-                        <div className="text-slate-500 font-semibold">CELL(1, {cIdx + 1})</div>
-                        <div className="text-slate-200 mt-0.5">&quot;{col}&quot;</div>
-                        <div className="text-[9px] text-purple-400 mt-1">COLUMN_HEADER</div>
+                      <div 
+                        key={cIdx} 
+                        className="p-2 rounded border transition-colors"
+                        style={{
+                          backgroundColor: 'var(--bg-surface)',
+                          borderColor: 'var(--border-subtle)'
+                        }}
+                      >
+                        <div className="font-semibold" style={{ color: 'var(--text-muted)' }}>CELL(1, {cIdx + 1})</div>
+                        <div className="mt-0.5" style={{ color: 'var(--text-primary)' }}>&quot;{col}&quot;</div>
+                        <div className="text-[9px] mt-1" style={{ color: 'var(--text-muted)' }}>COLUMN_HEADER</div>
                       </div>
                     ))}
                   </div>
@@ -614,50 +767,88 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
                 const isExpanded = !!expandedRows[rIndex];
 
                 return (
-                  <div key={idx} className="rounded border border-slate-800 bg-slate-900/60 overflow-hidden">
+                  <div 
+                    key={idx} 
+                    className="rounded-lg border overflow-hidden transition-colors"
+                    style={{
+                      backgroundColor: 'var(--bg-surface-elevated)',
+                      borderColor: 'var(--border-subtle)'
+                    }}
+                  >
                     <div 
                       onClick={() => toggleRowExpand(rIndex)}
-                      className="p-2.5 flex items-center justify-between cursor-pointer hover:bg-slate-800/40 transition-colors"
+                      className="p-2.5 flex items-center justify-between cursor-pointer transition-colors"
                     >
                       <div className="flex items-center gap-2">
-                        {isExpanded ? <ChevronDown className="w-3.5 h-3.5 text-slate-400" /> : <ChevronRight className="w-3.5 h-3.5 text-slate-400" />}
-                        <span className="px-1.5 py-0.2 rounded bg-blue-950 text-blue-300 border border-blue-800 text-[10px] font-bold">
+                        {isExpanded ? <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} /> : <ChevronRight className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />}
+                        <span 
+                          className="px-1.5 py-0.2 rounded text-[10px] font-bold border"
+                          style={{
+                            backgroundColor: 'var(--bg-surface)',
+                            borderColor: 'var(--border-subtle)',
+                            color: 'var(--text-secondary)'
+                          }}
+                        >
                           ROW {rIndex} (DATA)
                         </span>
-                        <span className="text-slate-200 text-[11px] font-sans font-medium">
+                        <span className="text-[11px] font-sans font-medium" style={{ color: 'var(--text-primary)' }}>
                           {item.description}
                         </span>
                       </div>
                       <div className="flex items-center gap-3 text-[11px]">
-                        <span className="text-emerald-400 font-semibold">${item.total.toFixed(2)}</span>
-                        <span className="text-slate-500 text-[10px]">4 Cells</span>
+                        <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>${item.total.toFixed(2)}</span>
+                        <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>4 Cells</span>
                       </div>
                     </div>
 
                     {isExpanded && (
                       <div className="p-2.5 pt-0 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
-                        <div className="bg-slate-950 p-2 rounded border border-slate-800">
-                          <div className="text-slate-500">CELL({rIndex}, 1) - Desc</div>
-                          <div className="text-slate-200 mt-0.5 truncate font-sans">{item.description}</div>
-                          <div className="text-[9px] text-emerald-400 mt-1">99.8% Conf</div>
+                        <div 
+                          className="p-2 rounded border"
+                          style={{
+                            backgroundColor: 'var(--bg-surface)',
+                            borderColor: 'var(--border-subtle)'
+                          }}
+                        >
+                          <div style={{ color: 'var(--text-muted)' }}>CELL({rIndex}, 1) - Desc</div>
+                          <div className="mt-0.5 truncate font-sans" style={{ color: 'var(--text-primary)' }}>{item.description}</div>
+                          <div className="text-[9px] mt-1" style={{ color: 'var(--text-muted)' }}>99.8% Conf</div>
                         </div>
 
-                        <div className="bg-slate-950 p-2 rounded border border-slate-800">
-                          <div className="text-slate-500">CELL({rIndex}, 2) - Qty</div>
-                          <div className="text-slate-200 mt-0.5">{item.quantity || 1}</div>
-                          <div className="text-[9px] text-emerald-400 mt-1">99.9% Conf</div>
+                        <div 
+                          className="p-2 rounded border"
+                          style={{
+                            backgroundColor: 'var(--bg-surface)',
+                            borderColor: 'var(--border-subtle)'
+                          }}
+                        >
+                          <div style={{ color: 'var(--text-muted)' }}>CELL({rIndex}, 2) - Qty</div>
+                          <div className="mt-0.5" style={{ color: 'var(--text-primary)' }}>{item.quantity || 1}</div>
+                          <div className="text-[9px] mt-1" style={{ color: 'var(--text-muted)' }}>99.9% Conf</div>
                         </div>
 
-                        <div className="bg-slate-950 p-2 rounded border border-slate-800">
-                          <div className="text-slate-500">CELL({rIndex}, 3) - Rate</div>
-                          <div className="text-slate-200 mt-0.5">${item.unitPrice?.toFixed(2) || '—'}</div>
-                          <div className="text-[9px] text-emerald-400 mt-1">99.5% Conf</div>
+                        <div 
+                          className="p-2 rounded border"
+                          style={{
+                            backgroundColor: 'var(--bg-surface)',
+                            borderColor: 'var(--border-subtle)'
+                          }}
+                        >
+                          <div style={{ color: 'var(--text-muted)' }}>CELL({rIndex}, 3) - Rate</div>
+                          <div className="mt-0.5" style={{ color: 'var(--text-primary)' }}>${item.unitPrice?.toFixed(2) || '—'}</div>
+                          <div className="text-[9px] mt-1" style={{ color: 'var(--text-muted)' }}>99.5% Conf</div>
                         </div>
 
-                        <div className="bg-slate-950 p-2 rounded border border-slate-800">
-                          <div className="text-slate-500">CELL({rIndex}, 4) - Total</div>
-                          <div className="text-emerald-400 font-semibold mt-0.5">${item.total.toFixed(2)}</div>
-                          <div className="text-[9px] text-blue-400 mt-1">Reconciled</div>
+                        <div 
+                          className="p-2 rounded border"
+                          style={{
+                            backgroundColor: 'var(--bg-surface)',
+                            borderColor: 'var(--border-subtle)'
+                          }}
+                        >
+                          <div style={{ color: 'var(--text-muted)' }}>CELL({rIndex}, 4) - Total</div>
+                          <div className="font-semibold mt-0.5" style={{ color: 'var(--text-primary)' }}>${item.total.toFixed(2)}</div>
+                          <div className="text-[9px] mt-1" style={{ color: 'var(--text-muted)' }}>Reconciled</div>
                         </div>
                       </div>
                     )}
@@ -672,17 +863,25 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
       {/* VIEW MODE 3: TEXTRACT BLOCKS JSON */}
       {viewMode === 'json' && (
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
             <span>Textract Relational Schema (TABLE &amp; CELL Blocks)</span>
             <button
               onClick={handleCopyHierarchyJson}
-              className="flex items-center gap-1 text-blue-400 hover:text-blue-300"
+              className="flex items-center gap-1 hover:underline cursor-pointer"
+              style={{ color: 'var(--text-primary)' }}
             >
-              {copiedJson ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copiedJson ? <Check className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedJson ? 'Copied JSON' : 'Copy Blocks'}</span>
             </button>
           </div>
-          <div className="bg-slate-950 p-4 rounded border border-slate-800 font-mono text-[11px] text-slate-300 overflow-x-auto max-h-[460px] select-text">
+          <div 
+            className="p-4 rounded-xl border font-mono text-[11px] overflow-x-auto max-h-[460px] select-text transition-colors"
+            style={{
+              backgroundColor: 'var(--bg-surface-elevated)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-primary)'
+            }}
+          >
             <pre>
               {JSON.stringify(
                 {
@@ -725,3 +924,4 @@ export const LineItemsInspector: React.FC<LineItemsInspectorProps> = ({
     </div>
   );
 };
+

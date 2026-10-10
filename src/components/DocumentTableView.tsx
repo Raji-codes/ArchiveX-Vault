@@ -54,21 +54,35 @@ export const DocumentTableView: React.FC<DocumentTableViewProps> = ({
   };
 
   return (
-    <div className="border border-slate-800 rounded-lg overflow-hidden bg-slate-900/60 shadow-sm">
+    <div 
+      className="border rounded-xl overflow-hidden shadow-sm transition-colors"
+      style={{
+        backgroundColor: 'var(--bg-surface)',
+        borderColor: 'var(--border-subtle)'
+      }}
+    >
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs text-slate-300">
+        <table className="w-full text-left text-xs" style={{ color: 'var(--text-primary)' }}>
           
           {/* Table Header */}
-          <thead className="bg-slate-950/80 text-slate-400 border-b border-slate-800 font-medium text-[11px] uppercase tracking-wider">
+          <thead 
+            className="border-b font-medium text-[11px] uppercase tracking-wider transition-colors"
+            style={{
+              backgroundColor: 'var(--bg-surface-elevated)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-secondary)'
+            }}
+          >
             <tr>
               <th className="w-10 px-3 py-3 text-center">
                 <button 
                   onClick={onSelectAll}
-                  className="text-slate-400 hover:text-slate-200"
+                  className="hover:opacity-75 transition-opacity cursor-pointer"
+                  style={{ color: 'var(--text-secondary)' }}
                   title={allSelected ? "Deselect All" : "Select All"}
                 >
                   {allSelected ? (
-                    <CheckSquare className="w-4 h-4 text-blue-500" />
+                    <CheckSquare className="w-4 h-4" style={{ color: 'var(--accent)' }} />
                   ) : (
                     <Square className="w-4 h-4" />
                   )}
@@ -86,7 +100,7 @@ export const DocumentTableView: React.FC<DocumentTableViewProps> = ({
           </thead>
 
           {/* Table Body */}
-          <tbody className="divide-y divide-slate-800/80">
+          <tbody className="divide-y" style={{ borderColor: 'var(--border-subtle)' }}>
             {searchResults.map(({ document: doc, snippets }) => {
               const isSelected = selectedDocIds.includes(doc.id);
               const hasSnippets = snippets.length > 0 && searchQuery.trim().length > 0;
@@ -94,47 +108,56 @@ export const DocumentTableView: React.FC<DocumentTableViewProps> = ({
               return (
                 <React.Fragment key={doc.id}>
                   <tr 
-                    className={`hover:bg-slate-800/40 transition-colors group cursor-pointer ${
-                      isSelected ? 'bg-blue-950/20' : ''
-                    }`}
+                    className="transition-colors group cursor-pointer hover:opacity-90"
+                    style={{
+                      backgroundColor: isSelected ? 'var(--bg-surface-elevated)' : 'transparent',
+                      borderBottom: '1px solid var(--border-subtle)'
+                    }}
                     onClick={() => onInspectDocument(doc)}
                   >
                     
                     {/* Checkbox */}
                     <td className="px-3 py-3 text-center" onClick={(e) => { e.stopPropagation(); onToggleSelect(doc.id); }}>
-                      <button className="text-slate-400 hover:text-slate-200">
+                      <button className="hover:opacity-75 transition-opacity cursor-pointer">
                         {isSelected ? (
-                          <CheckSquare className="w-4 h-4 text-blue-500" />
+                          <CheckSquare className="w-4 h-4" style={{ color: 'var(--accent)' }} />
                         ) : (
-                          <Square className="w-4 h-4 text-slate-600" />
+                          <Square className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
                         )}
                       </button>
                     </td>
 
                     {/* Document Name & S3 Path */}
                     <td className="px-4 py-3">
-                      <div className="font-medium text-slate-100 group-hover:text-blue-400 transition-colors truncate max-w-xs">
+                      <div className="font-semibold truncate max-w-xs transition-colors" style={{ color: 'var(--text-primary)' }}>
                         {highlightText(doc.name, searchQuery)}
                       </div>
-                      <div className="font-mono text-[11px] text-slate-400 truncate max-w-xs mt-0.5">
+                      <div className="font-mono text-[11px] truncate max-w-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
                         s3://{doc.s3Bucket}/{doc.s3Key}
                       </div>
                     </td>
 
                     {/* Document Type */}
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className="text-xs text-slate-300 font-medium">
+                      <span 
+                        className="text-xs font-medium px-2 py-0.5 rounded border"
+                        style={{
+                          backgroundColor: 'var(--bg-surface-elevated)',
+                          borderColor: 'var(--border-subtle)',
+                          color: 'var(--text-secondary)'
+                        }}
+                      >
                         {doc.extracted.documentType}
                       </span>
                     </td>
 
                     {/* Entity / Vendor */}
                     <td className="px-4 py-3 truncate max-w-[160px]">
-                      <span className="text-slate-300 font-medium truncate block">
+                      <span className="font-medium truncate block" style={{ color: 'var(--text-primary)' }}>
                         {doc.extracted.vendor ? highlightText(doc.extracted.vendor, searchQuery) : '—'}
                       </span>
                       {doc.extracted.invoiceNumber && (
-                        <span className="font-mono text-[10px] text-slate-400 block">
+                        <span className="font-mono text-[10px] block" style={{ color: 'var(--text-muted)' }}>
                           #{doc.extracted.invoiceNumber}
                         </span>
                       )}
@@ -143,11 +166,11 @@ export const DocumentTableView: React.FC<DocumentTableViewProps> = ({
                     {/* Extracted Total */}
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       {doc.extracted.totalAmount !== undefined ? (
-                        <span className="font-mono tabular-nums font-semibold text-emerald-400">
+                        <span className="font-mono tabular-nums font-bold" style={{ color: 'var(--text-primary)' }}>
                           ${doc.extracted.totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                         </span>
                       ) : (
-                        <span className="text-slate-500">—</span>
+                        <span style={{ color: 'var(--text-muted)' }}>—</span>
                       )}
                     </td>
 
@@ -158,13 +181,18 @@ export const DocumentTableView: React.FC<DocumentTableViewProps> = ({
                           <button
                             key={tag}
                             onClick={(e) => { e.stopPropagation(); onTagClick(tag); }}
-                            className="inline-flex items-center text-[10px] font-mono text-slate-400 hover:text-slate-200 bg-slate-800/60 hover:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700/60 transition-colors cursor-pointer"
+                            className="inline-flex items-center text-[10px] font-mono px-1.5 py-0.5 rounded border transition-colors cursor-pointer"
+                            style={{
+                              backgroundColor: 'var(--bg-surface-elevated)',
+                              borderColor: 'var(--border-subtle)',
+                              color: 'var(--text-secondary)'
+                            }}
                           >
                             {highlightText(tag, searchQuery)}
                           </button>
                         ))}
                         {doc.tags.length > 3 && (
-                          <span className="text-[10px] text-slate-500 font-mono">
+                          <span className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>
                             +{doc.tags.length - 3}
                           </span>
                         )}
@@ -172,28 +200,30 @@ export const DocumentTableView: React.FC<DocumentTableViewProps> = ({
                     </td>
 
                     {/* File Size */}
-                    <td className="px-4 py-3 text-right font-mono tabular-nums text-slate-400 whitespace-nowrap">
+                    <td className="px-4 py-3 text-right font-mono tabular-nums whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                       {formatFileSize(doc.size)}
                     </td>
 
                     {/* Upload Date */}
-                    <td className="px-4 py-3 text-right font-mono tabular-nums text-slate-400 whitespace-nowrap">
+                    <td className="px-4 py-3 text-right font-mono tabular-nums whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                       {formatDate(doc.uploadedAt)}
                     </td>
 
                     {/* Action buttons */}
                     <td className="px-4 py-3 text-center whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center justify-center gap-2">
+                      <div className="flex items-center justify-center gap-1.5">
                         <button
                           onClick={() => onInspectDocument(doc)}
-                          className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition-colors"
+                          className="p-1 rounded hover:opacity-75 transition-opacity"
+                          style={{ color: 'var(--text-secondary)' }}
                           title="Inspect OCR"
                         >
                           <ChevronRight className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => onDeleteDocument(doc.id)}
-                          className="text-slate-400 hover:text-rose-400 p-1 rounded hover:bg-slate-800 transition-colors"
+                          className="p-1 rounded hover:text-rose-400 transition-colors"
+                          style={{ color: 'var(--text-muted)' }}
                           title="Delete"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -203,17 +233,30 @@ export const DocumentTableView: React.FC<DocumentTableViewProps> = ({
 
                   </tr>
 
-                  {/* Search Match Snippet Row (When query is active and matched) */}
+                  {/* Search Match Snippet Row */}
                   {hasSnippets && (
-                    <tr className="bg-slate-950/90 border-b border-slate-800/80">
+                    <tr 
+                      className="border-b"
+                      style={{
+                        backgroundColor: 'var(--bg-surface-muted)',
+                        borderColor: 'var(--border-subtle)'
+                      }}
+                    >
                       <td colSpan={9} className="px-6 py-2.5">
                         <div className="flex items-start gap-3">
-                          <span className="text-[10px] font-mono text-amber-400 uppercase tracking-wider whitespace-nowrap pt-0.5">
+                          <span className="text-[10px] font-mono uppercase tracking-wider whitespace-nowrap pt-0.5" style={{ color: 'var(--accent)' }}>
                             OCR Match:
                           </span>
-                          <div className="space-y-1 text-xs font-mono text-slate-300 leading-relaxed select-text">
+                          <div className="space-y-1 text-xs font-mono leading-relaxed select-text" style={{ color: 'var(--text-primary)' }}>
                             {snippets.map((snip, idx) => (
-                              <div key={idx} className="bg-slate-900 px-2 py-1 rounded border border-slate-800">
+                              <div 
+                                key={idx} 
+                                className="px-2 py-1 rounded border"
+                                style={{
+                                  backgroundColor: 'var(--bg-surface)',
+                                  borderColor: 'var(--border-subtle)'
+                                }}
+                              >
                                 {highlightText(snip.snippet, searchQuery)}
                               </div>
                             ))}

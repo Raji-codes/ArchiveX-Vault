@@ -8,7 +8,9 @@ import {
   Search, 
   RotateCcw, 
   Trash2,
-  Upload
+  Upload,
+  Cloud,
+  FileText
 } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { SearchAndFilters } from './components/SearchAndFilters';
@@ -16,12 +18,14 @@ import { DocumentTableView } from './components/DocumentTableView';
 import { DocumentCard } from './components/DocumentCard';
 import { DocumentViewerModal } from './components/DocumentViewerModal';
 import { UploadModal } from './components/UploadModal';
-import { CenteredUploadDropzone } from './components/CenteredUploadDropzone';
+import { S3ConfigModal } from './components/S3ConfigModal';
 import { INITIAL_DOCUMENTS } from './data/mockDocuments';
 import { DocumentItem } from './types/document';
 import { searchDocuments } from './utils/searchHighlight';
+import { ThemeProvider } from './context/ThemeContext';
+import { LiveThemeBar } from './components/ThemeSwitcher';
 
-export default function App() {
+function VaultApp() {
   // Storage state with localStorage persistence
   const [documents, setDocuments] = useState<DocumentItem[]>(() => {
     try {
@@ -44,10 +48,8 @@ export default function App() {
     }
   }, [documents]);
 
-  // Documents list toggle state:
-  // When true -> lists out documents
-  // When false -> displays centered upload ingestion portal (default landing)
-  const [isDocumentsListOpen, setIsDocumentsListOpen] = useState(false);
+  // Documents view state: Default to true (Documents Table & Search view)
+  const [isDocumentsListOpen, setIsDocumentsListOpen] = useState(true);
 
   // Search & Filters State
   const [searchQuery, setSearchQuery] = useState('');
@@ -61,6 +63,7 @@ export default function App() {
 
   // Modals
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isS3ModalOpen, setIsS3ModalOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<DocumentItem | null>(null);
 
   // Toggle tag filter
@@ -201,151 +204,203 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
-      
+    <div 
+      className="min-h-screen flex flex-col font-sans antialiased transition-colors"
+      style={{
+        backgroundColor: 'var(--bg-app)',
+        color: 'var(--text-primary)'
+      }}
+    >
       {/* Top Bar Navigation */}
       <Navbar
         isDocumentsListOpen={isDocumentsListOpen}
-        onToggleDocumentsList={() => setIsDocumentsListOpen(prev => !prev)}
-        onOpenUpload={() => setIsDocumentsListOpen(false)}
+        onToggleDocumentsList={() => setIsDocumentsListOpen(true)}
+        onOpenUpload={() => setIsUploadModalOpen(true)}
+        onOpenS3Config={() => setIsS3ModalOpen(true)}
         totalDocuments={documents.length}
       />
 
+      {/* Interactive Live Theme Switcher Bar (Click any palette to see it immediately) */}
+      <LiveThemeBar />
+
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5">
-        
-        {isDocumentsListOpen ? (
-          <div className="space-y-4">
-            
-            {/* Contextual Workspace Header */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
-              <div>
-                <h1 className="text-lg font-bold text-white tracking-tight">Cloud Content Discovery System</h1>
-                <div className="flex items-center gap-2 text-xs text-slate-400 mt-1">
-                  <span className="font-mono tabular-nums text-slate-300">{documents.length} documents indexed</span>
-                  <span aria-hidden="true" className="text-slate-600">·</span>
-                  <span className="text-slate-400">Intelligent Full-Text OCR Search & Tagging</span>
-                </div>
-              </div>
-
-              {/* Header Action Buttons */}
-              <div className="flex items-center gap-2">
-                {selectedDocIds.length > 0 && (
-                  <button
-                    onClick={handleBatchDelete}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 text-xs font-medium border border-rose-800/80 transition-colors cursor-pointer"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Delete ({selectedDocIds.length})</span>
-                  </button>
-                )}
-
-                <button
-                  onClick={() => setIsDocumentsListOpen(false)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 text-xs font-medium border border-blue-500/30 transition-colors cursor-pointer"
-                  title="Close list and go to upload dropzone"
-                >
-                  <Upload className="w-3.5 h-3.5" />
-                  <span>Upload Document</span>
-                </button>
-
-                <button
-                  onClick={handleResetToDefaults}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-medium border border-slate-800 transition-colors cursor-pointer"
-                  title="Reset to default documents"
-                >
-                  <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Reset Fixtures</span>
-                </button>
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="space-y-4">
+          
+          {/* Contextual Workspace Header */}
+          <div 
+            className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b transition-colors"
+            style={{ borderColor: 'var(--border-subtle)' }}
+          >
+            <div>
+              <h1 className="text-xl font-semibold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                Documents
+              </h1>
+              <div className="flex items-center gap-2 text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
+                <span className="font-mono tabular-nums">{documents.length} files indexed</span>
+                <span aria-hidden="true" style={{ color: 'var(--border-strong)' }}>·</span>
+                <span>Full-text OCR search, tables & itemized extraction</span>
               </div>
             </div>
 
-            {/* Filter & Search Bar */}
-            <div className="bg-slate-900/40 border border-slate-800 rounded-lg p-3">
-              <SearchAndFilters
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                selectedTags={selectedTags}
-                toggleTag={toggleTag}
-                selectedDocType={selectedDocType}
-                setSelectedDocType={setSelectedDocType}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                viewMode={viewMode}
-                setViewMode={setViewMode}
-                availableTagsWithCounts={availableTagsWithCounts}
-                totalResults={searchResults.length}
-                onClearFilters={handleClearFilters}
-              />
+            {/* Header Action Buttons */}
+            <div className="flex items-center gap-2">
+              {selectedDocIds.length > 0 && (
+                <button
+                  onClick={handleBatchDelete}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 text-xs font-medium border border-rose-800/80 transition-colors cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete ({selectedDocIds.length})</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => setIsS3ModalOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-secondary)'
+                }}
+                title="Configure AWS S3 and Textract credentials"
+              >
+                <Cloud className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
+                <span>AWS Config</span>
+              </button>
+
+              <button
+                onClick={handleResetToDefaults}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-secondary)'
+                }}
+                title="Reset to default documents"
+              >
+                <RotateCcw className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
+                <span className="hidden sm:inline">Reset Fixtures</span>
+              </button>
+
+              <button
+                onClick={() => setIsUploadModalOpen(true)}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold tracking-tight transition-all shadow-sm cursor-pointer"
+                style={{
+                  backgroundColor: 'var(--btn-primary-bg)',
+                  color: 'var(--btn-primary-text)'
+                }}
+                title="Upload document"
+              >
+                <Upload className="w-3.5 h-3.5" />
+                <span>Upload</span>
+              </button>
             </div>
-
-            {/* Document Results (Table View or Grid View) */}
-            {searchResults.length > 0 ? (
-              viewMode === 'table' ? (
-                <DocumentTableView
-                  documents={documents}
-                  searchResults={searchResults}
-                  searchQuery={searchQuery}
-                  selectedDocIds={selectedDocIds}
-                  onToggleSelect={handleToggleSelect}
-                  onSelectAll={handleSelectAll}
-                  onInspectDocument={setSelectedDocument}
-                  onDeleteDocument={handleDeleteDocument}
-                  onTagClick={toggleTag}
-                />
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {searchResults.map(({ document, snippets, matchesIn, totalScore }) => (
-                    <DocumentCard
-                      key={document.id}
-                      document={document}
-                      searchMatch={{
-                        documentId: document.id,
-                        document,
-                        matchesIn,
-                        snippets,
-                        totalScore
-                      }}
-                      searchQuery={searchQuery}
-                      onSelect={setSelectedDocument}
-                      onDelete={handleDeleteDocument}
-                      onTagClick={toggleTag}
-                    />
-                  ))}
-                </div>
-              )
-            ) : (
-              <div className="text-center py-12 bg-slate-900/30 rounded-lg border border-slate-800/80 p-6 space-y-3">
-                <div className="w-10 h-10 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 mx-auto">
-                  <Search className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-xs font-semibold text-white">No documents match the current criteria</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Query "{searchQuery}" did not return results.
-                  </p>
-                </div>
-                <div className="flex items-center justify-center gap-2 pt-1">
-                  <button
-                    onClick={handleClearFilters}
-                    className="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium transition-colors cursor-pointer"
-                  >
-                    Clear Filters
-                  </button>
-                </div>
-              </div>
-            )}
-
           </div>
-        ) : (
-          /* When documents list is closed -> big centered drag & drop upload interface */
-          <CenteredUploadDropzone
-            onDocumentProcessed={handleDocumentProcessed}
-            onOpenDocumentsList={() => setIsDocumentsListOpen(true)}
-            totalDocuments={documents.length}
-          />
-        )}
 
+          {/* Filter & Search Bar */}
+          <div 
+            className="border rounded-xl p-3 transition-colors"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              borderColor: 'var(--border-subtle)'
+            }}
+          >
+            <SearchAndFilters
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedTags={selectedTags}
+              toggleTag={toggleTag}
+              selectedDocType={selectedDocType}
+              setSelectedDocType={setSelectedDocType}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              availableTagsWithCounts={availableTagsWithCounts}
+              totalResults={searchResults.length}
+              onClearFilters={handleClearFilters}
+            />
+          </div>
+
+          {/* Document Results (Table View or Grid View) */}
+          {searchResults.length > 0 ? (
+            viewMode === 'table' ? (
+              <DocumentTableView
+                documents={documents}
+                searchResults={searchResults}
+                searchQuery={searchQuery}
+                selectedDocIds={selectedDocIds}
+                onToggleSelect={handleToggleSelect}
+                onSelectAll={handleSelectAll}
+                onInspectDocument={setSelectedDocument}
+                onDeleteDocument={handleDeleteDocument}
+                onTagClick={toggleTag}
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {searchResults.map(({ document, snippets, matchesIn, totalScore }) => (
+                  <DocumentCard
+                    key={document.id}
+                    document={document}
+                    searchMatch={{
+                      documentId: document.id,
+                      document,
+                      matchesIn,
+                      snippets,
+                      totalScore
+                    }}
+                    searchQuery={searchQuery}
+                    onSelect={setSelectedDocument}
+                    onDelete={handleDeleteDocument}
+                    onTagClick={toggleTag}
+                  />
+                ))}
+              </div>
+            )
+          ) : (
+            <div 
+              className="text-center py-16 rounded-xl border p-6 space-y-3 transition-colors"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: 'var(--border-subtle)'
+              }}
+            >
+              <div 
+                className="w-10 h-10 rounded-lg border flex items-center justify-center mx-auto"
+                style={{
+                  backgroundColor: 'var(--bg-surface-elevated)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-muted)'
+                }}
+              >
+                <Search className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>No documents found</h3>
+                <p className="text-xs mt-1 max-w-sm mx-auto" style={{ color: 'var(--text-muted)' }}>
+                  {searchQuery 
+                    ? `No matching items for "${searchQuery}". Try searching by vendor, total, or invoice number.`
+                    : 'No documents match the selected filters.'}
+                </p>
+              </div>
+              <div className="flex items-center justify-center gap-2 pt-1">
+                <button
+                  onClick={handleClearFilters}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer"
+                  style={{
+                    backgroundColor: 'var(--bg-surface-elevated)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--text-secondary)'
+                  }}
+                >
+                  Clear Filters
+                </button>
+              </div>
+            </div>
+          )}
+
+        </div>
       </main>
 
       {/* Document Inspector Modal Workbench */}
@@ -357,34 +412,56 @@ export default function App() {
         onUpdateMetadata={handleUpdateMetadata}
       />
 
-      {/* Fallback Upload Modal (if triggered elsewhere) */}
+      {/* Upload Modal */}
       <UploadModal
         isOpen={isUploadModalOpen}
         onClose={() => setIsUploadModalOpen(false)}
         onDocumentProcessed={handleDocumentProcessed}
       />
 
-      {/* Clean Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-4 text-xs text-slate-400">
+      {/* AWS S3 / Textract Status Modal */}
+      <S3ConfigModal
+        isOpen={isS3ModalOpen}
+        onClose={() => setIsS3ModalOpen(false)}
+      />
+
+      {/* Clean, Humanized Footer */}
+      <footer 
+        className="border-t py-4 text-xs transition-colors"
+        style={{
+          backgroundColor: 'var(--bg-surface-muted)',
+          borderColor: 'var(--border-subtle)',
+          color: 'var(--text-muted)'
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-slate-200">ArchiveX</span>
-            <span className="text-slate-600">·</span>
-            <span>Cloud Content Discovery System</span>
+            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>ArchiveX Vault</span>
+            <span style={{ color: 'var(--border-subtle)' }}>·</span>
+            <span>Document Extraction & Cloud Storage</span>
           </div>
-          <div className="flex items-center gap-3 text-[11px] text-slate-500 font-mono">
-            <span>Full-Text Search & OCR Index</span>
-            <span aria-hidden="true">·</span>
+          <div className="flex items-center gap-3 text-[11px] font-mono" style={{ color: 'var(--text-muted)' }}>
+            <span>AWS S3 + Textract</span>
+            <span aria-hidden="true" style={{ color: 'var(--border-subtle)' }}>·</span>
             <button 
-              onClick={() => setIsDocumentsListOpen(prev => !prev)} 
-              className="text-slate-400 hover:text-blue-400 underline transition-colors cursor-pointer"
+              onClick={() => setIsUploadModalOpen(true)} 
+              className="hover:underline transition-colors cursor-pointer"
+              style={{ color: 'var(--text-secondary)' }}
             >
-              {isDocumentsListOpen ? 'Close Documents List' : `View Documents (${documents.length})`}
+              Upload file
             </button>
           </div>
         </div>
       </footer>
 
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <VaultApp />
+    </ThemeProvider>
   );
 }
