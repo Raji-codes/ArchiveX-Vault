@@ -310,7 +310,8 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
           {hasActiveFilters && (
             <button
               onClick={onClearFilters}
-              className="text-xs text-zinc-400 hover:text-zinc-200 px-2 py-1.5 transition-colors whitespace-nowrap"
+              className="text-xs px-2 py-1.5 transition-colors whitespace-nowrap hover:opacity-80 font-medium"
+              style={{ color: 'var(--accent)' }}
               title="Reset all filters"
             >
               Reset
@@ -322,28 +323,46 @@ export const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
       </div>
 
       {/* Subtle status row showing active filters and total count */}
-      <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-0.5">
+      <div 
+        className="flex items-center justify-between text-[11px] pt-0.5"
+        style={{ color: 'var(--text-muted)' }}
+      >
         <div className="flex items-center gap-2 flex-wrap">
           {selectedDocType !== 'ALL' && (
-            <span className="inline-flex items-center gap-1 bg-zinc-800/80 px-2 py-0.5 rounded text-zinc-300">
+            <span 
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs border font-medium"
+              style={{
+                backgroundColor: 'var(--bg-surface-elevated)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--text-secondary)'
+              }}
+            >
               <span>Type: {selectedDocType}</span>
-              <button onClick={() => setSelectedDocType('ALL')} className="hover:text-white">
+              <button onClick={() => setSelectedDocType('ALL')} className="hover:opacity-75 cursor-pointer">
                 <X className="w-3 h-3" />
               </button>
             </span>
           )}
 
           {selectedTags.map(tag => (
-            <span key={tag} className="inline-flex items-center gap-1 bg-zinc-800/80 font-mono px-2 py-0.5 rounded text-zinc-300">
+            <span 
+              key={tag} 
+              className="inline-flex items-center gap-1 font-mono px-2 py-0.5 rounded text-xs border font-medium"
+              style={{
+                backgroundColor: 'var(--bg-surface-elevated)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--text-secondary)'
+              }}
+            >
               <span>{tag}</span>
-              <button onClick={() => toggleTag(tag)} className="hover:text-white">
+              <button onClick={() => toggleTag(tag)} className="hover:opacity-75 cursor-pointer">
                 <X className="w-3 h-3" />
               </button>
             </span>
           ))}
         </div>
 
-        <div className="font-mono text-zinc-400 tabular-nums ml-auto">
+        <div className="font-mono tabular-nums ml-auto" style={{ color: 'var(--text-muted)' }}>
           {totalResults} {totalResults === 1 ? 'object' : 'objects'} found
         </div>
       </div>

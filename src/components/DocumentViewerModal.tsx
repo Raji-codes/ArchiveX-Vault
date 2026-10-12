@@ -323,7 +323,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
 
                 {/* Remaining OCR Lines */}
                 {document.rawText.split('\n').slice(document.textractBlocks.filter(b => b.blockType === 'LINE').length).map((line, idx) => (
-                  <div key={idx} className="text-zinc-400 text-[11px] px-1">
+                  <div key={idx} className="text-[11px] px-1" style={{ color: 'var(--text-muted)' }}>
                     {highlightText(line, searchQuery)}
                   </div>
                 ))}

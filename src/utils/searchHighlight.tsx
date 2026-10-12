@@ -140,7 +140,7 @@ export function highlightText(text: string, query: string): React.ReactNode {
       return (
         <mark
           key={i}
-          className="bg-amber-400/30 text-amber-200 border-b border-amber-400 px-0.5 rounded font-semibold"
+          className="bg-amber-200 text-stone-950 border-b-2 border-amber-500 px-0.5 rounded-xs font-semibold"
         >
           {part}
         </mark>
