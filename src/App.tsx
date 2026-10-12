@@ -21,6 +21,7 @@ import { CenteredUploadDropzone } from './components/CenteredUploadDropzone';
 import { INITIAL_DOCUMENTS } from './data/mockDocuments';
 import { DocumentItem } from './types/document';
 import { searchDocuments } from './utils/searchHighlight';
+import { deleteFromRealS3 } from './services/s3Service';
 
 function VaultApp() {
   // Storage state with localStorage persistence
@@ -143,6 +144,10 @@ function VaultApp() {
   };
 
   const handleDeleteDocument = (id: string) => {
+    const docToDelete = documents.find(d => d.id === id);
+    if (docToDelete?.s3Key) {
+      deleteFromRealS3(docToDelete.s3Key).catch(() => {});
+    }
     setDocuments(prev => prev.filter(d => d.id !== id));
     setSelectedDocIds(prev => prev.filter(item => item !== id));
     if (selectedDocument?.id === id) {
@@ -396,6 +401,7 @@ function VaultApp() {
         onClose={() => setSelectedDocument(null)}
         onUpdateTags={handleUpdateTags}
         onUpdateMetadata={handleUpdateMetadata}
+        onDelete={handleDeleteDocument}
       />
 
       {/* Upload Modal */}

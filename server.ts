@@ -26,11 +26,23 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+function normalizeAwsRegion(rawRegion?: string): string {
+  if (!rawRegion) return 'ap-southeast-2';
+  const trimmed = rawRegion.trim();
+  // Extract standard AWS region identifier like ap-southeast-2, us-east-1, eu-central-1
+  const match = trimmed.match(/[a-z]{2,}(?:-[a-z]+)+-\d+/i);
+  if (match) {
+    return match[0].toLowerCase();
+  }
+  return trimmed.toLowerCase().replace(/[^a-z0-9-]/g, '') || 'ap-southeast-2';
+}
+
 /**
  * Helper to construct an AWS S3 Client from environment variables
  */
 function getS3Config() {
-  const region = process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION || 'ap-southeast-2';
+  const rawRegion = process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION || 'ap-southeast-2';
+  const region = normalizeAwsRegion(rawRegion);
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   const sessionToken = process.env.AWS_SESSION_TOKEN;
