@@ -110,7 +110,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   const lineItemsCount = document.extracted.lineItems?.length || 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-xs">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/50 backdrop-blur-xs">
       <div 
         className="border rounded-2xl w-full max-w-6xl h-[92vh] shadow-2xl overflow-hidden flex flex-col transition-colors"
         style={{
