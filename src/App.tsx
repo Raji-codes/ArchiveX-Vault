@@ -17,6 +17,7 @@ import { DocumentTableView } from './components/DocumentTableView';
 import { DocumentCard } from './components/DocumentCard';
 import { DocumentViewerModal } from './components/DocumentViewerModal';
 import { UploadModal } from './components/UploadModal';
+import { CenteredUploadDropzone } from './components/CenteredUploadDropzone';
 import { INITIAL_DOCUMENTS } from './data/mockDocuments';
 import { DocumentItem } from './types/document';
 import { searchDocuments } from './utils/searchHighlight';
@@ -44,8 +45,8 @@ function VaultApp() {
     }
   }, [documents]);
 
-  // Documents view state: Default to true (Documents Table & Search view)
-  const [isDocumentsListOpen, setIsDocumentsListOpen] = useState(true);
+  // Main landing view: Default to 'portal' (Upload Portal landing page)
+  const [currentView, setCurrentView] = useState<'portal' | 'vault'>('portal');
 
   // Search & Filters State
   const [searchQuery, setSearchQuery] = useState('');
@@ -138,7 +139,6 @@ function VaultApp() {
   // Document actions
   const handleDocumentProcessed = (newDoc: DocumentItem) => {
     setDocuments(prev => [newDoc, ...prev]);
-    setIsDocumentsListOpen(true);
     setSelectedDocument(newDoc);
   };
 
@@ -208,15 +208,23 @@ function VaultApp() {
     >
       {/* Top Bar Navigation */}
       <Navbar
-        isDocumentsListOpen={isDocumentsListOpen}
-        onToggleDocumentsList={() => setIsDocumentsListOpen(true)}
-        onOpenUpload={() => setIsUploadModalOpen(true)}
+        currentView={currentView}
+        onNavigate={setCurrentView}
         totalDocuments={documents.length}
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="space-y-4">
+      <main className="flex-1 w-full mx-auto px-4 sm:px-8 lg:px-12 py-6">
+        {currentView === 'portal' ? (
+          <CenteredUploadDropzone
+            onDocumentProcessed={handleDocumentProcessed}
+            onOpenDocumentsList={() => setCurrentView('vault')}
+            onInspectDocument={(doc) => setSelectedDocument(doc)}
+            recentDocuments={documents}
+            totalDocuments={documents.length}
+          />
+        ) : (
+          <div className="space-y-4 animate-fadeIn">
           
           {/* Contextual Workspace Header */}
           <div 
@@ -261,16 +269,16 @@ function VaultApp() {
               </button>
 
               <button
-                onClick={() => setIsUploadModalOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold tracking-tight transition-all shadow-sm cursor-pointer"
+                onClick={() => setCurrentView('portal')}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold tracking-tight transition-all shadow-sm cursor-pointer hover:opacity-90"
                 style={{
                   backgroundColor: 'var(--btn-primary-bg)',
                   color: 'var(--btn-primary-text)'
                 }}
-                title="Upload document"
+                title="Open Upload Portal"
               >
                 <Upload className="w-3.5 h-3.5" />
-                <span>Upload</span>
+                <span>Upload Portal</span>
               </button>
             </div>
           </div>
@@ -377,7 +385,8 @@ function VaultApp() {
             </div>
           )}
 
-        </div>
+          </div>
+        )}
       </main>
 
       {/* Document Inspector Modal Workbench */}
@@ -405,7 +414,7 @@ function VaultApp() {
           color: 'var(--text-muted)'
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="w-full mx-auto px-4 sm:px-8 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="font-medium" style={{ color: 'var(--text-primary)' }}>ArchiveX Vault</span>
             <span style={{ color: 'var(--border-subtle)' }}>·</span>
@@ -413,11 +422,19 @@ function VaultApp() {
           </div>
           <div className="flex items-center gap-3 text-[11px] font-mono" style={{ color: 'var(--text-muted)' }}>
             <button 
-              onClick={() => setIsUploadModalOpen(true)} 
+              onClick={() => setCurrentView('portal')} 
               className="hover:underline transition-colors cursor-pointer"
-              style={{ color: 'var(--text-secondary)' }}
+              style={{ color: currentView === 'portal' ? 'var(--text-primary)' : 'var(--text-secondary)' }}
             >
-              Upload file
+              Upload Portal
+            </button>
+            <span aria-hidden="true" style={{ color: 'var(--border-subtle)' }}>·</span>
+            <button 
+              onClick={() => setCurrentView('vault')} 
+              className="hover:underline transition-colors cursor-pointer"
+              style={{ color: currentView === 'vault' ? 'var(--text-primary)' : 'var(--text-secondary)' }}
+            >
+              Vault Archive ({documents.length})
             </button>
           </div>
         </div>
