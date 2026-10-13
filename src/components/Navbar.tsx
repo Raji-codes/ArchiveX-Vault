@@ -1,16 +1,18 @@
 import React from 'react';
-import { Upload, Files, Compass } from 'lucide-react';
+import { Upload, Files, Compass, Network } from 'lucide-react';
 
 interface NavbarProps {
   currentView: 'portal' | 'vault';
   onNavigate: (view: 'portal' | 'vault') => void;
   totalDocuments: number;
+  onOpenArchitecture?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentView,
   onNavigate,
-  totalDocuments
+  totalDocuments,
+  onOpenArchitecture
 }) => {
   return (
     <header 
@@ -95,7 +97,24 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Quick Header Action */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            {onOpenArchitecture && (
+              <button
+                type="button"
+                onClick={onOpenArchitecture}
+                className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-xl border transition-all cursor-pointer shadow-xs hover:opacity-95"
+                style={{
+                  backgroundColor: 'var(--bg-surface-elevated)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-primary)'
+                }}
+                title="View System Architecture Blueprint"
+              >
+                <Network className="w-4 h-4 text-emerald-500" />
+                <span>Architecture</span>
+              </button>
+            )}
+
             {currentView === 'portal' ? (
               <button
                 onClick={() => onNavigate('vault')}

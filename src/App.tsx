@@ -9,7 +9,8 @@ import {
   RotateCcw, 
   Trash2,
   Upload,
-  FileText
+  FileText,
+  Network
 } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { SearchAndFilters } from './components/SearchAndFilters';
@@ -17,6 +18,7 @@ import { DocumentTableView } from './components/DocumentTableView';
 import { DocumentCard } from './components/DocumentCard';
 import { DocumentViewerModal } from './components/DocumentViewerModal';
 import { UploadModal } from './components/UploadModal';
+import { ArchitectureModal } from './components/ArchitectureModal';
 import { CenteredUploadDropzone } from './components/CenteredUploadDropzone';
 import { INITIAL_DOCUMENTS } from './data/mockDocuments';
 import { DocumentItem } from './types/document';
@@ -61,6 +63,7 @@ function VaultApp() {
 
   // Modals
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isArchitectureModalOpen, setIsArchitectureModalOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<DocumentItem | null>(null);
 
   // Toggle tag filter
@@ -216,6 +219,7 @@ function VaultApp() {
         currentView={currentView}
         onNavigate={setCurrentView}
         totalDocuments={documents.length}
+        onOpenArchitecture={() => setIsArchitectureModalOpen(true)}
       />
 
       {/* Main Container */}
@@ -411,6 +415,12 @@ function VaultApp() {
         onDocumentProcessed={handleDocumentProcessed}
       />
 
+      {/* System Architecture Blueprint Modal */}
+      <ArchitectureModal
+        isOpen={isArchitectureModalOpen}
+        onClose={() => setIsArchitectureModalOpen(false)}
+      />
+
       {/* Clean, Humanized Footer */}
       <footer 
         className="border-t py-4 text-xs transition-colors"
@@ -441,6 +451,16 @@ function VaultApp() {
               style={{ color: currentView === 'vault' ? 'var(--text-primary)' : 'var(--text-secondary)' }}
             >
               Vault Archive ({documents.length})
+            </button>
+            <span aria-hidden="true" style={{ color: 'var(--border-subtle)' }}>·</span>
+            <button 
+              onClick={() => setIsArchitectureModalOpen(true)} 
+              className="hover:underline transition-colors cursor-pointer inline-flex items-center gap-1 font-semibold"
+              style={{ color: 'var(--accent)' }}
+              title="Open System Architecture Blueprint"
+            >
+              <Network className="w-3.5 h-3.5" />
+              <span>Architecture</span>
             </button>
           </div>
         </div>
