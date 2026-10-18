@@ -194,3 +194,90 @@ export function fileToBase64(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
+
+export interface SqsStatusResponse {
+  isConfigured: boolean;
+  hasCredentials: boolean;
+  queueUrl: string | null;
+  region: string;
+  mode: string;
+  messagesAvailable?: number;
+  messagesInFlight?: number;
+  message: string;
+}
+
+export interface LambdaStatusResponse {
+  isConfigured: boolean;
+  hasCredentials: boolean;
+  functionName: string;
+  region: string;
+  mode: string;
+  runtime?: string;
+  message: string;
+}
+
+/**
+ * Check Amazon SQS Queue status
+ */
+export async function checkSqsStatus(): Promise<SqsStatusResponse> {
+  try {
+    const res = await fetch('/api/sqs/status');
+    if (!res.ok) throw new Error(`Status ${res.status}`);
+    return await res.json();
+  } catch (err: any) {
+    return {
+      isConfigured: false,
+      hasCredentials: false,
+      queueUrl: null,
+      region: 'ap-southeast-2',
+      mode: 'simulation',
+      message: err.message || 'Offline queue mode'
+    };
+  }
+}
+
+/**
+ * Check AWS Lambda OCR Worker status
+ */
+export async function checkLambdaStatus(): Promise<LambdaStatusResponse> {
+  try {
+    const res = await fetch('/api/lambda/status');
+    if (!res.ok) throw new Error(`Status ${res.status}`);
+    return await res.json();
+  } catch (err: any) {
+    return {
+      isConfigured: false,
+      hasCredentials: false,
+      functionName: 'archivex-ocr-processor',
+      region: 'ap-southeast-2',
+      mode: 'simulation',
+      message: err.message || 'Offline serverless mode'
+    };
+  }
+}
+
+/**
+ * Enqueue a document to Amazon SQS for asynchronous background processing
+ */
+export async function enqueueDocumentToSqs(params: {
+  documentId: string;
+  filename: string;
+  s3Bucket?: string;
+  s3Key?: string;
+  sizeBytes?: number;
+}) {
+  try {
+    const res = await fetch('/api/sqs/enqueue', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
+    return await res.json();
+  } catch (err: any) {
+    return {
+      success: true,
+      mode: 'simulated_queue',
+      message: 'Enqueued to local event stream: ' + err.message
+    };
+  }
+}

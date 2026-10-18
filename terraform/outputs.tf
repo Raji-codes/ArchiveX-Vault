@@ -28,3 +28,23 @@ output "iam_secret_access_key" {
   value       = aws_iam_access_key.app_user_key.secret
   sensitive   = true
 }
+
+output "sqs_queue_url" {
+  description = "URL of the primary SQS document ingestion queue"
+  value       = aws_sqs_queue.ocr_queue.id
+}
+
+output "sqs_queue_arn" {
+  description = "ARN of the primary SQS document ingestion queue"
+  value       = aws_sqs_queue.ocr_queue.arn
+}
+
+output "sqs_dlq_url" {
+  description = "URL of the SQS Dead Letter Queue (DLQ)"
+  value       = aws_sqs_queue.ocr_dlq.id
+}
+
+output "lambda_function_arn" {
+  description = "ARN of the serverless OCR processor Lambda function"
+  value       = aws_lambda_function.ocr_processor.arn
+}

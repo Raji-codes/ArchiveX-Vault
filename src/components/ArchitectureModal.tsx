@@ -61,6 +61,8 @@ ArchiveX Vault is an enterprise-grade cloud document storage and intelligent dis
        │   │                     REST API Controllers                       │   │
        │   │  - POST /api/s3/upload          - GET  /api/s3/presigned-url   │   │
        │   │  - POST /api/textract/analyze   - GET  /api/s3/status          │   │
+       │   │  - POST /api/sqs/enqueue        - GET  /api/sqs/status         │   │
+       │   │  - POST /api/lambda/invoke      - GET  /api/lambda/status      │   │
        │   │  - DELETE /api/s3/delete        - GET  /api/textract/status    │   │
        │   └───────────────────────────────┬────────────────────────────────┘   │
        │                                   │                                    │
@@ -125,10 +127,14 @@ ArchiveX Vault is an enterprise-grade cloud document storage and intelligent dis
 * **Security & Credentials:** AWS credentials (\`AWS_ACCESS_KEY_ID\`, \`AWS_SECRET_ACCESS_KEY\`, \`AWS_REGION\`, \`AWS_S3_BUCKET\`) are kept strictly on the server; no secrets or tokens are ever exposed to the client browser.
 * **REST API Endpoints:**
   * \`POST /api/s3/upload\`: Receives file payloads (base64 or text) and streams them to S3 with AES-256 encryption.
+  * \`POST /api/sqs/enqueue\`: Enqueues document processing jobs to Amazon SQS with DLQ protection.
+  * \`GET /api/sqs/status\`: Real-time queue health check reporting approximate message depth.
+  * \`POST /api/lambda/invoke\`: Invokes serverless AWS Lambda OCR worker.
+  * \`GET /api/lambda/status\`: Reports Lambda function state and event-source mapping.
   * \`POST /api/textract/analyze\`: Unified extraction endpoint executing multi-page PDF parsing, raw text extraction, or AWS Textract OCR.
   * \`GET /api/s3/presigned-url\`: Generates temporary (15-minute expiration) pre-signed download URLs for secure file retrieval.
   * \`DELETE /api/s3/delete\`: Removes objects from the S3 bucket.
-  * \`GET /api/s3/status\` & \`GET /api/textract/status\`: Diagnostic health checks reporting bucket status and credential availability.
+  * \`GET /api/s3/status\` & \`GET /api/textract/status\`: Diagnostic health checks reporting bucket and service availability.
 
 ### 3. Document Ingestion & Extraction Pipeline
 ArchiveX uses a **hybrid multi-stage extraction strategy**:

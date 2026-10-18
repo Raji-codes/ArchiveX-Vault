@@ -7,14 +7,25 @@ import {
   RefreshCw, 
   Copy, 
   Check, 
-  ExternalLink,
-  ShieldCheck,
-  Key,
-  FileCode2,
-  Sliders,
-  Database
+  ExternalLink, 
+  ShieldCheck, 
+  Key, 
+  FileCode2, 
+  Sliders, 
+  Database,
+  Zap,
+  Layers
 } from 'lucide-react';
-import { checkS3Status, S3StatusResponse, checkTextractStatus, TextractStatusResponse } from '../services/s3Service';
+import { 
+  checkS3Status, 
+  S3StatusResponse, 
+  checkTextractStatus, 
+  TextractStatusResponse,
+  checkSqsStatus,
+  SqsStatusResponse,
+  checkLambdaStatus,
+  LambdaStatusResponse
+} from '../services/s3Service';
 
 interface S3ConfigModalProps {
   isOpen: boolean;
@@ -29,6 +40,8 @@ export const S3ConfigModal: React.FC<S3ConfigModalProps> = ({
 }) => {
   const [status, setStatus] = useState<S3StatusResponse | null>(null);
   const [textractStatus, setTextractStatus] = useState<TextractStatusResponse | null>(null);
+  const [sqsStatus, setSqsStatus] = useState<SqsStatusResponse | null>(null);
+  const [lambdaStatus, setLambdaStatus] = useState<LambdaStatusResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'env' | 'iam' | 'cors'>('env');
@@ -40,12 +53,16 @@ export const S3ConfigModal: React.FC<S3ConfigModalProps> = ({
   const fetchStatus = async () => {
     setLoading(true);
     try {
-      const [s3Data, textractData] = await Promise.all([
+      const [s3Data, textractData, sqsData, lambdaData] = await Promise.all([
         checkS3Status(),
-        checkTextractStatus()
+        checkTextractStatus(),
+        checkSqsStatus(),
+        checkLambdaStatus()
       ]);
       setStatus(s3Data);
       setTextractStatus(textractData);
+      setSqsStatus(sqsData);
+      setLambdaStatus(lambdaData);
       onStatusChange?.(s3Data);
     } catch {
       // ignore
@@ -68,9 +85,11 @@ export const S3ConfigModal: React.FC<S3ConfigModalProps> = ({
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  const envSample = `# AWS S3 Configuration for archivex-vault
+  const envSample = `# AWS Configuration for ArchiveX Vault (.env)
 AWS_REGION="${region}"
 AWS_S3_BUCKET="${bucketName}"
+AWS_SQS_QUEUE_URL="https://sqs.${region}.amazonaws.com/123456789012/${bucketName}-ocr-queue"
+AWS_LAMBDA_FUNCTION_NAME="archivex-ocr-processor"
 AWS_ACCESS_KEY_ID="AKIA_YOUR_ACTUAL_ACCESS_KEY"
 AWS_SECRET_ACCESS_KEY="YOUR_ACTUAL_SECRET_ACCESS_KEY"`;
 
@@ -78,31 +97,45 @@ AWS_SECRET_ACCESS_KEY="YOUR_ACTUAL_SECRET_ACCESS_KEY"`;
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "ArchivexVaultBucketLevelAccess",
+      "Sid": "ArchivexS3Access",
       "Effect": "Allow",
       "Action": [
         "s3:ListBucket",
-        "s3:GetBucketLocation"
-      ],
-      "Resource": "arn:aws:s3:::${bucketName}"
-    },
-    {
-      "Sid": "ArchivexVaultObjectLevelAccess",
-      "Effect": "Allow",
-      "Action": [
+        "s3:GetBucketLocation",
         "s3:PutObject",
         "s3:GetObject",
         "s3:DeleteObject"
       ],
-      "Resource": "arn:aws:s3:::${bucketName}/*"
+      "Resource": [
+        "arn:aws:s3:::${bucketName}",
+        "arn:aws:s3:::${bucketName}/*"
+      ]
+    },
+    {
+      "Sid": "ArchivexSqsAccess",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:SendMessage",
+        "sqs:GetQueueUrl",
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": "arn:aws:sqs:${region}:*:${bucketName}-ocr-queue"
+    },
+    {
+      "Sid": "ArchivexLambdaAccess",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:InvokeFunction",
+        "lambda:GetFunction"
+      ],
+      "Resource": "arn:aws:lambda:${region}:*:function:archivex-ocr-processor"
     },
     {
       "Sid": "ArchivexTextractAccess",
       "Effect": "Allow",
       "Action": [
         "textract:DetectDocumentText",
-        "textract:AnalyzeDocument",
-        "textract:AnalyzeExpense"
+        "textract:AnalyzeDocument"
       ],
       "Resource": "*"
     }
@@ -272,33 +305,61 @@ AWS_SECRET_ACCESS_KEY="YOUR_ACTUAL_SECRET_ACCESS_KEY"`;
             </button>
           </div>
 
-          {/* Quick Checklist */}
+          {/* Quick AWS Services Checklist */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-mono">
+            {/* Amazon S3 */}
             <div className="p-2.5 rounded-lg border" style={{ backgroundColor: 'var(--bg-surface-elevated)', borderColor: 'var(--border-subtle)' }}>
-              <span className="block text-[10px]" style={{ color: 'var(--text-muted)' }}>BUCKET</span>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-bold" style={{ color: 'var(--text-muted)' }}>AMAZON S3</span>
+                <span className={`w-2 h-2 rounded-full ${status?.isConfigured ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+              </div>
               <span className="font-bold truncate block" style={{ color: 'var(--text-primary)' }} title={bucketName}>
                 {bucketName}
               </span>
-            </div>
-
-            <div className="p-2.5 rounded-lg border" style={{ backgroundColor: 'var(--bg-surface-elevated)', borderColor: 'var(--border-subtle)' }}>
-              <span className="block text-[10px]" style={{ color: 'var(--text-muted)' }}>REGION</span>
-              <span className="font-bold block" style={{ color: 'var(--text-primary)' }}>
-                {region}
+              <span className="text-[10px] block" style={{ color: 'var(--text-secondary)' }}>
+                {region} • SSE-S3
               </span>
             </div>
 
+            {/* AWS Textract */}
             <div className="p-2.5 rounded-lg border" style={{ backgroundColor: 'var(--bg-surface-elevated)', borderColor: 'var(--border-subtle)' }}>
-              <span className="block text-[10px]" style={{ color: 'var(--text-muted)' }}>ACCESS KEY ID</span>
-              <span className="font-bold" style={{ color: status?.hasCredentials ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-                {status?.hasCredentials ? 'Detected' : 'Pending .env'}
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-bold" style={{ color: 'var(--text-muted)' }}>AWS TEXTRACT</span>
+                <span className={`w-2 h-2 rounded-full ${textractStatus?.isConfigured ? 'bg-emerald-500' : 'bg-sky-500'}`} />
+              </div>
+              <span className="font-bold truncate block" style={{ color: 'var(--text-primary)' }}>
+                {textractStatus?.isConfigured ? 'Active (Live)' : 'SDK Ready'}
+              </span>
+              <span className="text-[10px] block" style={{ color: 'var(--text-secondary)' }}>
+                OCR + Tables/Forms
               </span>
             </div>
 
+            {/* Amazon SQS */}
             <div className="p-2.5 rounded-lg border" style={{ backgroundColor: 'var(--bg-surface-elevated)', borderColor: 'var(--border-subtle)' }}>
-              <span className="block text-[10px]" style={{ color: 'var(--text-muted)' }}>AWS TEXTRACT</span>
-              <span className="font-bold truncate block" style={{ color: textractStatus?.isConfigured ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-                {textractStatus?.isConfigured ? 'Ready (Live)' : 'Pending Keys'}
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-bold" style={{ color: 'var(--text-muted)' }}>AMAZON SQS</span>
+                <span className={`w-2 h-2 rounded-full ${sqsStatus?.isConfigured ? 'bg-emerald-500' : 'bg-sky-500'}`} />
+              </div>
+              <span className="font-bold truncate block" style={{ color: 'var(--text-primary)' }}>
+                {sqsStatus?.isConfigured ? 'Decoupled Queue' : 'Queue Pipeline'}
+              </span>
+              <span className="text-[10px] block" style={{ color: 'var(--text-secondary)' }}>
+                DLQ Enabled • Free Tier
+              </span>
+            </div>
+
+            {/* AWS Lambda */}
+            <div className="p-2.5 rounded-lg border" style={{ backgroundColor: 'var(--bg-surface-elevated)', borderColor: 'var(--border-subtle)' }}>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-bold" style={{ color: 'var(--text-muted)' }}>AWS LAMBDA</span>
+                <span className={`w-2 h-2 rounded-full ${lambdaStatus?.isConfigured ? 'bg-emerald-500' : 'bg-sky-500'}`} />
+              </div>
+              <span className="font-bold truncate block" style={{ color: 'var(--text-primary)' }}>
+                {lambdaStatus?.isConfigured ? 'Serverless Worker' : 'Event Worker'}
+              </span>
+              <span className="text-[10px] block" style={{ color: 'var(--text-secondary)' }}>
+                Node.js 20.x • Scale-to-Zero
               </span>
             </div>
           </div>

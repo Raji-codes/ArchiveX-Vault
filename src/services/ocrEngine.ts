@@ -1,5 +1,5 @@
 import { DocumentItem, ExtractedMetadata, TextractBlock, LineItem } from '../types/document';
-import { uploadToRealS3, analyzeDocumentWithTextract } from './s3Service';
+import { uploadToRealS3, analyzeDocumentWithTextract, enqueueDocumentToSqs } from './s3Service';
 
 interface ProcessingCallback {
   onPhaseChange?: (phase: string, progress: number) => void;
@@ -14,8 +14,8 @@ export async function processDocumentUpload(
   let s3Bucket = 'archivex-vault';
   let s3UploadMs = 80;
 
-  // Phase 1: Upload
-  callbacks?.onPhaseChange?.('Uploading document to storage...', 25);
+  // Phase 1: Upload to Amazon S3
+  callbacks?.onPhaseChange?.('Streaming document to Amazon S3...', 20);
   try {
     const s3Result = await uploadToRealS3(file);
     if (s3Result && s3Result.success) {
@@ -27,8 +27,23 @@ export async function processDocumentUpload(
     console.log('S3 upload deferred:', s3Err);
   }
 
-  // Phase 2: OCR Extraction
-  callbacks?.onPhaseChange?.('Extracting document text...', 65);
+  // Phase 2: Decoupled SQS Ingestion & Lambda Trigger
+  callbacks?.onPhaseChange?.('Dispatching task to Amazon SQS & AWS Lambda...', 45);
+  const tempDocId = `doc-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+  try {
+    await enqueueDocumentToSqs({
+      documentId: tempDocId,
+      filename: file.name,
+      s3Bucket,
+      s3Key,
+      sizeBytes: file.size
+    });
+  } catch (sqsErr) {
+    console.warn('SQS enqueue notice:', sqsErr);
+  }
+
+  // Phase 3: OCR Extraction (AWS Textract / Multi-Page Parser)
+  callbacks?.onPhaseChange?.('Extracting document text with AWS Textract...', 75);
   const textractStart = Date.now();
   const textractRes = await analyzeDocumentWithTextract(file, s3Bucket, s3Key);
   const textractMs = Math.max(300, Date.now() - textractStart);
