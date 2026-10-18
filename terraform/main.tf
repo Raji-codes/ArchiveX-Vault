@@ -85,6 +85,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "vault" {
     id     = "archive-infrequent-access"
     status = "Enabled"
 
+    filter {}
+
     # Move older files to cheaper S3 Standard-IA after 30 days
     transition {
       days          = 30
