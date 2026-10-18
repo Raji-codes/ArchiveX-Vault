@@ -1,0 +1,10 @@
+# Example Terraform Variables File
+# Rename this to terraform.tfvars to customize your deployment
+
+aws_region           = "ap-southeast-2"
+bucket_name          = "archivex-vault-storage-myuniqueid"
+environment          = "production"
+allowed_cors_origins = [
+  "http://localhost:3000",
+  "https://yourdomain.com"
+]
