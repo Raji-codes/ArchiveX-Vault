@@ -31,7 +31,10 @@ import { PDFParse } from 'pdf-parse';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+// Cloud Run sets PORT=8080 for the reverse proxy. In AI Studio, the dev server must run on port 3000.
+const portArgIndex = process.argv.indexOf('--port');
+const cliPort = portArgIndex !== -1 && process.argv[portArgIndex + 1] ? parseInt(process.argv[portArgIndex + 1], 10) : null;
+const PORT = cliPort || (process.env.PORT && process.env.PORT !== '8080' ? parseInt(process.env.PORT, 10) : 3000);
 
 // Body parser limits for document uploads (support up to 50MB base64)
 app.use(express.json({ limit: '50mb' }));
@@ -847,24 +850,33 @@ app.post('/api/lambda/invoke', async (req, res) => {
 // -----------------------------------------------------------------------------
 
 async function startServer() {
-  if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.resolve('dist')));
-    app.get('*', (_req, res) => {
-      res.sendFile(path.resolve('dist', 'index.html'));
-    });
-  } else {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa'
-    });
-    app.use(vite.middlewares);
-  }
+  try {
+    if (process.env.NODE_ENV === 'production') {
+      app.use(express.static(path.resolve('dist')));
+      app.get('*', (_req, res) => {
+        res.sendFile(path.resolve('dist', 'index.html'));
+      });
+    } else {
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: 'spa'
+      });
+      app.use(vite.middlewares);
+    }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`ArchiveX full-stack server running at:`);
-    console.log(`  > Local:   http://localhost:${PORT}`);
-    console.log(`  > Network: http://127.0.0.1:${PORT}`);
-  });
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`ArchiveX full-stack server running at:`);
+      console.log(`  > Local:   http://localhost:${PORT}`);
+      console.log(`  > Network: http://127.0.0.1:${PORT}`);
+    });
+
+    server.on('error', (err: any) => {
+      console.error('Server error event:', err);
+    });
+  } catch (err) {
+    console.error('Failed to start ArchiveX server:', err);
+    process.exit(1);
+  }
 }
 
 startServer();

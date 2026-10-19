@@ -7,13 +7,13 @@ variable "aws_region" {
 variable "bucket_name" {
   description = "Unique name for the Amazon S3 document bucket."
   type        = string
-  default     = "archivex-vault-documents-prod"
+  default     = "archivex-vault-test-storage"
 }
 
 variable "environment" {
-  description = "Environment tag (e.g., development, staging, production)."
+  description = "Environment tag (e.g., development, staging, production, test)."
   type        = string
-  default     = "production"
+  default     = "test"
 }
 
 variable "allowed_cors_origins" {

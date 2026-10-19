@@ -75,7 +75,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 
 # IAM Execution Role for Lambda
 resource "aws_iam_role" "lambda_exec" {
-  name = "archivex-lambda-ocr-exec-role"
+  name = "archivex-lambda-test-ocr-exec-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -93,8 +93,8 @@ resource "aws_iam_role" "lambda_exec" {
 
 # IAM Policy for Lambda: CloudWatch Logs, S3 Read, Textract OCR, SQS Polling
 resource "aws_iam_policy" "lambda_policy" {
-  name        = "archivex-lambda-ocr-policy"
-  description = "Allows Lambda to read documents from S3, run Textract OCR, and poll SQS queue"
+  name        = "archivex-lambda-test-ocr-policy"
+  description = "Allows test Lambda to read documents from S3, run Textract OCR, and poll SQS queue"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -157,10 +157,10 @@ data "archive_file" "lambda_zip" {
 resource "aws_lambda_function" "ocr_processor" {
   filename         = data.archive_file.lambda_zip.output_path
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
-  function_name    = "archivex-ocr-processor"
+  function_name    = "archivex-test-ocr-processor"
   role             = aws_iam_role.lambda_exec.arn
   handler          = "index.handler"
-  runtime          = "nodejs20.x"
+  runtime          = "nodejs22.x"
   timeout          = 60
   memory_size      = 512
 
@@ -172,7 +172,7 @@ resource "aws_lambda_function" "ocr_processor" {
   }
 
   tags = {
-    Name    = "ArchiveX OCR Processor Function"
+    Name    = "ArchiveX Test OCR Processor Function"
     Managed = "Terraform"
   }
 }
@@ -187,7 +187,7 @@ resource "aws_lambda_event_source_mapping" "sqs_trigger" {
 
 # Attach SQS & Lambda invoke permissions to the App IAM user
 resource "aws_iam_user_policy" "app_sqs_lambda_policy" {
-  name = "archivex-app-sqs-lambda-policy"
+  name = "archivex-app-test-sqs-lambda-policy"
   user = aws_iam_user.app_user.name
 
   policy = jsonencode({

@@ -29,7 +29,7 @@ resource "aws_s3_bucket" "vault" {
   force_destroy = false
 
   tags = {
-    Name = "ArchiveX Document Vault Storage"
+    Name = "ArchiveX Test Document Vault Storage"
   }
 }
 
@@ -110,11 +110,11 @@ resource "aws_s3_bucket_lifecycle_configuration" "vault" {
 # AWS IAM: Least-Privilege Identity & Access Management
 # -----------------------------------------------------------------------------
 resource "aws_iam_user" "app_user" {
-  name = "archivex-app-user"
+  name = "archivex-test-app-user"
   path = "/system/"
 
   tags = {
-    Description = "Service user for ArchiveX Vault Node.js Backend API"
+    Description = "Service user for ArchiveX Vault Test Node.js Backend API"
   }
 }
 
@@ -124,8 +124,8 @@ resource "aws_iam_access_key" "app_user_key" {
 
 # Least-Privilege Policy: Restricts S3 and Textract actions
 resource "aws_iam_policy" "vault_least_privilege" {
-  name        = "ArchiveXVaultAccessPolicy"
-  description = "Least privilege policy granting S3 bucket access and Textract OCR permissions"
+  name        = "ArchiveXTestVaultAccessPolicy"
+  description = "Least privilege policy granting test S3 bucket access and Textract OCR permissions"
 
   policy = jsonencode({
     Version = "2012-10-17"
