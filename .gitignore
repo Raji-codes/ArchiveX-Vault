@@ -6,3 +6,13 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Terraform - Ignore state and binaries (Never commit secrets!)
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+*.zip
+crash.log
+crash.*.log
